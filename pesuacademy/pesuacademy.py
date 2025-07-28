@@ -1,186 +1,177 @@
-from typing import Optional
+import asyncio
+from typing import Optional, List, Dict
 
-import requests_html
-from bs4 import BeautifulSoup
+# Import the core engine
+from .client import PesuAcademyClient
 
-from pesuacademy import util
-from pesuacademy.models.seating_information import SeatingInformation
-from pesuacademy.util.page import PageHandler
-from .exceptions import CSRFTokenError, AuthenticationError
-from .models import Profile, ClassAndSectionInfo, Course, Announcement
+# Import all Pydantic models to be used as return types for clarity
+from .models import (
+    Profile,
+    Course,
+    SeatingInformation,
+    SemesterResult,
+    Announcement,
+    Unit,
+    Topic,
+    MaterialLink
+)
 
 
 class PESUAcademy:
     """
-    A class to interact with PESU Academy website.
-    This class is the entrypoint to all the functionality in this module
+    The main, user-facing class to interact with PESU Academy.
+
+    An instance of this class represents a single authenticated session and provides
+    asynchronous methods to fetch academic data.
     """
 
-    def __init__(self, username: Optional[str] = None, password: Optional[str] = None):
+    def __init__(self, client: PesuAcademyClient):
         """
-        Initialize the PESU Academy object.
+        Initializes the PESUAcademy session. This method is not meant to be called directly.
+        Please use the `PESUAcademy.login()` class method to create an instance.
 
-        :param username: Your SRN, PRN or email address.
-        :param password: Your password.
+        Args:
+            client (PesuAcademyClient): An authenticated instance of the core client.
         """
-        self.__session = requests_html.HTMLSession()
-        self._authenticated: bool = False
-        self.page_handler = PageHandler(self.__session)
-        self._csrf_token: str = self.generate_csrf_token(username, password)
+        self._client = client
 
-    @property
-    def authenticated(self):
-        return self._authenticated
-
-    def generate_csrf_token(
-        self, username: Optional[str] = None, password: Optional[str] = None
-    ) -> str:
+    @classmethod
+    async def login(cls, username: str, password: str) -> "PESUAcademy":
         """
-        Generate a CSRF token. If username and password are provided, authenticate and get the CSRF token.
+        Creates, authenticates, and returns an active PESUAcademy session.
+        This is the primary way to start using the library.
 
-        :param username: Your SRN, PRN or email address.
-        :param password: Your password.
-        :return: The CSRF token.
+        Args:
+            username (str): The user's SRN, PRN, or other login identifier.
+            password (str): The user's password.
+
+        Returns:
+            PESUAcademy: An authenticated instance ready to make requests.
         """
-        try:
-            # Get the initial csrf token
-            home_url = "https://www.pesuacademy.com/Academy/"
-            response = self.__session.get(home_url)
-            soup = BeautifulSoup(response.text, "lxml")
-            csrf_token = soup.find("meta", attrs={"name": "csrf-token"})["content"]
-        except Exception:
-            self.__session.close()
-            raise CSRFTokenError(
-                "Unable to fetch default csrf token. Please try again later."
-            )
+        client = PesuAcademyClient()
+        await client.login(username, password)
+        return cls(client)
 
-        if username and password:
-            # Prepare the login data for auth call
-            data = {
-                "_csrf": csrf_token,
-                "j_username": username,
-                "j_password": password,
-            }
-            try:
-                auth_url = "https://www.pesuacademy.com/Academy/j_spring_security_check"
-                response = self.__session.post(auth_url, data=data)
-                soup = BeautifulSoup(response.text, "lxml")
-            except Exception as e:
-                self.__session.close()
-                raise AuthenticationError(
-                    "Unable to authenticate. Please check your credentials."
-                )
+    async def get_profile(self) -> Profile:
+        """Fetches the student's detailed profile information.
+        
+        Args:
+            None
 
-            # if class login-form is present, login failed
-            if soup.find("div", attrs={"class": "login-form"}):
-                self.__session.close()
-                raise AuthenticationError(
-                    "Invalid username or password, or the user does not exist."
-                )
-
-            # if login is successful, update the CSRF token
-            csrf_token = soup.find("meta", attrs={"name": "csrf-token"})["content"]
-            self._authenticated = True
-            self.page_handler.set_semester_id_to_number_mapping(csrf_token)
-
-        return csrf_token
-
-    def know_your_class_and_section(self, username: str) -> ClassAndSectionInfo:
+        Returns:
+            Profile: A Profile object containing personal, parent, and address details.
         """
-        Get the publicly visible class and section information of a student from the Know Your Class and Section page.
+        return await self._client.get_profile()
 
-        :param username: The SRN, PRN or email address of the student.
-        :return: The profile information.
+    async def get_seating_info(self) -> List[SeatingInformation]:
+        """Fetches upcoming exam seating arrangements.
+        
+        Args:
+            None
+            
+        Returns:
+            A list of SeatingInformation objects containing seating details."""
+        return await self._client.get_seating_info()
+
+    async def get_courses(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
         """
-        try:
-            response = self.__session.post(
-                "https://www.pesuacademy.com/Academy/getStudentClassInfo",
-                headers={
-                    "authority": "www.pesuacademy.com",
-                    "accept": "*/*",
-                    "accept-language": "en-IN,en-US;q=0.9,en-GB;q=0.8,en;q=0.7",
-                    "content-type": "application/x-www-form-urlencoded",
-                    "origin": "https://www.pesuacademy.com",
-                    "referer": "https://www.pesuacademy.com/Academy/",
-                    "sec-ch-ua": '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
-                    "sec-ch-ua-mobile": "?0",
-                    "sec-ch-ua-platform": '"Linux"',
-                    "sec-fetch-dest": "empty",
-                    "sec-fetch-mode": "cors",
-                    "sec-fetch-site": "same-origin",
-                    "x-csrf-token": self._csrf_token,
-                    "x-requested-with": "XMLHttpRequest",
-                },
-                data={"loginId": username},
-            )
-        except Exception:
-            raise ValueError("Unable to get profile from Know Your Class and Section.")
+        Fetches registered courses.
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        profile = util.profile.create_class_and_section_object_from_know_your_class_and_section(
-            soup
-        )
-        return profile
+        Args:
+            semester (Optional[int]): The semester number to fetch. If not provided,
+                courses for all available semesters are returned.
 
-    def profile(self) -> Profile:
+        Returns:
+            A dictionary mapping semester numbers to lists of Course objects.
         """
-        Get the private profile information of the currently authenticated user.
+        return await self._client.get_courses(semester)
 
-        :return: The profile information.
+    async def get_attendance(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
         """
-        if not self._authenticated:
-            raise AuthenticationError("You need to authenticate first.")
-        profile_info = self.page_handler.get_profile()
-        return profile_info
+        Fetches attendance records.
 
-    def courses(self, semester: Optional[int] = None) -> dict[int, list[Course]]:
-        """
-        Get the courses of the currently authenticated user.
+        Args:
+            semester (Optional[int]): The semester number to fetch. If not provided,
+                attendance for all available semesters is returned.
 
-        :param semester: The semester number. If not provided, all courses across all semesters are returned.
-        :return: The course information for the given semester.
+        Returns:
+            A dictionary mapping semester numbers to lists of Course objects with attendance data.
         """
-        if not self._authenticated:
-            raise AuthenticationError("You need to authenticate first.")
-        courses_info = self.page_handler.get_courses(semester)
-        return courses_info
+        return await self._client.get_attendance(semester)
 
-    def attendance(self, semester: Optional[int] = None) -> dict[int, list[Course]]:
+    async def get_results(self, semester: int) -> SemesterResult:
         """
-        Get the attendance in courses of the currently authenticated user.
+        Fetches the final results for a specific semester.
 
-        :param semester: The semester number. If not provided, attendance across all semesters are returned.
-        :return: The attendance information for the given semester.
-        """
-        if not self._authenticated:
-            raise AuthenticationError("You need to authenticate first.")
-        attendance_info = self.page_handler.get_attendance(semester)
-        return attendance_info
+        Args:
+            semester (int): The semester number for which to fetch results.
 
-    def seating_information(self) -> list[SeatingInformation]:
+        Returns:
+            A SemesterResult object containing SGPA, credits, and subject details.
+        
+        Raises:
+            ValueError: If the requested semester is invalid or has no results.
         """
-        Get the seating information of the currently authenticated user.
+        semester_id_str = self._client._semester_ids.get(semester)
+        if not semester_id_str:
+            raise ValueError(f"Invalid or unavailable semester: {semester}. Available: {list(self._client._semester_ids.keys())}")
+        return await self._client.get_results(semester_id_str)
 
-        :return: The seating information.
+    async def get_announcements(self) -> List[Announcement]:
+        """Fetches all recent announcements from the dashboard.
+        
+        Args:
+            None    
+            
+        Returns:
+            A list of Announcement objects containing the latest announcements.
         """
-        if not self._authenticated:
-            raise AuthenticationError("You need to authenticate first.")
-        seating_info = self.page_handler.get_seating_info()
-        return seating_info
+        return await self._client.get_announcements()
+    
+    # < Methods for the Materials Workflow >
 
-    def announcements(
-        self, start_date: Optional[str] = None, end_date: Optional[str] = None
-    ) -> list[Announcement]:
+    async def get_units_for_course(self, course_id: str) -> List[Unit]:
         """
-        Get the announcements from the PESU Academy website.
+        Given a course_id, fetches the list of units within it.
+        The course_id can be obtained from the Course model returned by `get_courses()`.
 
-        :param start_date: The start date of the announcements to fetch in "yyyy-mm-dd" format. If not provided, all
-        announcements from the beginning are fetched.
-        :param end_date: The end date of the announcements to fetch in "yyyy-mm-dd" format. If not provided, all
-        announcements till the end are fetched.
-        :return: The list of announcements.
+        Args:
+            course_id (str): The unique internal ID for the course.
+
+        Returns:
+            A list of Unit objects.
         """
-        announcements = self.page_handler.get_announcements(
-            self._csrf_token, start_date, end_date
-        )
-        return announcements
+        return await self._client.get_units_for_course(course_id)
+
+    async def get_topics_for_unit(self, unit_id: str) -> List[Topic]:
+        """
+        Given a unit_id, fetches the list of topics within it.
+        The unit_id can be obtained from the Unit model.
+
+        Args:
+            unit_id (str): The unique internal ID for the unit.
+
+        Returns:
+            A list of Topic objects, containing IDs needed for the final step.
+        """
+        return await self._client.get_topics_for_unit(unit_id)
+
+    async def get_material_links(self, topic: Topic, material_type_id: str) -> List[MaterialLink]:
+        """
+        Given a Topic object and a material type ID, fetches the final download links.
+
+        Args:
+            topic (Topic): The Topic object obtained from `get_topics_for_unit()`.
+            material_type_id (str): A string representing the material type (e.g., "2" for Slides, "3" for Notes).
+
+        Returns:
+            A list of MaterialLink objects.
+        """
+        return await self._client.get_material_links(topic, material_type_id)
+
+    async def close(self):
+        """
+        Closes the network session gracefully. This should always be called when
+        you are finished with the session to release resources.
+        """
+        await self._client.close()

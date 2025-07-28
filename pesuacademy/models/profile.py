@@ -1,18 +1,21 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class PersonalDetails(BaseModel):
     """ Represents personal details of a user in the PESU Academy system.
     Attributes:
         name (str): Full name of the user.
-        pesu_id (str): Unique identifier for the user in the PESU system.
-        srn (str): Student Registration Number.
-        program (str): Program in which the user is enrolled.
+        pesu_id (str): PESU ID of the user. (PRN or similar)
+        srn (str): SRN of the user.
+        program (str): Program enrolled in by the user.
         branch (str): Branch of study.
-        semester (str): Current semester of the user.
-        section (str): Section of the class.
+        semester (str): Current semester.
+        section (str): Section of the user.
         email_id (str): Email address of the user.
         contact_no (str): Contact number of the user.
+        name_as_in_aadhar (str): Name as per Aadhar card.
+        profile_image_base64 (Optional[str]): Base64 encoded profile image, if available.
     """
     name: str
     pesu_id: str
@@ -23,6 +26,33 @@ class PersonalDetails(BaseModel):
     section: str
     email_id: str
     contact_no: str
+    aadhar_no: Optional[str] = None
+    name_as_in_aadhar: Optional[str] = None
+    profile_image_base64: Optional[str] = None
+
+class OtherInformation(BaseModel):
+    """ Represents other personal information of a user in the PESU Academy system.
+    Attributes:
+        sslc_marks (str): Marks obtained in SSLC.
+        puc_marks (str): Marks obtained in PUC.
+        date_of_birth (str): Date of birth of the user.
+        blood_group (str): Blood group of the user.
+    """
+    sslc_marks: str
+    puc_marks: str
+    date_of_birth: str
+    blood_group: str
+
+class QualifyingExamination(BaseModel):
+    """ Represents details of a qualifying examination in the PESU Academy system.
+    Attributes:
+        exam (str): The qualifying examination.
+        rank (str): Rank obtained in the examination.
+        score (str): Score obtained in the examination.
+    """
+    exam: str
+    rank: str
+    score: Optional[str] = None
 
 
 class ParentDetails(BaseModel):
@@ -32,11 +62,17 @@ class ParentDetails(BaseModel):
         mobile (str): Mobile number of the parent.
         email (str): Email address of the parent.
         occupation (str): Occupation of the parent.
+        qualification (str): Qualification of the parent.
+        designation (str): Designation of the parent.
+        employer (str): Employer of the parent.
     """
     name: str
     mobile: str
     email: str
     occupation: str
+    qualification: str
+    designation: str
+    employer: str
 
 
 class ParentInformation(BaseModel):
@@ -64,9 +100,13 @@ class Profile(BaseModel):
     """ Represents a user's profile in the PESU Academy system.
     Attributes:
         personal (PersonalDetails): Personal details of the user.
+        other_info (OtherInformation): Other personal information of the user.
+        qualifying_exam (QualifyingExamination): Details of the qualifying examination.
         parents (ParentInformation): Information about the user's parents.
         address (AddressDetails): Address details of the user.
     """
     personal: PersonalDetails
+    other_info: OtherInformation
+    qualifying_exam: QualifyingExamination
     parents: ParentInformation
     address: AddressDetails

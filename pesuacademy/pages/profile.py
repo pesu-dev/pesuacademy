@@ -2,30 +2,29 @@ import datetime
 import httpx
 from bs4 import BeautifulSoup, Tag
 import re
-from ..models.profile import Profile, PersonalDetails, ParentDetails, ParentInformation, AddressDetails
+from ..models.profile import Profile, PersonalDetails, OtherInformation, QualifyingExamination, ParentDetails, ParentInformation, AddressDetails
 
 class ProfilePageHandler:
     """ Handles fetching and parsing the user profile page in the PESU Academy system.
     This class provides methods to retrieve and parse the profile page to extract personal, parent, and address details.
     """
     @staticmethod
-    def _find_value_for_label(soup: BeautifulSoup, text: str) -> str:
-        """ Finds the value associated with a label in the profile page HTML.
+    def _find_value_for_label(container: Tag, text: str) -> str:
+        """Finds a value associated with a label within a specific container.
         Args:
-            soup (BeautifulSoup): The BeautifulSoup object containing the profile page HTML.
+            container (Tag): The BeautifulSoup Tag object containing the profile information.
             text (str): The label text to search for.
         Returns:
             str: The value associated with the label, or "N/A" if not found.
         """
-        label_tag = soup.find("label", string=re.compile(r'\s*' + text + r'\s*'))
+        label_tag = container.find("label", string=re.compile(r'\s*' + text + r'\s*'))
         if not label_tag:
             return "N/A"
-        
-        # The value can be in the next sibling label or inside an input tag within the parent div
-        next_sibling = label_tag.find_next_sibling()
-        if next_sibling and next_sibling.name == 'label':
-            return next_sibling.text.strip()
-        
+        # Find the next sibling label or input to get the value
+        value_tag = label_tag.find_next_sibling("label")
+        if value_tag:
+            return value_tag.text.strip()
+        # If the next sibling is not a label, check for an input field
         input_tag = label_tag.find_next("input")
         if input_tag and input_tag.has_attr('value'):
             return input_tag['value'].strip()
@@ -34,63 +33,104 @@ class ProfilePageHandler:
 
     @staticmethod
     def _parse_profile_soup(soup: BeautifulSoup) -> Profile:
-        """ Parses the profile page HTML and extracts personal, parent, and address details.
+        """Parses the profile page HTML into a structured Profile object.
         Args:
-            soup (BeautifulSoup): The BeautifulSoup object containing the profile page HTML.    
+            soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML of the profile page.
         Returns:
             Profile: A Profile object containing personal, parent, and address details.
         Raises:
             ValueError: If the profile page structure is not as expected.
         """
         
-        # Extract personal details
+        # Personal Details
+        personal_container = soup.find("div", class_="media-body")
+        img_tag = soup.find("img", class_="media-object")
+        profile_image_base64 = img_tag['src'] if img_tag else None
+        profile_image_base64 = profile_image_base64.split("data:image/jpeg;base64,")[1]
+
         personal = PersonalDetails(
-            name=ProfilePageHandler._find_value_for_label(soup, "Name"),
-            pesu_id=ProfilePageHandler._find_value_for_label(soup, "PESU Id"),
-            srn=ProfilePageHandler._find_value_for_label(soup, "SRN"),
-            program=ProfilePageHandler._find_value_for_label(soup, "Program"),
-            branch=ProfilePageHandler._find_value_for_label(soup, "Branch"),
-            semester=ProfilePageHandler._find_value_for_label(soup, "Semester"),
-            section=ProfilePageHandler._find_value_for_label(soup, "Section"),
-            email_id=ProfilePageHandler._find_value_for_label(soup, "Email ID"),
-            contact_no=ProfilePageHandler._find_value_for_label(soup, "Contact No"),
+            name=ProfilePageHandler._find_value_for_label(personal_container, "Name"),
+            pesu_id=ProfilePageHandler._find_value_for_label(personal_container, "PESU Id"),
+            srn=ProfilePageHandler._find_value_for_label(personal_container, "SRN"),
+            program=ProfilePageHandler._find_value_for_label(personal_container, "Program"),
+            branch=ProfilePageHandler._find_value_for_label(personal_container, "Branch"),
+            semester=ProfilePageHandler._find_value_for_label(personal_container, "Semester"),
+            section=ProfilePageHandler._find_value_for_label(personal_container, "Section"),
+            email_id=ProfilePageHandler._find_value_for_label(personal_container, "Email ID"),
+            contact_no=ProfilePageHandler._find_value_for_label(personal_container, "Contact No"),
+            aadhar_no=ProfilePageHandler._find_value_for_label(personal_container, "Aadhar No"),
+            name_as_in_aadhar=ProfilePageHandler._find_value_for_label(personal_container, "Name as in aadhar"),
+            profile_image_base64=profile_image_base64,
         )
+
+        # Other Information and Qualifying Examination
+        other_info_container = soup.find("h4", string="Other Information").find_next("div", class_="info-contents")
+        qualifying_exam_container = soup.find("h4", string="Qualifying examination").find_next("div", class_="info-contents")
         
-        # Found an issue with the parent details extraction, it was not correctly identifying the parent labels.
-        # The mobile, email, and occupation fields of both parents were being fetched from the same label.
-        # TO-DO - Fix the parent details extraction logic to correctly identify each parent's fields.
+        other_info = OtherInformation(
+            sslc_marks=ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
+            puc_marks=ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
+            date_of_birth=ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
+            blood_group=ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
+        )
+        qualifying_exam = QualifyingExamination(
+            exam=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
+            rank=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Rank"),
+            score=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Score"),
+        )
+
+        # Parent Details
+        # Correctly handles the parent details section by just spltting the containers
+        # Assumes Father is always first and Mother is always second (just in this context, lol)
+        parent_containers = soup.find("h4", string="Parent Details").find_next("div").find_all("div", class_="col-md-6")
+        father_container = parent_containers[0]
+        mother_container = parent_containers[1]
+
         parents = ParentInformation(
             father=ParentDetails(
-                name=ProfilePageHandler._find_value_for_label(soup, "Father Name"),
-                mobile=ProfilePageHandler._find_value_for_label(soup, "Mobile"),
-                email=ProfilePageHandler._find_value_for_label(soup, "Email"),
-                occupation=ProfilePageHandler._find_value_for_label(soup, "Occupation"),
+                name=ProfilePageHandler._find_value_for_label(father_container, "Father Name"),
+                mobile=ProfilePageHandler._find_value_for_label(father_container, "Mobile"),
+                email=ProfilePageHandler._find_value_for_label(father_container, "Email"),
+                occupation=ProfilePageHandler._find_value_for_label(father_container, "Occupation"),
+                qualification=ProfilePageHandler._find_value_for_label(father_container, "Qualification"),
+                designation=ProfilePageHandler._find_value_for_label(father_container, "Designation"),
+                employer=ProfilePageHandler._find_value_for_label(father_container, "Employer"),
             ),
             mother=ParentDetails(
-                name=ProfilePageHandler._find_value_for_label(soup, "Mother Name"),
-                mobile=ProfilePageHandler._find_value_for_label(soup, "Mobile"),
-                email=ProfilePageHandler._find_value_for_label(soup, "Email"),
-                occupation=ProfilePageHandler._find_value_for_label(soup, "Occupation"),
+                name=ProfilePageHandler._find_value_for_label(mother_container, "Mother Name"),
+                mobile=ProfilePageHandler._find_value_for_label(mother_container, "Mobile"),
+                email=ProfilePageHandler._find_value_for_label(mother_container, "Email"),
+                occupation=ProfilePageHandler._find_value_for_label(mother_container, "Occupation"),
+                qualification=ProfilePageHandler._find_value_for_label(mother_container, "Qualification"),
+                designation=ProfilePageHandler._find_value_for_label(mother_container, "Designation"),
+                employer=ProfilePageHandler._find_value_for_label(mother_container, "Employer"),
             )
         )
 
+        # Address Details
+        address_container = soup.find("h4", string="Address").find_next("div")
         address = AddressDetails(
-            present=ProfilePageHandler._find_value_for_label(soup, "Present Address"),
-            permanent=ProfilePageHandler._find_value_for_label(soup, "Permanent Address"),
+            present=ProfilePageHandler._find_value_for_label(address_container, "Present Address"),
+            permanent=ProfilePageHandler._find_value_for_label(address_container, "Permanent Address"),
         )
 
-        return Profile(personal=personal, parents=parents, address=address)
+        return Profile(
+            personal=personal,
+            other_info=other_info,
+            qualifying_exam=qualifying_exam,
+            parents=parents,
+            address=address
+        )
 
     @staticmethod
     async def get_page(session: httpx.AsyncClient) -> Profile:
-        """ Fetches the profile page and parses the user's profile information.
+        """Fetches and parses the user's profile page.
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            session (httpx.AsyncClient): An authenticated HTTP client session.
         Returns:
-            Profile: A Profile object containing personal, parent, and address details.
+            Profile: A Profile object containing the user's profile information.
         Raises:
-            httpx.HTTPStatusError: If the request to the profile page fails.
-        """
+            httpx.HTTPStatusError: If the request to fetch the profile page fails."""
         url = "/s/studentProfilePESUAdmin"
         params = {
             "menuId": "670", "controllerMode": "6414", "actionType": "5",

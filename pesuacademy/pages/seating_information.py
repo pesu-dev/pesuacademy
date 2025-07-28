@@ -1,58 +1,46 @@
 import datetime
-
-import requests_html
+import httpx
 from bs4 import BeautifulSoup
-
-from pesuacademy.models import SeatingInformation
-
+from typing import List
+from models import SeatingInformation
 
 class SeatingInformationHandler:
     @staticmethod
-    def get_seating_information_from_page(
-        soup: BeautifulSoup,
-    ) -> list[SeatingInformation]:
-        info_table = soup.find("table", attrs={"id": "seatinginfo"})
-        tablebody = info_table.find("tbody")
-        tablerows = tablebody.find_all("tr")
-        seating_info = list()
-        for row in tablerows:
-            columns = row.find_all("td")
-            assn_name = columns[0].text.strip()
-            course_code = columns[1].text.strip()
-            date = columns[2].text.strip()
-            time = columns[3].text.strip()
-            terminal = columns[4].text.strip()
-            block = columns[5].text.strip()
-            seating_info.append(
-                SeatingInformation(assn_name, course_code, date, time, terminal, block)
-            )
-        return seating_info
+    async def get_page(session: httpx.AsyncClient) -> List[SeatingInformation]:
+        """ Fetches and parses the seating information page.
+        Args:
+            session (httpx.AsyncClient): The HTTP client session to use for requests.
+        Returns:
+            List[SeatingInformation]: A list of SeatingInformation objects containing the seating details.
+        Raises:
+            httpx.HTTPStatusError: If the request to the seating information page fails.
+        """
+        url = "/s/studentProfilePESUAdmin"
+        params = {
+            "menuId": "655", "controllerMode": "6404", "actionType": "5",
+            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
+        }
+        response = await session.get(url, params=params)
+        response.raise_for_status()
+        
+        if "No Test Seating Info is available" in response.text: # Check if no seating info is available
+            return []
 
-    @staticmethod
-    def get_page(session: requests_html.HTMLSession) -> list[SeatingInformation]:
-        try:
-            profile_url = (
-                "https://www.pesuacademy.com/Academy/s/studentProfilePESUAdmin"
-            )
-            query = {
-                "menuId": "655",
-                "url": "studentProfilePESUAdmin",
-                "controllerMode": "6404",
-                "actionType": "5",
-                "id": "0",
-                "selectedData": "0",
-                "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-            }
-            response = session.get(profile_url, allow_redirects=False, params=query)
-            if response.status_code != 200:
-                raise ConnectionError("Unable to fetch seating info.")
-            soup = BeautifulSoup(response.text, "lxml")
-            if (
-                (no_seating_tag := soup.find("h5")) is not None
-                and no_seating_tag.text == "No Test Seating Info is available"
-            ):
-                return []
-            else:
-                return SeatingInformationHandler.get_seating_information_from_page(soup)
-        except Exception:
-            raise ConnectionError("Unable to fetch seating info.")
+        soup = BeautifulSoup(response.text, "lxml")
+        info_table = soup.find("table", id="seatinginfo")
+        if not info_table:
+            return []
+
+        # Parse the seating information data
+        # The table structure is assumed to have columns: Name, Course Code, Date, Time, Terminal, Block
+        seating_info = []
+        for row in info_table.find("tbody").find_all("tr"):
+            cols = [c.text.strip() for c in row.find_all("td")]
+            if len(cols) >= 6:
+                seating_info.append(
+                    SeatingInformation(
+                        name=cols[0], course_code=cols[1], date=cols[2],
+                        time=cols[3], terminal=cols[4], block=cols[5]
+                    )
+                )
+        return seating_info

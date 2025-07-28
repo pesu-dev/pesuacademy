@@ -1,60 +1,61 @@
 import datetime
-from typing import Optional
-
-import requests_html
+import httpx
 from bs4 import BeautifulSoup
-
-from pesuacademy.models import Course
-
+from typing import List
+from models import Course
 
 class CoursesPageHandler:
     @staticmethod
-    def get_courses_in_semester(
-        session: requests_html.HTMLSession, semester_id: Optional[int] = None
-    ):
-        try:
-            url = "https://www.pesuacademy.com/Academy/s/studentProfilePESUAdmin"
-            query = {
-                "menuId": "653",
-                "controllerMode": "6403",
-                "actionType": "38",
-                "id": f"{semester_id}",
-                "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-            }
-            response = session.get(url, allow_redirects=False, params=query)
-            if response.status_code != 200:
-                raise ConnectionError("Unable to fetch profile data.")
-            soup = BeautifulSoup(response.text, "lxml")
-        except Exception:
-            raise ConnectionError("Unable to fetch courses data.")
+    async def get_courses_in_semester(session: httpx.AsyncClient, semester_id: str) -> List[Course]:
+        """ Fetches the courses for a single given semester ID.
+        Args:
+            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            semester_id (str): The ID of the semester to fetch courses for.
+        Returns:
+            List[Course]: A list of Course objects containing course information.
+        Raises:
+            httpx.HTTPStatusError: If the request to the courses page fails.
+        """
+        url = "/s/studentProfilePESUAdmin"
+        params = {
+            "menuId": "653",
+            "controllerMode": "6403",
+            "actionType": "38",
+            "id": semester_id, # Some wierd formating error in semester id, made a temp fix but will have to find a better way later
+            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
+        }
+
+        response = await session.get(url, params=params)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, "lxml")
+        table = soup.find("table", class_="table-hover")
+        if not table or "No subjects found" in table.text:
+            return []
 
         courses = []
-        table = soup.find("table", attrs={"class": "table table-hover box-shadow"})
-        table_body = table.find("tbody")
-        for row in table_body.find_all("tr"):
-            columns = row.find_all("td")
-            if (
-                len(columns) == 1
-                and columns[0].text.strip() == "No\n\t\t\t\t\t\tsubjects found"
-            ):
-                break
-            course_code = columns[0].text.strip()
-            course_title = columns[1].text.strip()
-            course_type = columns[2].text.strip()
-            course_status = columns[3].text.strip()
-            course = Course(course_code, course_title, course_type, course_status)
-            courses.append(course)
-        return courses
+        # Iterate through each Course row
+        for row in table.find("tbody").find_all("tr"):
+            row_id = row.get("id")
+            # Ensure the row ID is valid and contains the expected prefix
+            if not row_id or "rowWiseCourseContent_" not in row_id:
+                continue
+            # Split and extract the course ID from the row ID
+            try:
+                course_id = row_id.split('_')[-1]
+            except IndexError:
+                continue
 
-    @staticmethod
-    def get_page(
-        session: requests_html.HTMLSession, semester_ids: dict
-    ) -> dict[int, list[Course]]:
-        courses = dict()
-        for semester_number in semester_ids:
-            courses_in_semester = CoursesPageHandler.get_courses_in_semester(
-                session, semester_ids[semester_number]
-            )
-            courses[semester_number] = courses_in_semester
-        courses = dict(sorted(courses.items()))
+            cols = [c.text.strip() for c in row.find_all("td")]
+
+            if len(cols) >= 4: # Temp fix to ensure we have enough columns
+                courses.append(
+                    Course(
+                        code=cols[0],
+                        title=cols[1],
+                        type=cols[2],
+                        status=cols[3],
+                        course_id=course_id
+                    )
+                )
         return courses

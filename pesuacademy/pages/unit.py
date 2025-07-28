@@ -1,0 +1,68 @@
+import datetime
+import httpx
+import re
+from bs4 import BeautifulSoup
+from typing import List
+from models.materials import Topic
+
+class UnitPageHandler:
+    @staticmethod
+    async def get_page(session: httpx.AsyncClient, unit_id: str) -> List[Topic]:
+        """ Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
+        Args:
+            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            unit_id (str): The ID of the unit to fetch topics for.
+        Returns:
+            List[Topic]: A list of Topic objects containing the scraped data.
+        Raises:
+            httpx.HTTPStatusError: If the request to the unit page fails.
+        """
+        url = "/s/studentProfilePESUAdmin"
+        params = {
+            "controllerMode": "6403",
+            "actionType": "43",
+            "coursecontentid": unit_id,
+            "menuId": "653",
+            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
+        }
+        response = await session.get(url, params=params)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.text, "lxml")
+        
+        # Find the topics table
+        table = soup.find("table", class_="table-bordered")
+        if not table:
+            return []
+
+        topics = []
+        for row in table.find("tbody").find_all("tr"):
+
+            onclick_attr = row.get("onclick")
+            if not onclick_attr:
+                continue
+
+            # handleclasscoursecontentunit('topic_id', 'course_id', 'unit_id', ...)
+            match = re.search(r"handleclasscoursecontentunit\('([^']*)','([^']*)','([^']*)'", onclick_attr)
+            if not match:
+                continue
+            # Extract the first three critical arguments from the JS function
+            # The MaterialLinksHandler needs only these 3 ids to fetch the material links
+            topic_id, course_id, scraped_unit_id = match.groups()
+
+            title_tag = row.find("span", class_="short-title")
+            if not title_tag:
+                continue
+            # Get the title of the topic, defaulting to "Untitled Topic" if not found
+            title = title_tag.get("title", "Untitled Topic")
+
+            topics.append(
+                Topic(
+                    title=title,
+                    topic_id=topic_id,
+                    course_id=course_id,
+                    unit_id=scraped_unit_id
+                )
+            )
+        
+        return topics

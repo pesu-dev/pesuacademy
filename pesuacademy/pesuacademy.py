@@ -1,4 +1,3 @@
-import asyncio
 from typing import Optional, List, Dict
 
 # Import the core engine
@@ -122,7 +121,7 @@ class PESUAcademy:
         
         Args:
             None    
-            
+
         Returns:
             A list of Announcement objects containing the latest announcements.
         """

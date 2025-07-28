@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from typing import List, Dict, Optional
 
 
-from pages import (
+from .pages import (
     SeatingInformationHandler,
     CoursesPageHandler,
     CourseDetailPageHandler, 
@@ -15,7 +15,7 @@ from pages import (
     AnnouncementPageHandler,
     ResultsPageHandler
 )
-from models import (
+from .models import (
     SeatingInformation, 
     Course, 
     Profile, 

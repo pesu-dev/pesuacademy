@@ -3,7 +3,7 @@ import httpx
 import re
 from bs4 import BeautifulSoup
 from typing import List
-from models.materials import Unit
+from ..models.materials import Unit
 
 class CourseDetailPageHandler:
     @staticmethod

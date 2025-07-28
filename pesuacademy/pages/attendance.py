@@ -2,7 +2,7 @@ import datetime
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
-from models import Course, Attendance
+from ..models import Course, Attendance
 
 class AttendancePageHandler:
     @staticmethod

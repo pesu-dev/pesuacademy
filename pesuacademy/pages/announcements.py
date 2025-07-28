@@ -4,7 +4,7 @@ import re
 import copy
 from bs4 import BeautifulSoup
 from typing import List
-from models.announcement import Announcement
+from ..models.announcement import Announcement
 
 class AnnouncementPageHandler:
     @staticmethod

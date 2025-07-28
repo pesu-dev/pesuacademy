@@ -2,7 +2,7 @@ import datetime
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
-from models.results import SemesterResult, SubjectResult, Assessment
+from ..models.results import SemesterResult, SubjectResult, Assessment
 
 class ResultsPageHandler:
     @staticmethod

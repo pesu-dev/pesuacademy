@@ -2,7 +2,7 @@ import datetime
 import httpx
 from bs4 import BeautifulSoup, Tag
 import re
-from models.profile import Profile, PersonalDetails, ParentDetails, ParentInformation, AddressDetails
+from ..models.profile import Profile, PersonalDetails, ParentDetails, ParentInformation, AddressDetails
 
 class ProfilePageHandler:
     """ Handles fetching and parsing the user profile page in the PESU Academy system.

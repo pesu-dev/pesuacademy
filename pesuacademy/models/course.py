@@ -1,35 +1,33 @@
 from typing import Optional
+from pydantic import BaseModel
 
 
-class Attendance:
-    def __init__(
-        self,
-        attended_classes: Optional[int] = None,
-        total_classes: Optional[int] = None,
-        percentage: Optional[float] = None,
-    ):
-        self.attended_classes = attended_classes
-        self.total_classes = total_classes
-        self.percentage = percentage
-
-    def __str__(self):
-        return f"{self.__dict__}"
+class Attendance(BaseModel):
+    """ Represents attendance information for a course.
+    Attributes:
+        attended_classes (Optional[int]): Number of classes attended by the student.
+        total_classes (Optional[int]): Total number of classes for the course.
+        percentage (Optional[float]): Attendance percentage calculated from attended and total classes.
+    """
+    attended_classes: Optional[int] = None
+    total_classes: Optional[int] = None
+    percentage: Optional[float] = None
 
 
-class Course:
-    def __init__(
-        self,
-        code: str,
-        title: str,
-        _type: Optional[str] = None,
-        status: Optional[str] = None,
-        attendance: Optional[Attendance] = None,
-    ):
-        self.code = code
-        self.title = title
-        self.type = _type
-        self.status = status
-        self.attendance = attendance
+class Course(BaseModel):
+    """ Represents a course in the PESU Academy system.
+    Attributes:
+        code (str): Unique identifier for the course.
+        title (str): Title of the course.
+        type (Optional[str]): Type of the course (e.g., FC, CC).
+        status (Optional[str]): Current status of the course (e.g., Enrolled).
+        attendance (Optional[Attendance]): Attendance information for the course.
+        course_id (Optional[str]): Unique identifier for the course instance.
+    """
+    code: str
+    title: str
+    type: Optional[str] = None
+    status: Optional[str] = None
+    attendance: Optional[Attendance] = None
+    course_id: Optional[str] = None
 
-    def __str__(self):
-        return f"{self.__dict__}"

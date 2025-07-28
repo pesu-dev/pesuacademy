@@ -1,144 +1,72 @@
-import datetime
-from typing import Optional
+from pydantic import BaseModel
 
 
-class ClassAndSectionInfo:
-    def __init__(
-        self,
-        prn: str,
-        srn: str,
-        name: str,
-        semester: str,
-        section: str,
-        department: str,
-        branch: str,
-        institute: str,
-        cycle: Optional[str] = None,
-    ):
-        self.prn = prn
-        self.srn = srn
-        self.name = name
-        self.semester = semester
-        self.section = section
-        self.cycle = cycle
-        self.department = department
-        self.branch = branch
-        self.institute = institute
-
-    def __str__(self):
-        return f"{self.__dict__}"
+class PersonalDetails(BaseModel):
+    """ Represents personal details of a user in the PESU Academy system.
+    Attributes:
+        name (str): Full name of the user.
+        pesu_id (str): Unique identifier for the user in the PESU system.
+        srn (str): Student Registration Number.
+        program (str): Program in which the user is enrolled.
+        branch (str): Branch of study.
+        semester (str): Current semester of the user.
+        section (str): Section of the class.
+        email_id (str): Email address of the user.
+        contact_no (str): Contact number of the user.
+    """
+    name: str
+    pesu_id: str
+    srn: str
+    program: str
+    branch: str
+    semester: str
+    section: str
+    email_id: str
+    contact_no: str
 
 
-class PersonalDetails:
-    def __init__(
-        self,
-        name: str,
-        prn: str,
-        srn: str,
-        branch: str,
-        semester: str,
-        section: str,
-        img: str,
-        program: Optional[str] = None,
-        email: Optional[str] = None,
-        mobile: Optional[str] = None,
-        aadhar: Optional[str] = None,
-        name_as_in_aadhar: Optional[str] = None,
-    ):
-        self.name = name
-        self.prn = prn
-        self.srn = srn
-        self.program = program
-        self.branch = branch
-        self.semester = semester
-        self.section = section
-        self.email = email
-        self.mobile = mobile
-        self.img = img
-        self.aadhar = aadhar
-        self.name_as_in_aadhar = name_as_in_aadhar
-
-    def __str__(self):
-        return f"{self.__dict__}"
+class ParentDetails(BaseModel):
+    """ Represents details of a parent in the PESU Academy system.
+    Attributes:
+        name (str): Full name of the parent.
+        mobile (str): Mobile number of the parent.
+        email (str): Email address of the parent.
+        occupation (str): Occupation of the parent.
+    """
+    name: str
+    mobile: str
+    email: str
+    occupation: str
 
 
-class OtherInformation:
-    def __init__(self, sslc: float, puc: float, dob: datetime.date, blood_group: str):
-        self.sslc = sslc
-        self.puc = puc
-        self.dob = dob
-        self.blood_group = blood_group
-
-    def __str__(self):
-        return f"{self.__dict__}"
-
-
-class QualifyingExamination:
-    def __init__(self, exam: str, rank: int, score: float):
-        self.exam = exam
-        self.rank = rank
-        self.score = score
-
-    def __str__(self):
-        return f"{self.__dict__}"
+class ParentInformation(BaseModel):
+    """ Represents information about parents in the PESU Academy system.
+    Attributes:
+        father (ParentDetails): Details of the father.
+        mother (ParentDetails): Details of the mother.
+    """
+    father: ParentDetails
+    mother: ParentDetails
 
 
-class ParentInformation:
-    def __init__(
-        self,
-        name: str,
-        mobile: str,
-        email: str,
-        occupation: str,
-        qualification: str,
-        designation: str,
-        employer: str,
-    ):
-        self.name = name
-        self.mobile = mobile
-        self.email = email
-        self.occupation = occupation
-        self.qualification = qualification
-        self.designation = designation
-        self.employer = employer
+class AddressDetails(BaseModel):
+    """ Represents address details in the PESU Academy system.
+    Attributes:
+        present (str): Present address of the user.
+        permanent (str): Permanent address of the user.
+    """
+    present: str
+    permanent: str
 
 
-class ParentDetails:
-    def __init__(self, mother: ParentInformation, father: ParentInformation):
-        self.mother = mother
-        self.father = father
-
-    def __str__(self):
-        return f"{self.__dict__}"
-
-
-def __str__(self):
-    return f"{self.__dict__}"
-
-
-class AddressDetails:
-    def __init__(self, present: str, permanent: str):
-        self.present = present
-        self.permanent = permanent
-
-    def __str__(self):
-        return f"{self.__dict__}"
-
-
-class Profile:
-    def __init__(
-        self,
-        personal_details: PersonalDetails,
-        other_information: OtherInformation,
-        qualifying_examination: QualifyingExamination,
-        parent_details: ParentDetails,
-        address_details: AddressDetails,
-    ):
-        self.personal_details = personal_details
-        self.other_information = other_information
-        self.qualifying_examination = qualifying_examination
-        self.parent_details = parent_details
-        self.address_details = address_details
-
-    def __str__(self):
-        return f"{self.__dict__}"
+# Need to add Other details like profile picture, date of birth, Blood Group, etc. in the future.
+class Profile(BaseModel):
+    """ Represents a user's profile in the PESU Academy system.
+    Attributes:
+        personal (PersonalDetails): Personal details of the user.
+        parents (ParentInformation): Information about the user's parents.
+        address (AddressDetails): Address details of the user.
+    """
+    personal: PersonalDetails
+    parents: ParentInformation
+    address: AddressDetails

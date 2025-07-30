@@ -3,6 +3,7 @@ import httpx
 from bs4 import BeautifulSoup
 from typing import List
 from ..models import Course
+from .. import constants
 
 class CoursesPageHandler:
     @staticmethod
@@ -18,9 +19,9 @@ class CoursesPageHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "menuId": "653",
-            "controllerMode": "6403",
-            "actionType": "38",
+            "menuId": constants.PageURLParams.Courses.MENU_ID,
+            "controllerMode": constants.PageURLParams.Courses.CONTROLLER_MODE,
+            "actionType": constants.PageURLParams.Courses.ACTION_TYPE,
             "id": semester_id, # Some wierd formating error in semester id, made a temp fix but will have to find a better way later
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }

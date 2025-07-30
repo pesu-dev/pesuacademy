@@ -3,6 +3,7 @@ import httpx
 from bs4 import BeautifulSoup, Tag
 import re
 from ..models.profile import Profile, PersonalDetails, OtherInformation, QualifyingExamination, ParentDetails, ParentInformation, AddressDetails
+from .. import constants
 
 class ProfilePageHandler:
     """ Handles fetching and parsing the user profile page in the PESU Academy system.
@@ -133,7 +134,9 @@ class ProfilePageHandler:
             httpx.HTTPStatusError: If the request to fetch the profile page fails."""
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "menuId": "670", "controllerMode": "6414", "actionType": "5",
+            "menuId": constants.PageURLParams.Profile.MENU_ID, 
+            "controllerMode": constants.PageURLParams.Profile.CONTROLLER_MODE, 
+            "actionType": constants.PageURLParams.Profile.ACTION_TYPE,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

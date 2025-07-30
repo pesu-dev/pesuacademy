@@ -3,6 +3,7 @@ import httpx
 from bs4 import BeautifulSoup
 from typing import List
 from ..models import SeatingInformation
+from .. import constants
 
 class SeatingInformationHandler:
     @staticmethod
@@ -17,7 +18,9 @@ class SeatingInformationHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "menuId": "655", "controllerMode": "6404", "actionType": "5",
+            "menuId": constants.PageURLParams.SeatingInformation.MENU_ID, 
+            "controllerMode": constants.PageURLParams.SeatingInformation.CONTROLLER_MODE, 
+            "actionType": constants.PageURLParams.SeatingInformation.ACTION_TYPE,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

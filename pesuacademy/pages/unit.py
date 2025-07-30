@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from typing import List
 from ..models.materials import Topic
+from .. import constants
 
 class UnitPageHandler:
     @staticmethod
@@ -19,10 +20,10 @@ class UnitPageHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "controllerMode": "6403",
-            "actionType": "43",
+            "controllerMode": constants.PageURLParams.MaterialLinks.CONTROLLER_MODE,
+            "actionType": constants.PageURLParams.MaterialLinks.ACTION_TYPE,
             "coursecontentid": unit_id,
-            "menuId": "653",
+            "menuId": constants.PageURLParams.MaterialLinks.MENU_ID,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

@@ -5,6 +5,8 @@ import copy
 from bs4 import BeautifulSoup
 from typing import List
 from ..models.announcement import Announcement
+from .. import constants
+
 
 class AnnouncementPageHandler:
     @staticmethod
@@ -19,10 +21,10 @@ class AnnouncementPageHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "menuId": "667",
+            "menuId": constants.PageURLParams.Announcements.MENU_ID,
             "url": "studentProfilePESUAdmin",
-            "controllerMode": "6411",
-            "actionType": "5",
+            "controllerMode": constants.PageURLParams.Announcements.CONTROLLER_MODE,
+            "actionType": constants.PageURLParams.Announcements.ACTION_TYPE,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

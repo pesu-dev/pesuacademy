@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from typing import List
 from ..models.materials import Topic, MaterialLink
+from .. import constants
 
 class MaterialLinksHandler:
     @staticmethod
@@ -21,12 +22,12 @@ class MaterialLinksHandler:
         url = "/s/studentProfilePESUAdmin"
         params = {
             "url": "studentProfilePESUAdmin",
-            "controllerMode": "6403",
-            "actionType": "60",
+            "controllerMode": constants.PageURLParams.MaterialLinks.CONTROLLER_MODE,
+            "actionType": constants.PageURLParams.MaterialLinks.ACTION_TYPE,
             "selectedData": topic.course_id,
             "id": material_type_id,
             "unitid": topic.topic_id,
-            "menuId": "653",
+            "menuId": constants.PageURLParams.MaterialLinks.MENU_ID,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

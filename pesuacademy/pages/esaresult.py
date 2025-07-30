@@ -3,6 +3,7 @@ import httpx
 from bs4 import BeautifulSoup
 from typing import List
 from ..models.results import SemesterResult, SubjectResult, Assessment
+from .. import constants
 
 class ResultsPageHandler:
     @staticmethod
@@ -18,10 +19,10 @@ class ResultsPageHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "controllerMode": "6402",
-            "actionType": "9",
+            "controllerMode": constants.PageURLParams.Results.CONTROLLER_MODE,
+            "actionType": constants.PageURLParams.Results.ACTION_TYPE,
             "semid": semester_id,
-            "menuId": "652",
+            "menuId": constants.PageURLParams.Results.MENU_ID,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

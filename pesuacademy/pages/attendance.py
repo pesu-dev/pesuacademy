@@ -3,6 +3,8 @@ import httpx
 from bs4 import BeautifulSoup
 from typing import List
 from ..models import Course, Attendance
+from .. import constants
+
 
 class AttendancePageHandler:
     @staticmethod
@@ -18,7 +20,10 @@ class AttendancePageHandler:
         """
         url = "/s/studentProfilePESUAdmin"
         params = {
-            "menuId": "660", "controllerMode": "6407", "actionType": "8", "batchClassId": semester_id,
+            "menuId": constants.PageURLParams.Attendance.MENU_ID, 
+            "controllerMode": constants.PageURLParams.Attendance.CONTROLLER_MODE, 
+            "actionType": constants.PageURLParams.Attendance.ACTION_TYPE, 
+            "batchClassId": semester_id,
             "_": str(int(datetime.datetime.now().timestamp() * 1000)),
         }
         response = await session.get(url, params=params)

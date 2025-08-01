@@ -15,7 +15,7 @@ class PersonalDetails(BaseModel):
         email_id (str): Email address of the user.
         contact_no (str): Contact number of the user.
         name_as_in_aadhar (str): Name as per Aadhar card.
-        profile_image_base64 (Optional[str]): Base64 encoded profile image, if available.
+        image (Optional[str]): Base64 encoded profile image, if available.
     """
     name: str
     pesu_id: str
@@ -28,7 +28,7 @@ class PersonalDetails(BaseModel):
     contact_no: str
     aadhar_no: Optional[str] = None
     name_as_in_aadhar: Optional[str] = None
-    profile_image_base64: Optional[str] = None
+    image: Optional[str] = None
 
 class OtherInformation(BaseModel):
     """ Represents other personal information of a user in the PESU Academy system.
@@ -95,7 +95,7 @@ class AddressDetails(BaseModel):
     permanent: str
 
 
-# Need to add Other details like profile picture, date of birth, Blood Group, etc. in the future.
+
 class Profile(BaseModel):
     """ Represents a user's profile in the PESU Academy system.
     Attributes:

@@ -1,13 +1,14 @@
-import datetime
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models import SeatingInformation
 from .. import constants
 
-class SeatingInformationHandler:
+class _SeatingInformationHandler:
     @staticmethod
-    async def get_page(session: httpx.AsyncClient) -> List[SeatingInformation]:
+    async def _get_page(session: httpx.AsyncClient) -> List[SeatingInformation]:
         """ Fetches and parses the seating information page.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -17,12 +18,9 @@ class SeatingInformationHandler:
             httpx.HTTPStatusError: If the request to the seating information page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "menuId": constants.PageURLParams.SeatingInformation.MENU_ID, 
-            "controllerMode": constants.PageURLParams.SeatingInformation.CONTROLLER_MODE, 
-            "actionType": constants.PageURLParams.SeatingInformation.ACTION_TYPE,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.SeatingInformation,
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
         

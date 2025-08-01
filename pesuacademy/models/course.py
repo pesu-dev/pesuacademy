@@ -5,12 +5,12 @@ from pydantic import BaseModel
 class Attendance(BaseModel):
     """ Represents attendance information for a course.
     Attributes:
-        attended_classes (Optional[int]): Number of classes attended by the student.
-        total_classes (Optional[int]): Total number of classes for the course.
+        attended (Optional[int]): Number of classes attended by the student.
+        total (Optional[int]): Total number of classes for the course.
         percentage (Optional[float]): Attendance percentage calculated from attended and total classes.
     """
-    attended_classes: Optional[int] = None
-    total_classes: Optional[int] = None
+    attended: Optional[int] = None
+    total: Optional[int] = None
     percentage: Optional[float] = None
 
 

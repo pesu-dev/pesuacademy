@@ -4,13 +4,15 @@ import re
 import copy
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models.announcement import Announcement
 from .. import constants
 
 
-class AnnouncementPageHandler:
+class _AnnouncementPageHandler:
     @staticmethod
-    async def get_page(session: httpx.AsyncClient) -> List[Announcement]:
+    async def _get_page(session: httpx.AsyncClient) -> List[Announcement]:
         """ Fetches the main announcements page and scrapes all announcements.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -20,13 +22,10 @@ class AnnouncementPageHandler:
             httpx.HTTPStatusError: If the request to the announcements page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "menuId": constants.PageURLParams.Announcements.MENU_ID,
-            "url": "studentProfilePESUAdmin",
-            "controllerMode": constants.PageURLParams.Announcements.CONTROLLER_MODE,
-            "actionType": constants.PageURLParams.Announcements.ACTION_TYPE,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.Announcements,
+            url="studentProfilePESUAdmin"
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 

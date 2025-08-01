@@ -7,22 +7,22 @@ class Assessment(BaseModel):
     """ Represents an assessment(e.g., ISA1, MATLAB) in the PESU Academy system.
     Attributes:
         name (str): Name of the assessment.
-        marks (Optional[str]): Marks obtained in the assessment, if applicable.
-        max_marks (Optional[str]): Maximum marks for the assessment, if applicable.
+        marks (Optional[str]): Marks obtained in the assessment, if applicable. (e.g., 72)
+        total (Optional[str]): Total marks for the assessment, if applicable. (e.g., 100)
     """
     name: str
     marks: Optional[str] = None
-    max_marks: Optional[str] = None
+    total: Optional[str] = None
 
 
-class SubjectResult(BaseModel):
-    """ Represents the result of a subject in the PESU Academy system.
+class CourseResult(BaseModel):
+    """ Represents the result of a course in the PESU Academy system.
     Attributes:
-        code (str): Unique identifier for the subject.
-        title (str): Title of the subject.
-        credits_earned (str): Credits earned for the subject.
-        credits_total (str): Total credits available for the subject.
-        assessments (List[Assessment]): List of assessments associated with the subject.
+        code (str): Unique identifier for the course.
+        title (str): Title of the course.
+        credits_earned (str): Credits earned for the course.
+        credits_total (str): Total credits available for the course.
+        assessments (List[Assessment]): List of assessments associated with the course.
     """
     code: str
     title: str
@@ -38,9 +38,9 @@ class SemesterResult(BaseModel):
         sgpa (str): Semester Grade Point Average.
         credits_earned (str): Total credits earned in the semester.
         credits_total (str): Total credits available in the semester.
-        subjects (List[SubjectResult]): List of subject results for the semester.
+        courses (List[CourseResult]): List of course results for the semester.
     """
     sgpa: str
     credits_earned: str
     credits_total: str
-    subjects: List[SubjectResult]
+    courses: List[CourseResult]

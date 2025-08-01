@@ -1,15 +1,16 @@
-import datetime
 import httpx
 import re
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models.materials import Unit
 from .. import constants
 
 
-class CourseDetailPageHandler:
+class _CourseDetailPageHandler:
     @staticmethod
-    async def get_page(session: httpx.AsyncClient, course_id: str) -> List[Unit]:
+    async def _get_page(session: httpx.AsyncClient, course_id: str) -> List[Unit]:
         """ Fetches the main page for a course and scrapes the list of units.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -20,13 +21,10 @@ class CourseDetailPageHandler:
             httpx.HTTPStatusError: If the request to the course page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "controllerMode": constants.PageURLParams.CourseDetail.CONTROLLER_MODE,
-            "actionType": constants.PageURLParams.CourseDetail.ACTION_TYPE,
-            "id": course_id,
-            "menuId": constants.PageURLParams.CourseDetail.MENU_ID,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.CourseDetail,
+            id=course_id
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 

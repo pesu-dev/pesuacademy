@@ -1,11 +1,12 @@
-import datetime
 import httpx
 from bs4 import BeautifulSoup, Tag
 import re
+
+from ..util import build_params
 from ..models.profile import Profile, PersonalDetails, OtherInformation, QualifyingExamination, ParentDetails, ParentInformation, AddressDetails
 from .. import constants
 
-class ProfilePageHandler:
+class _ProfilePageHandler:
     """ Handles fetching and parsing the user profile page in the PESU Academy system.
     This class provides methods to retrieve and parse the profile page to extract personal, parent, and address details.
     """
@@ -50,18 +51,18 @@ class ProfilePageHandler:
         profile_image_base64 = profile_image_base64.split("data:image/jpeg;base64,")[1]
 
         personal = PersonalDetails(
-            name=ProfilePageHandler._find_value_for_label(personal_container, "Name"),
-            pesu_id=ProfilePageHandler._find_value_for_label(personal_container, "PESU Id"),
-            srn=ProfilePageHandler._find_value_for_label(personal_container, "SRN"),
-            program=ProfilePageHandler._find_value_for_label(personal_container, "Program"),
-            branch=ProfilePageHandler._find_value_for_label(personal_container, "Branch"),
-            semester=ProfilePageHandler._find_value_for_label(personal_container, "Semester"),
-            section=ProfilePageHandler._find_value_for_label(personal_container, "Section"),
-            email_id=ProfilePageHandler._find_value_for_label(personal_container, "Email ID"),
-            contact_no=ProfilePageHandler._find_value_for_label(personal_container, "Contact No"),
-            aadhar_no=ProfilePageHandler._find_value_for_label(personal_container, "Aadhar No"),
-            name_as_in_aadhar=ProfilePageHandler._find_value_for_label(personal_container, "Name as in aadhar"),
-            profile_image_base64=profile_image_base64,
+            name=_ProfilePageHandler._find_value_for_label(personal_container, "Name"),
+            pesu_id=_ProfilePageHandler._find_value_for_label(personal_container, "PESU Id"),
+            srn=_ProfilePageHandler._find_value_for_label(personal_container, "SRN"),
+            program=_ProfilePageHandler._find_value_for_label(personal_container, "Program"),
+            branch=_ProfilePageHandler._find_value_for_label(personal_container, "Branch"),
+            semester=_ProfilePageHandler._find_value_for_label(personal_container, "Semester"),
+            section=_ProfilePageHandler._find_value_for_label(personal_container, "Section"),
+            email_id=_ProfilePageHandler._find_value_for_label(personal_container, "Email ID"),
+            contact_no=_ProfilePageHandler._find_value_for_label(personal_container, "Contact No"),
+            aadhar_no=_ProfilePageHandler._find_value_for_label(personal_container, "Aadhar No"),
+            name_as_in_aadhar=_ProfilePageHandler._find_value_for_label(personal_container, "Name as in aadhar"),
+            image=profile_image_base64,
         )
 
         # Other Information and Qualifying Examination
@@ -69,15 +70,15 @@ class ProfilePageHandler:
         qualifying_exam_container = soup.find("h4", string="Qualifying examination").find_next("div", class_="info-contents")
         
         other_info = OtherInformation(
-            sslc_marks=ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
-            puc_marks=ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
-            date_of_birth=ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
-            blood_group=ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
+            sslc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
+            puc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
+            date_of_birth=_ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
+            blood_group=_ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
         )
         qualifying_exam = QualifyingExamination(
-            exam=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
-            rank=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Rank"),
-            score=ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Score"),
+            exam=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
+            rank=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Rank"),
+            score=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Score"),
         )
 
         # Parent Details
@@ -89,30 +90,30 @@ class ProfilePageHandler:
 
         parents = ParentInformation(
             father=ParentDetails(
-                name=ProfilePageHandler._find_value_for_label(father_container, "Father Name"),
-                mobile=ProfilePageHandler._find_value_for_label(father_container, "Mobile"),
-                email=ProfilePageHandler._find_value_for_label(father_container, "Email"),
-                occupation=ProfilePageHandler._find_value_for_label(father_container, "Occupation"),
-                qualification=ProfilePageHandler._find_value_for_label(father_container, "Qualification"),
-                designation=ProfilePageHandler._find_value_for_label(father_container, "Designation"),
-                employer=ProfilePageHandler._find_value_for_label(father_container, "Employer"),
+                name=_ProfilePageHandler._find_value_for_label(father_container, "Father Name"),
+                mobile=_ProfilePageHandler._find_value_for_label(father_container, "Mobile"),
+                email=_ProfilePageHandler._find_value_for_label(father_container, "Email"),
+                occupation=_ProfilePageHandler._find_value_for_label(father_container, "Occupation"),
+                qualification=_ProfilePageHandler._find_value_for_label(father_container, "Qualification"),
+                designation=_ProfilePageHandler._find_value_for_label(father_container, "Designation"),
+                employer=_ProfilePageHandler._find_value_for_label(father_container, "Employer"),
             ),
             mother=ParentDetails(
-                name=ProfilePageHandler._find_value_for_label(mother_container, "Mother Name"),
-                mobile=ProfilePageHandler._find_value_for_label(mother_container, "Mobile"),
-                email=ProfilePageHandler._find_value_for_label(mother_container, "Email"),
-                occupation=ProfilePageHandler._find_value_for_label(mother_container, "Occupation"),
-                qualification=ProfilePageHandler._find_value_for_label(mother_container, "Qualification"),
-                designation=ProfilePageHandler._find_value_for_label(mother_container, "Designation"),
-                employer=ProfilePageHandler._find_value_for_label(mother_container, "Employer"),
+                name=_ProfilePageHandler._find_value_for_label(mother_container, "Mother Name"),
+                mobile=_ProfilePageHandler._find_value_for_label(mother_container, "Mobile"),
+                email=_ProfilePageHandler._find_value_for_label(mother_container, "Email"),
+                occupation=_ProfilePageHandler._find_value_for_label(mother_container, "Occupation"),
+                qualification=_ProfilePageHandler._find_value_for_label(mother_container, "Qualification"),
+                designation=_ProfilePageHandler._find_value_for_label(mother_container, "Designation"),
+                employer=_ProfilePageHandler._find_value_for_label(mother_container, "Employer"),
             )
         )
 
         # Address Details
         address_container = soup.find("h4", string="Address").find_next("div")
         address = AddressDetails(
-            present=ProfilePageHandler._find_value_for_label(address_container, "Present Address"),
-            permanent=ProfilePageHandler._find_value_for_label(address_container, "Permanent Address"),
+            present=_ProfilePageHandler._find_value_for_label(address_container, "Present Address"),
+            permanent=_ProfilePageHandler._find_value_for_label(address_container, "Permanent Address"),
         )
 
         return Profile(
@@ -124,7 +125,7 @@ class ProfilePageHandler:
         )
 
     @staticmethod
-    async def get_page(session: httpx.AsyncClient) -> Profile:
+    async def _get_page(session: httpx.AsyncClient) -> Profile:
         """Fetches and parses the user's profile page.
         Args:
             session (httpx.AsyncClient): An authenticated HTTP client session.
@@ -133,14 +134,11 @@ class ProfilePageHandler:
         Raises:
             httpx.HTTPStatusError: If the request to fetch the profile page fails."""
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "menuId": constants.PageURLParams.Profile.MENU_ID, 
-            "controllerMode": constants.PageURLParams.Profile.CONTROLLER_MODE, 
-            "actionType": constants.PageURLParams.Profile.ACTION_TYPE,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.Profile,
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")
-        return ProfilePageHandler._parse_profile_soup(soup)
+        return _ProfilePageHandler._parse_profile_soup(soup)

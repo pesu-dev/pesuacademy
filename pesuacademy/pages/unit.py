@@ -1,14 +1,15 @@
-import datetime
 import httpx
 import re
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models.materials import Topic
 from .. import constants
 
-class UnitPageHandler:
+class _UnitPageHandler:
     @staticmethod
-    async def get_page(session: httpx.AsyncClient, unit_id: str) -> List[Topic]:
+    async def _get_page(session: httpx.AsyncClient, unit_id: str) -> List[Topic]:
         """ Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -19,13 +20,10 @@ class UnitPageHandler:
             httpx.HTTPStatusError: If the request to the unit page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "controllerMode": constants.PageURLParams.MaterialLinks.CONTROLLER_MODE,
-            "actionType": constants.PageURLParams.MaterialLinks.ACTION_TYPE,
-            "coursecontentid": unit_id,
-            "menuId": constants.PageURLParams.MaterialLinks.MENU_ID,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.UnitPage,
+            unitid=unit_id
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 

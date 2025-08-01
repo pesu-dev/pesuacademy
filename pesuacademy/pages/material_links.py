@@ -1,14 +1,15 @@
-import datetime
 import httpx
 import re
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models.materials import Topic, MaterialLink
 from .. import constants
 
-class MaterialLinksHandler:
+class _MaterialLinksHandler:
     @staticmethod
-    async def get_page(session: httpx.AsyncClient, topic: Topic, material_type_id: str) -> List[MaterialLink]:
+    async def _get_page(session: httpx.AsyncClient, topic: Topic, material_type_id: str) -> List[MaterialLink]:
         """ Fetches the material links for a given topic and material type ID.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -20,22 +21,18 @@ class MaterialLinksHandler:
             httpx.HTTPStatusError: If the request to the material links page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "url": "studentProfilePESUAdmin",
-            "controllerMode": constants.PageURLParams.MaterialLinks.CONTROLLER_MODE,
-            "actionType": constants.PageURLParams.MaterialLinks.ACTION_TYPE,
-            "selectedData": topic.course_id,
-            "id": material_type_id,
-            "unitid": topic.topic_id,
-            "menuId": constants.PageURLParams.MaterialLinks.MENU_ID,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.MaterialLinks,
+            selectedData=topic.course_id,
+            id=material_type_id,
+            unitid=topic.topic_id,
+            url="studentProfilePESUAdmin"
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")
         links = []
-        base_url = "https://www.pesuacademy.com"
 
         # Find all link containers
         link_containers = soup.find_all("div", class_="link-preview")
@@ -50,7 +47,7 @@ class MaterialLinksHandler:
                     doc_id = match.group(1)
                     title = container.text.strip()
                     # Construct the full download URL
-                    full_url = f"{base_url}/Academy/s/referenceMeterials/downloadcoursedoc/{doc_id}"
+                    full_url = f"{constants.BASE_URL}/Academy/s/referenceMeterials/downloadcoursedoc/{doc_id}"
                     links.append(MaterialLink(title=title, url=full_url, is_pdf=False))
             
             # PDF links which are in the form of an Iframe
@@ -63,7 +60,7 @@ class MaterialLinksHandler:
                         partial_url = match.group(1).split('#')[0] # Get URL part before the '#'
                         title = link_tag.text.strip()
                         # Construct the full download URL
-                        full_url = f"{base_url}{partial_url}"
+                        full_url = f"{constants.BASE_UR}{partial_url}"
                         links.append(MaterialLink(title=title, url=full_url, is_pdf=True))
 
         return links

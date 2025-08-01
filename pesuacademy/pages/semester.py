@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 import re
 import datetime
 
-class SemesterHandler:
+class _SemesterHandler:
     @staticmethod
-    async def get_semester_ids(session: httpx.AsyncClient) -> dict[int, str]:
+    async def _get_semester_ids(session: httpx.AsyncClient) -> dict[int, str]:
         """ Fetches semester IDs by calling the dynamic endpoint and cleaning the extracted values.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.

@@ -1,7 +1,8 @@
 from typing import Optional, List, Dict
-
+import os
+from dotenv import load_dotenv
 # Import the core engine
-from .client import PesuAcademyClient
+from .client import _PesuScraper
 
 # Import all Pydantic models to be used as return types for clarity
 from .models import (
@@ -24,31 +25,40 @@ class PESUAcademy:
     asynchronous methods to fetch academic data.
     """
 
-    def __init__(self, client: PesuAcademyClient):
+    def __init__(self, client: _PesuScraper):
         """
         Initializes the PESUAcademy session. This method is not meant to be called directly.
         Please use the `PESUAcademy.login()` class method to create an instance.
 
         Args:
-            client (PesuAcademyClient): An authenticated instance of the core client.
+            client (_PesuScraper): An authenticated instance of the core client.
         """
         self._client = client
 
     @classmethod
-    async def login(cls, username: str, password: str) -> "PESUAcademy":
+    async def login(cls, username: Optional[str] = None, password: Optional[str] = None) -> "PESUAcademy":
         """
-        Creates, authenticates, and returns an active PESUAcademy session.
-        This is the primary way to start using the library.
+        Creates and returns an authenticated PESUAcademy session.
+
+        Credentials can be passed as arguments or loaded from environment variables
+        (PESU_USERNAME, PESU_PASSWORD).
 
         Args:
-            username (str): The user's SRN, PRN, or other login identifier.
-            password (str): The user's password.
-
-        Returns:
-            PESUAcademy: An authenticated instance ready to make requests.
+            username (Optional[str]): The user's login identifier.
+            password (Optional[str]): The user's password.
         """
-        client = PesuAcademyClient()
-        await client.login(username, password)
+        load_dotenv()  # Load environment variables from .env file
+        uname = username or os.environ.get("PESU_USERNAME")
+        pword = password or os.environ.get("PESU_PASSWORD")
+
+        if not uname or not pword:
+            raise ValueError(
+                "Credentials not provided. "
+                "Pass them as arguments or set PESU_USERNAME and PESU_PASSWORD environment variables."
+            )
+
+        client = _PesuScraper()
+        await client.login(uname, pword)
         return cls(client)
 
     async def get_profile(self) -> Profile:

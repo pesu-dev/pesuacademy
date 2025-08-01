@@ -1,14 +1,15 @@
-import datetime
 import httpx
 from bs4 import BeautifulSoup
 from typing import List
+
+from ..util import build_params
 from ..models import Course, Attendance
 from .. import constants
 
 
-class AttendancePageHandler:
+class _AttendancePageHandler:
     @staticmethod
-    async def get_attendance_in_semester(session: httpx.AsyncClient, semester_id: str) -> List[Course]:
+    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> List[Course]:
         """ Fetches the attendance for a single given semester ID.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
@@ -19,13 +20,10 @@ class AttendancePageHandler:
             httpx.HTTPStatusError: If the request to the attendance page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = {
-            "menuId": constants.PageURLParams.Attendance.MENU_ID, 
-            "controllerMode": constants.PageURLParams.Attendance.CONTROLLER_MODE, 
-            "actionType": constants.PageURLParams.Attendance.ACTION_TYPE, 
-            "batchClassId": semester_id,
-            "_": str(int(datetime.datetime.now().timestamp() * 1000)),
-        }
+        params = build_params(
+            constants.PageURLParams.Attendance,
+            batchClassId=semester_id
+        )
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -40,11 +38,11 @@ class AttendancePageHandler:
         for row in table.find("tbody").find_all("tr"):
             cols = [c.text.strip() for c in row.find_all("td")]
             if len(cols) >= 4:
-                attended_classes, total_classes = None, None
+                attended, total = None, None
                 if "/" in cols[2]:
                     try:
                         attended, total = cols[2].split("/")
-                        attended_classes, total_classes = int(attended), int(total)
+                        attended, total = int(attended), int(total)
                     except ValueError:
                         pass # Keep them as None if conversion fails
                 
@@ -55,8 +53,8 @@ class AttendancePageHandler:
                     pass # Keep as None if "NA"
 
                 course_attendance = Attendance(
-                    attended_classes=attended_classes,
-                    total_classes=total_classes,
+                    attended=attended,
+                    total=total,
                     percentage=percentage
                 )
                 course = Course(

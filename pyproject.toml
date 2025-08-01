@@ -1,0 +1,64 @@
+[project]
+name = "pesuacademy"
+version = "2.0.0"
+description = "A simple API to communicate via CLI with PESU Academy."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Achyuth S S", email = "achyuthss2003@gmail.com" }
+]
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.6.0",
+    "pytz>=2025.2",
+    "selectolax>=0.3.30",
+    "aiofiles>=24.1.0",
+    "emoji>=2.14.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.1",
+    "pandas>=2.3.1",
+    "pre-commit>=4.2.0",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.2.1",
+    "python-dotenv>=1.1.0",
+    "ruff>=0.12.2",
+    "seaborn>=0.13.2",
+    "tqdm>=4.67.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+markers = [
+    "secret_required: marks tests that require secrets or environment variables (e.g. TEST_PRN, TEST_PASSWORD)"
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+ignore-init-module-imports = true
+
+[tool.ruff.lint]
+select = ["F"]
+per-file-ignores = { "__init__.py" = ["F401"] }
+
+[tool.ruff.format]
+quote-style = "double"

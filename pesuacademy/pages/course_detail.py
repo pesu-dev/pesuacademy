@@ -1,7 +1,6 @@
 import httpx
 import re
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models.materials import Unit
@@ -10,21 +9,18 @@ from .. import constants
 
 class _CourseDetailPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, course_id: str) -> List[Unit]:
-        """ Fetches the main page for a course and scrapes the list of units.
+    async def _get_page(session: httpx.AsyncClient, course_id: str) -> list[Unit]:
+        """Fetches the main page for a course and scrapes the list of units.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
-            course_id (str): The ID of the course to fetch units for.   
+            course_id (str): The ID of the course to fetch units for.
         Returns:
             List[Unit]: A list of Unit objects containing the scraped data.
         Raises:
             httpx.HTTPStatusError: If the request to the course page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.CourseDetail,
-            id=course_id
-        )
+        params = build_params(constants.PageURLParams.CourseDetail, id=course_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -42,7 +38,7 @@ class _CourseDetailPageHandler:
             # Title
             title = link.get("title")
             onclick_attr = link.get("onclick")
-            
+
             # Skip if title or onclick attribute is missing
             if not title or not onclick_attr:
                 continue
@@ -52,5 +48,5 @@ class _CourseDetailPageHandler:
             if match:
                 unit_id = match.group(1)
                 units.append(Unit(title=title, unit_id=unit_id))
-        
+
         return units

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class SeatingInformation(BaseModel):
-    """ Represents seating information in the PESU Academy system.
+    """Represents seating information in the PESU Academy system.
     Attributes:
         name (str): Name of the course/assessment.
         course_code (str): Code of the course for which seating information is provided.
@@ -11,6 +11,7 @@ class SeatingInformation(BaseModel):
         terminal (str): Terminal or location where the student is seated.
         block (str): Block or section of the seating arrangement.
     """
+
     name: str
     course_code: str
     date: str

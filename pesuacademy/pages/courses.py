@@ -1,15 +1,15 @@
 import httpx
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models import Course
 from .. import constants
 
+
 class _CoursesPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> List[Course]:
-        """ Fetches the courses for a single given semester ID.
+    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
+        """Fetches the courses for a single given semester ID.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             semester_id (str): The ID of the semester to fetch courses for.
@@ -19,14 +19,11 @@ class _CoursesPageHandler:
             httpx.HTTPStatusError: If the request to the courses page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.Courses,
-            id=semester_id
-        )
+        params = build_params(constants.PageURLParams.Courses, id=semester_id)
 
         response = await session.get(url, params=params)
         response.raise_for_status()
-        
+
         soup = BeautifulSoup(response.text, "lxml")
         table = soup.find("table", class_="table-hover")
         if not table or "No subjects found" in table.text:
@@ -41,7 +38,7 @@ class _CoursesPageHandler:
                 continue
             # Split and extract the course ID from the row ID
             try:
-                course_id = row_id.split('_')[-1]
+                course_id = row_id.split("_")[-1]
             except IndexError:
                 continue
 
@@ -54,7 +51,7 @@ class _CoursesPageHandler:
                         title=cols[1],
                         type=cols[2],
                         status=cols[3],
-                        course_id=course_id
+                        course_id=course_id,
                     )
                 )
         return courses

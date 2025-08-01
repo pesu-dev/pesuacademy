@@ -1,16 +1,16 @@
 import httpx
 import re
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models.materials import Topic
 from .. import constants
 
+
 class _UnitPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, unit_id: str) -> List[Topic]:
-        """ Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
+    async def _get_page(session: httpx.AsyncClient, unit_id: str) -> list[Topic]:
+        """Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             unit_id (str): The ID of the unit to fetch topics for.
@@ -20,15 +20,12 @@ class _UnitPageHandler:
             httpx.HTTPStatusError: If the request to the unit page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.UnitPage,
-            unitid=unit_id
-        )
+        params = build_params(constants.PageURLParams.UnitPage, unitid=unit_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")
-        
+
         # Find the topics table
         table = soup.find("table", class_="table-bordered")
         if not table:
@@ -36,13 +33,15 @@ class _UnitPageHandler:
 
         topics = []
         for row in table.find("tbody").find_all("tr"):
-
             onclick_attr = row.get("onclick")
             if not onclick_attr:
                 continue
 
             # handleclasscoursecontentunit('topic_id', 'course_id', 'unit_id', ...)
-            match = re.search(r"handleclasscoursecontentunit\('([^']*)','([^']*)','([^']*)'", onclick_attr)
+            match = re.search(
+                r"handleclasscoursecontentunit\('([^']*)','([^']*)','([^']*)'",
+                onclick_attr,
+            )
             if not match:
                 continue
             # Extract the first three critical arguments from the JS function
@@ -60,8 +59,8 @@ class _UnitPageHandler:
                     title=title,
                     topic_id=topic_id,
                     course_id=course_id,
-                    unit_id=scraped_unit_id
+                    unit_id=scraped_unit_id,
                 )
             )
-        
+
         return topics

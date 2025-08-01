@@ -1,18 +1,18 @@
 import datetime
-from typing import Optional, List
 from pydantic import BaseModel
 
 
 class Announcement(BaseModel):
-    """ Represents an announcement in the PESU Academy system.
+    """Represents an announcement in the PESU Academy system.
 
-    Attributes: 
+    Attributes:
         title (str): The title of the announcement.
         date (datetime.date): The date of the announcement.
         content (str): The content of the announcement.
         links (Optional[List[str]]): Optional list of attachment links related to the announcement.
     """
+
     title: str
     date: datetime.date
     content: str
-    links: Optional[List[str]] = None
+    links: list[str] | None = None

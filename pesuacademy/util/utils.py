@@ -1,7 +1,8 @@
 import datetime
-from typing import Dict, Any
+from typing import Any
 
-def build_params(params_obj: Any, **kwargs: Any) -> Dict[str, str]:
+
+def build_params(params_obj: Any, **kwargs: Any) -> dict[str, str]:
     """
     Builds and returns the common parameter dictionary for PESU Academy requests.
 
@@ -17,9 +18,9 @@ def build_params(params_obj: Any, **kwargs: Any) -> Dict[str, str]:
         "controllerMode": params_obj.CONTROLLER_MODE,
         "actionType": params_obj.ACTION_TYPE,
     }
-    
+
     params.update(kwargs)
-    
+
     params["_"] = str(int(datetime.datetime.now().timestamp() * 1000))
-    
+
     return params

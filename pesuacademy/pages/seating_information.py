@@ -1,15 +1,15 @@
 import httpx
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models import SeatingInformation
 from .. import constants
 
+
 class _SeatingInformationHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient) -> List[SeatingInformation]:
-        """ Fetches and parses the seating information page.
+    async def _get_page(session: httpx.AsyncClient) -> list[SeatingInformation]:
+        """Fetches and parses the seating information page.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
         Returns:
@@ -23,8 +23,10 @@ class _SeatingInformationHandler:
         )
         response = await session.get(url, params=params)
         response.raise_for_status()
-        
-        if "No Test Seating Info is available" in response.text: # Check if no seating info is available
+
+        if (
+            "No Test Seating Info is available" in response.text
+        ):  # Check if no seating info is available
             return []
 
         soup = BeautifulSoup(response.text, "lxml")
@@ -40,8 +42,12 @@ class _SeatingInformationHandler:
             if len(cols) >= 6:
                 seating_info.append(
                     SeatingInformation(
-                        name=cols[0], course_code=cols[1], date=cols[2],
-                        time=cols[3], terminal=cols[4], block=cols[5]
+                        name=cols[0],
+                        course_code=cols[1],
+                        date=cols[2],
+                        time=cols[3],
+                        terminal=cols[4],
+                        block=cols[5],
                     )
                 )
         return seating_info

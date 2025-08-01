@@ -1,41 +1,43 @@
 import httpx
 from bs4 import BeautifulSoup
-from typing import List, Dict, Optional
 import asyncio
 
 from .pages import (
     _SeatingInformationHandler,
     _CoursesPageHandler,
-    _CourseDetailPageHandler, 
-    _UnitPageHandler,         
+    _CourseDetailPageHandler,
+    _UnitPageHandler,
     _MaterialLinksHandler,
     _AttendancePageHandler,
     _ProfilePageHandler,
     _SemesterHandler,
     _AnnouncementPageHandler,
-    _ResultsPageHandler
+    _ResultsPageHandler,
 )
 from .models import (
-    SeatingInformation, 
-    Course, 
-    Profile, 
-    Announcement, 
-    Unit,                 
-    Topic,                
+    SeatingInformation,
+    Course,
+    Profile,
+    Announcement,
+    Unit,
+    Topic,
     MaterialLink,
-    SemesterResult        
+    SemesterResult,
 )
+
 
 class _PesuScraper:
     def __init__(self):
         self._base_url = "https://www.pesuacademy.com/Academy"
-        self._session = httpx.AsyncClient(base_url=self._base_url, follow_redirects=True, timeout=30.0)
-        self._csrf_token: Optional[str] = None
-        self._semester_ids: Dict[int, str] = {}
+        self._session = httpx.AsyncClient(
+            base_url=self._base_url, follow_redirects=True, timeout=30.0
+        )
+        self._csrf_token: str | None = None
+        self._semester_ids: dict[int, str] = {}
         self.is_authenticated = False
 
     async def login(self, username: str, password: str):
-        """ Logs in to the PESU Academy portal and initializes the session.
+        """Logs in to the PESU Academy portal and initializes the session.
         Args:
             username (str): The user's SRN, PRN, or other login identifier.
             password (str): The user's password.
@@ -50,13 +52,17 @@ class _PesuScraper:
         # Extract the CSRF token from the initial page
         initial_csrf = soup.find("meta", attrs={"name": "csrf-token"})["content"]
 
-        login_data = {"_csrf": initial_csrf, "j_username": username, "j_password": password}
+        login_data = {
+            "_csrf": initial_csrf,
+            "j_username": username,
+            "j_password": password,
+        }
         response = await self._session.post("/j_spring_security_check", data=login_data)
         response.raise_for_status()
 
-        if "Invalid credentials" in response.text: # Check if login failed
+        if "Invalid credentials" in response.text:  # Check if login failed
             raise Exception("Authentication failed. Please check your credentials.")
-        
+
         # After login, fetch the CSRF token again
         soup = BeautifulSoup(response.text, "lxml")
         final_csrf = soup.find("meta", attrs={"name": "csrf-token"})["content"]
@@ -66,52 +72,74 @@ class _PesuScraper:
         # Improve this by making it a separate method later
         self._semester_ids = await _SemesterHandler._get_semester_ids(self._session)
 
-    async def get_seating_info(self) -> List[SeatingInformation]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_seating_info(self) -> list[SeatingInformation]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _SeatingInformationHandler._get_page(self._session)
 
-    async def get_profile(self) -> Profile: 
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_profile(self) -> Profile:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _ProfilePageHandler._get_page(self._session)
 
-    async def get_courses(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         # Fetch courses for a specific semester or all semesters if none specified
-        semesters_to_fetch = {semester: self._semester_ids[semester]} if semester and semester in self._semester_ids else self._semester_ids
-        tasks = [_CoursesPageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
+        semesters_to_fetch = (
+            {semester: self._semester_ids[semester]}
+            if semester and semester in self._semester_ids
+            else self._semester_ids
+        )
+        tasks = [
+            _CoursesPageHandler._get_page(self._session, sem_id)
+            for sem_id in semesters_to_fetch.values()
+        ]
         results = await asyncio.gather(*tasks)
         courses_data = dict(zip(semesters_to_fetch.keys(), results))
         return courses_data
-        
 
-    async def get_attendance(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         attendance_data = {}
         # Fetch attendance for a specific semester or all semesters if none specified
-        semesters_to_fetch = {semester: self._semester_ids[semester]} if semester and semester in self._semester_ids else self._semester_ids
-        tasks = [_AttendancePageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
+        semesters_to_fetch = (
+            {semester: self._semester_ids[semester]}
+            if semester and semester in self._semester_ids
+            else self._semester_ids
+        )
+        tasks = [
+            _AttendancePageHandler._get_page(self._session, sem_id)
+            for sem_id in semesters_to_fetch.values()
+        ]
         results = await asyncio.gather(*tasks)
         attendance_data = dict(zip(semesters_to_fetch.keys(), results))
         return attendance_data
-    
-    async def get_announcements(self) -> List[Announcement]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+
+    async def get_announcements(self) -> list[Announcement]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _AnnouncementPageHandler._get_page(self._session)
 
-    async def get_units_for_course(self, course_id: str) -> List[Unit]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_units_for_course(self, course_id: str) -> list[Unit]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _CourseDetailPageHandler._get_page(self._session, course_id)
 
-    async def get_topics_for_unit(self, unit_id: str) -> List[Topic]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _UnitPageHandler._get_page(self._session, unit_id)
 
-    async def get_material_links(self, topic: Topic, material_type_id: str) -> List[MaterialLink]:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+    async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _MaterialLinksHandler._get_page(self._session, topic, material_type_id)
-    
+
     async def get_results(self, semester_id: str) -> SemesterResult:
-        if not self.is_authenticated: raise Exception("Not authenticated.")
+        if not self.is_authenticated:
+            raise Exception("Not authenticated.")
         return await _ResultsPageHandler._get_page(self._session, semester_id)
 
     async def close(self):

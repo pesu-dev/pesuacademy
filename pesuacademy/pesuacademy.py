@@ -1,6 +1,6 @@
-from typing import Optional, List, Dict
 import os
 from dotenv import load_dotenv
+
 # Import the core engine
 from .client import _PesuScraper
 
@@ -13,7 +13,7 @@ from .models import (
     Announcement,
     Unit,
     Topic,
-    MaterialLink
+    MaterialLink,
 )
 
 
@@ -36,7 +36,7 @@ class PESUAcademy:
         self._client = client
 
     @classmethod
-    async def login(cls, username: Optional[str] = None, password: Optional[str] = None) -> "PESUAcademy":
+    async def login(cls, username: str | None = None, password: str | None = None) -> "PESUAcademy":
         """
         Creates and returns an authenticated PESUAcademy session.
 
@@ -63,7 +63,7 @@ class PESUAcademy:
 
     async def get_profile(self) -> Profile:
         """Fetches the student's detailed profile information.
-        
+
         Args:
             None
 
@@ -72,17 +72,17 @@ class PESUAcademy:
         """
         return await self._client.get_profile()
 
-    async def get_seating_info(self) -> List[SeatingInformation]:
+    async def get_seating_info(self) -> list[SeatingInformation]:
         """Fetches upcoming exam seating arrangements.
-        
+
         Args:
             None
-            
+
         Returns:
             A list of SeatingInformation objects containing seating details."""
         return await self._client.get_seating_info()
 
-    async def get_courses(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
+    async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
         """
         Fetches registered courses.
 
@@ -95,7 +95,7 @@ class PESUAcademy:
         """
         return await self._client.get_courses(semester)
 
-    async def get_attendance(self, semester: Optional[int] = None) -> Dict[int, List[Course]]:
+    async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
         """
         Fetches attendance records.
 
@@ -117,29 +117,31 @@ class PESUAcademy:
 
         Returns:
             A SemesterResult object containing SGPA, credits, and subject details.
-        
+
         Raises:
             ValueError: If the requested semester is invalid or has no results.
         """
         semester_id_str = self._client._semester_ids.get(semester)
         if not semester_id_str:
-            raise ValueError(f"Invalid or unavailable semester: {semester}. Available: {list(self._client._semester_ids.keys())}")
+            raise ValueError(
+                f"Invalid or unavailable semester: {semester}. Available: {list(self._client._semester_ids.keys())}"
+            )
         return await self._client.get_results(semester_id_str)
 
-    async def get_announcements(self) -> List[Announcement]:
+    async def get_announcements(self) -> list[Announcement]:
         """Fetches all recent announcements from the dashboard.
-        
+
         Args:
-            None    
+            None
 
         Returns:
             A list of Announcement objects containing the latest announcements.
         """
         return await self._client.get_announcements()
-    
+
     # < Methods for the Materials Workflow >
 
-    async def get_units_for_course(self, course_id: str) -> List[Unit]:
+    async def get_units_for_course(self, course_id: str) -> list[Unit]:
         """
         Given a course_id, fetches the list of units within it.
         The course_id can be obtained from the Course model returned by `get_courses()`.
@@ -152,7 +154,7 @@ class PESUAcademy:
         """
         return await self._client.get_units_for_course(course_id)
 
-    async def get_topics_for_unit(self, unit_id: str) -> List[Topic]:
+    async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
         """
         Given a unit_id, fetches the list of topics within it.
         The unit_id can be obtained from the Unit model.
@@ -165,7 +167,7 @@ class PESUAcademy:
         """
         return await self._client.get_topics_for_unit(unit_id)
 
-    async def get_material_links(self, topic: Topic, material_type_id: str) -> List[MaterialLink]:
+    async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
         """
         Given a Topic object and a material type ID, fetches the final download links.
 

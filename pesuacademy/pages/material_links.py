@@ -1,16 +1,18 @@
 import httpx
 import re
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models.materials import Topic, MaterialLink
 from .. import constants
 
+
 class _MaterialLinksHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, topic: Topic, material_type_id: str) -> List[MaterialLink]:
-        """ Fetches the material links for a given topic and material type ID.
+    async def _get_page(
+        session: httpx.AsyncClient, topic: Topic, material_type_id: str
+    ) -> list[MaterialLink]:
+        """Fetches the material links for a given topic and material type ID.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             topic (Topic): The Topic object containing course and topic IDs.
@@ -26,7 +28,7 @@ class _MaterialLinksHandler:
             selectedData=topic.course_id,
             id=material_type_id,
             unitid=topic.topic_id,
-            url="studentProfilePESUAdmin"
+            url="studentProfilePESUAdmin",
         )
         response = await session.get(url, params=params)
         response.raise_for_status()
@@ -49,7 +51,7 @@ class _MaterialLinksHandler:
                     # Construct the full download URL
                     full_url = f"{constants.BASE_URL}/Academy/s/referenceMeterials/downloadcoursedoc/{doc_id}"
                     links.append(MaterialLink(title=title, url=full_url, is_pdf=False))
-            
+
             # PDF links which are in the form of an Iframe
             else:
                 link_tag = container.find("a")
@@ -57,7 +59,7 @@ class _MaterialLinksHandler:
                     onclick_attr = link_tag.get("onclick", "")
                     match = re.search(r"loadIframe\('([^']*)'", onclick_attr)
                     if match:
-                        partial_url = match.group(1).split('#')[0] # Get URL part before the '#'
+                        partial_url = match.group(1).split("#")[0]  # Get URL part before the '#'
                         title = link_tag.text.strip()
                         # Construct the full download URL
                         full_url = f"{constants.BASE_UR}{partial_url}"

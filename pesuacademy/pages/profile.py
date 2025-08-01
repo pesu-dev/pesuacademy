@@ -3,13 +3,23 @@ from bs4 import BeautifulSoup, Tag
 import re
 
 from ..util import build_params
-from ..models.profile import Profile, PersonalDetails, OtherInformation, QualifyingExamination, ParentDetails, ParentInformation, AddressDetails
+from ..models.profile import (
+    Profile,
+    PersonalDetails,
+    OtherInformation,
+    QualifyingExamination,
+    ParentDetails,
+    ParentInformation,
+    AddressDetails,
+)
 from .. import constants
 
+
 class _ProfilePageHandler:
-    """ Handles fetching and parsing the user profile page in the PESU Academy system.
+    """Handles fetching and parsing the user profile page in the PESU Academy system.
     This class provides methods to retrieve and parse the profile page to extract personal, parent, and address details.
     """
+
     @staticmethod
     def _find_value_for_label(container: Tag, text: str) -> str:
         """Finds a value associated with a label within a specific container.
@@ -19,7 +29,7 @@ class _ProfilePageHandler:
         Returns:
             str: The value associated with the label, or "N/A" if not found.
         """
-        label_tag = container.find("label", string=re.compile(r'\s*' + text + r'\s*'))
+        label_tag = container.find("label", string=re.compile(r"\s*" + text + r"\s*"))
         if not label_tag:
             return "N/A"
         # Find the next sibling label or input to get the value
@@ -28,9 +38,9 @@ class _ProfilePageHandler:
             return value_tag.text.strip()
         # If the next sibling is not a label, check for an input field
         input_tag = label_tag.find_next("input")
-        if input_tag and input_tag.has_attr('value'):
-            return input_tag['value'].strip()
-            
+        if input_tag and input_tag.has_attr("value"):
+            return input_tag["value"].strip()
+
         return "N/A"
 
     @staticmethod
@@ -43,11 +53,11 @@ class _ProfilePageHandler:
         Raises:
             ValueError: If the profile page structure is not as expected.
         """
-        
+
         # Personal Details
         personal_container = soup.find("div", class_="media-body")
         img_tag = soup.find("img", class_="media-object")
-        profile_image_base64 = img_tag['src'] if img_tag else None
+        profile_image_base64 = img_tag["src"] if img_tag else None
         profile_image_base64 = profile_image_base64.split("data:image/jpeg;base64,")[1]
 
         personal = PersonalDetails(
@@ -61,19 +71,31 @@ class _ProfilePageHandler:
             email_id=_ProfilePageHandler._find_value_for_label(personal_container, "Email ID"),
             contact_no=_ProfilePageHandler._find_value_for_label(personal_container, "Contact No"),
             aadhar_no=_ProfilePageHandler._find_value_for_label(personal_container, "Aadhar No"),
-            name_as_in_aadhar=_ProfilePageHandler._find_value_for_label(personal_container, "Name as in aadhar"),
+            name_as_in_aadhar=_ProfilePageHandler._find_value_for_label(
+                personal_container, "Name as in aadhar"
+            ),
             image=profile_image_base64,
         )
 
         # Other Information and Qualifying Examination
-        other_info_container = soup.find("h4", string="Other Information").find_next("div", class_="info-contents")
-        qualifying_exam_container = soup.find("h4", string="Qualifying examination").find_next("div", class_="info-contents")
-        
+        other_info_container = soup.find("h4", string="Other Information").find_next(
+            "div", class_="info-contents"
+        )
+        qualifying_exam_container = soup.find("h4", string="Qualifying examination").find_next(
+            "div", class_="info-contents"
+        )
+
         other_info = OtherInformation(
-            sslc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
+            sslc_marks=_ProfilePageHandler._find_value_for_label(
+                other_info_container, "SSLC Marks"
+            ),
             puc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
-            date_of_birth=_ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
-            blood_group=_ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
+            date_of_birth=_ProfilePageHandler._find_value_for_label(
+                other_info_container, "Date of birth"
+            ),
+            blood_group=_ProfilePageHandler._find_value_for_label(
+                other_info_container, "Blood Group"
+            ),
         )
         qualifying_exam = QualifyingExamination(
             exam=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
@@ -84,7 +106,11 @@ class _ProfilePageHandler:
         # Parent Details
         # Correctly handles the parent details section by just spltting the containers
         # Assumes Father is always first and Mother is always second (just in this context, lol)
-        parent_containers = soup.find("h4", string="Parent Details").find_next("div").find_all("div", class_="col-md-6")
+        parent_containers = (
+            soup.find("h4", string="Parent Details")
+            .find_next("div")
+            .find_all("div", class_="col-md-6")
+        )
         father_container = parent_containers[0]
         mother_container = parent_containers[1]
 
@@ -93,27 +119,41 @@ class _ProfilePageHandler:
                 name=_ProfilePageHandler._find_value_for_label(father_container, "Father Name"),
                 mobile=_ProfilePageHandler._find_value_for_label(father_container, "Mobile"),
                 email=_ProfilePageHandler._find_value_for_label(father_container, "Email"),
-                occupation=_ProfilePageHandler._find_value_for_label(father_container, "Occupation"),
-                qualification=_ProfilePageHandler._find_value_for_label(father_container, "Qualification"),
-                designation=_ProfilePageHandler._find_value_for_label(father_container, "Designation"),
+                occupation=_ProfilePageHandler._find_value_for_label(
+                    father_container, "Occupation"
+                ),
+                qualification=_ProfilePageHandler._find_value_for_label(
+                    father_container, "Qualification"
+                ),
+                designation=_ProfilePageHandler._find_value_for_label(
+                    father_container, "Designation"
+                ),
                 employer=_ProfilePageHandler._find_value_for_label(father_container, "Employer"),
             ),
             mother=ParentDetails(
                 name=_ProfilePageHandler._find_value_for_label(mother_container, "Mother Name"),
                 mobile=_ProfilePageHandler._find_value_for_label(mother_container, "Mobile"),
                 email=_ProfilePageHandler._find_value_for_label(mother_container, "Email"),
-                occupation=_ProfilePageHandler._find_value_for_label(mother_container, "Occupation"),
-                qualification=_ProfilePageHandler._find_value_for_label(mother_container, "Qualification"),
-                designation=_ProfilePageHandler._find_value_for_label(mother_container, "Designation"),
+                occupation=_ProfilePageHandler._find_value_for_label(
+                    mother_container, "Occupation"
+                ),
+                qualification=_ProfilePageHandler._find_value_for_label(
+                    mother_container, "Qualification"
+                ),
+                designation=_ProfilePageHandler._find_value_for_label(
+                    mother_container, "Designation"
+                ),
                 employer=_ProfilePageHandler._find_value_for_label(mother_container, "Employer"),
-            )
+            ),
         )
 
         # Address Details
         address_container = soup.find("h4", string="Address").find_next("div")
         address = AddressDetails(
             present=_ProfilePageHandler._find_value_for_label(address_container, "Present Address"),
-            permanent=_ProfilePageHandler._find_value_for_label(address_container, "Permanent Address"),
+            permanent=_ProfilePageHandler._find_value_for_label(
+                address_container, "Permanent Address"
+            ),
         )
 
         return Profile(
@@ -121,7 +161,7 @@ class _ProfilePageHandler:
             other_info=other_info,
             qualifying_exam=qualifying_exam,
             parents=parents,
-            address=address
+            address=address,
         )
 
     @staticmethod

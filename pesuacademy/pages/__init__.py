@@ -2,7 +2,7 @@ from .semester import _SemesterHandler
 from .seating_information import _SeatingInformationHandler
 from .courses import _CoursesPageHandler
 from .course_detail import _CourseDetailPageHandler
-from .unit import _UnitPageHandler 
+from .unit import _UnitPageHandler
 from .material_links import _MaterialLinksHandler
 from .attendance import _AttendancePageHandler
 from .profile import _ProfilePageHandler

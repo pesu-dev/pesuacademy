@@ -15,7 +15,7 @@ PESU Academy API
 Python wrapper and APIs for the PESU Academy website.
 
 The wrapper requires the user's credentials to authenticate and provide **read-only** access to all the pages and
-information accessible on the PESU Academy website. Without the credentials, the wrapper will only be able to fetch 
+information accessible on the PESU Academy website. Without the credentials, the wrapper will only be able to fetch
 details from the `Know Your Class and Section` page.
 
 **Warning:** This is not an official API and is not endorsed by PESU. Use at your own risk.
@@ -47,6 +47,7 @@ Usage
 .. code:: python
 
    from pesuacademy import PESUAcademy
+
    p = PESUAcademy("PRN_or_SRN", "password")
    profile = p.profile()
    courses = p.courses(semester=2)

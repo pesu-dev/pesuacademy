@@ -5,7 +5,7 @@ from pesuacademy import __version__ as VERSION
 DESCRIPTION = "Python wrapper and APIs for the PESU Academy website"
 
 try:
-    with open("README.md", "r") as fh:
+    with open("README.md") as fh:
         long_description = fh.read()
 except FileNotFoundError:
     long_description = DESCRIPTION
@@ -20,12 +20,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/HackerSpace-PESU/pesuacademy-py",
     packages=setuptools.find_packages(),
-    install_requires=[
-        "requests",
-        "requests-html",
-        "beautifulsoup4",
-        "lxml_html_clean"
-    ],
+    install_requires=["requests", "requests-html", "beautifulsoup4", "lxml_html_clean"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -35,6 +30,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.9',
-    keywords=["pesu", "pesu academy", "api", "wrapper", "python"]
+    python_requires=">=3.9",
+    keywords=["pesu", "pesu academy", "api", "wrapper", "python"],
 )

@@ -1,6 +1,5 @@
 import httpx
 from bs4 import BeautifulSoup
-from typing import List
 
 from ..util import build_params
 from ..models import Course, Attendance
@@ -9,8 +8,8 @@ from .. import constants
 
 class _AttendancePageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> List[Course]:
-        """ Fetches the attendance for a single given semester ID.
+    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
+        """Fetches the attendance for a single given semester ID.
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             semester_id (str): The ID of the semester to fetch attendance for.
@@ -20,10 +19,7 @@ class _AttendancePageHandler:
             httpx.HTTPStatusError: If the request to the attendance page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.Attendance,
-            batchClassId=semester_id
-        )
+        params = build_params(constants.PageURLParams.Attendance, batchClassId=semester_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -44,21 +40,17 @@ class _AttendancePageHandler:
                         attended, total = cols[2].split("/")
                         attended, total = int(attended), int(total)
                     except ValueError:
-                        pass # Keep them as None if conversion fails
-                
+                        pass  # Keep them as None if conversion fails
+
                 percentage = None
                 try:
                     percentage = float(cols[3])
                 except ValueError:
-                    pass # Keep as None if "NA"
+                    pass  # Keep as None if "NA"
 
                 course_attendance = Attendance(
-                    attended=attended,
-                    total=total,
-                    percentage=percentage
+                    attended=attended, total=total, percentage=percentage
                 )
-                course = Course(
-                    code=cols[0], title=cols[1], attendance=course_attendance
-                )
+                course = Course(code=cols[0], title=cols[1], attendance=course_attendance)
                 attendance_data.append(course)
         return attendance_data

@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Import the core engine
@@ -6,28 +7,26 @@ from .client import _PesuScraper
 
 # Import all Pydantic models to be used as return types for clarity
 from .models import (
-    Profile,
+    Announcement,
     Course,
+    MaterialLink,
+    Profile,
     SeatingInformation,
     SemesterResult,
-    Announcement,
-    Unit,
     Topic,
-    MaterialLink,
+    Unit,
 )
 
 
 class PESUAcademy:
-    """
-    The main, user-facing class to interact with PESU Academy.
+    """The main, user-facing class to interact with PESU Academy.
 
     An instance of this class represents a single authenticated session and provides
     asynchronous methods to fetch academic data.
     """
 
     def __init__(self, client: _PesuScraper):
-        """
-        Initializes the PESUAcademy session. This method is not meant to be called directly.
+        """Initializes the PESUAcademy session. This method is not meant to be called directly.
         Please use the `PESUAcademy.login()` class method to create an instance.
 
         Args:
@@ -37,8 +36,7 @@ class PESUAcademy:
 
     @classmethod
     async def login(cls, username: str | None = None, password: str | None = None) -> "PESUAcademy":
-        """
-        Creates and returns an authenticated PESUAcademy session.
+        """Creates and returns an authenticated PESUAcademy session.
 
         Credentials can be passed as arguments or loaded from environment variables
         (PESU_USERNAME, PESU_PASSWORD).
@@ -79,12 +77,12 @@ class PESUAcademy:
             None
 
         Returns:
-            A list of SeatingInformation objects containing seating details."""
+            A list of SeatingInformation objects containing seating details.
+        """
         return await self._client.get_seating_info()
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
-        """
-        Fetches registered courses.
+        """Fetches registered courses.
 
         Args:
             semester (Optional[int]): The semester number to fetch. If not provided,
@@ -96,8 +94,7 @@ class PESUAcademy:
         return await self._client.get_courses(semester)
 
     async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
-        """
-        Fetches attendance records.
+        """Fetches attendance records.
 
         Args:
             semester (Optional[int]): The semester number to fetch. If not provided,
@@ -109,8 +106,7 @@ class PESUAcademy:
         return await self._client.get_attendance(semester)
 
     async def get_results(self, semester: int) -> SemesterResult:
-        """
-        Fetches the final results for a specific semester.
+        """Fetches the final results for a specific semester.
 
         Args:
             semester (int): The semester number for which to fetch results.
@@ -142,8 +138,7 @@ class PESUAcademy:
     # < Methods for the Materials Workflow >
 
     async def get_units_for_course(self, course_id: str) -> list[Unit]:
-        """
-        Given a course_id, fetches the list of units within it.
+        """Given a course_id, fetches the list of units within it.
         The course_id can be obtained from the Course model returned by `get_courses()`.
 
         Args:
@@ -155,8 +150,7 @@ class PESUAcademy:
         return await self._client.get_units_for_course(course_id)
 
     async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
-        """
-        Given a unit_id, fetches the list of topics within it.
+        """Given a unit_id, fetches the list of topics within it.
         The unit_id can be obtained from the Unit model.
 
         Args:
@@ -168,8 +162,7 @@ class PESUAcademy:
         return await self._client.get_topics_for_unit(unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        """
-        Given a Topic object and a material type ID, fetches the final download links.
+        """Given a Topic object and a material type ID, fetches the final download links.
 
         Args:
             topic (Topic): The Topic object obtained from `get_topics_for_unit()`.
@@ -181,8 +174,7 @@ class PESUAcademy:
         return await self._client.get_material_links(topic, material_type_id)
 
     async def close(self):
-        """
-        Closes the network session gracefully. This should always be called when
+        """Closes the network session gracefully. This should always be called when
         you are finished with the session to release resources.
         """
         await self._client.close()

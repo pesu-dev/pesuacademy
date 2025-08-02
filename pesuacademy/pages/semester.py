@@ -1,17 +1,21 @@
+import datetime
+import re
+
 import httpx
 from bs4 import BeautifulSoup
-import re
-import datetime
 
 
 class _SemesterHandler:
     @staticmethod
     async def _get_semester_ids(session: httpx.AsyncClient) -> dict[int, str]:
         """Fetches semester IDs by calling the dynamic endpoint and cleaning the extracted values.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
+
         Returns:
             dict[int, str]: A dictionary mapping semester numbers to their corresponding IDs.
+
         Raises:
             httpx.HTTPStatusError: If the request to the semester endpoint fails.
             Exception: If the semester data cannot be fetched or parsed correctly.

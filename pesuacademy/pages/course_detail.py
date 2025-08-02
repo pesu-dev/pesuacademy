@@ -1,21 +1,25 @@
-import httpx
 import re
+
+import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models.materials import Unit
 from .. import constants
+from ..models.materials import Unit
+from ..util import build_params
 
 
 class _CourseDetailPageHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient, course_id: str) -> list[Unit]:
         """Fetches the main page for a course and scrapes the list of units.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             course_id (str): The ID of the course to fetch units for.
+
         Returns:
             List[Unit]: A list of Unit objects containing the scraped data.
+
         Raises:
             httpx.HTTPStatusError: If the request to the course page fails.
         """

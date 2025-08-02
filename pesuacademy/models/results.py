@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class Assessment(BaseModel):
     """Represents an assessment(e.g., ISA1, MATLAB) in the PESU Academy system.
+
     Attributes:
         name (str): Name of the assessment.
         marks (Optional[str]): Marks obtained in the assessment, if applicable. (e.g., 72)
@@ -16,6 +17,7 @@ class Assessment(BaseModel):
 
 class CourseResult(BaseModel):
     """Represents the result of a course in the PESU Academy system.
+
     Attributes:
         code (str): Unique identifier for the course.
         title (str): Title of the course.
@@ -33,6 +35,7 @@ class CourseResult(BaseModel):
 
 class SemesterResult(BaseModel):
     """Represents the result of a semester in the PESU Academy system.
+
     Attributes:
         semester (str): Semester number.
         sgpa (str): Semester Grade Point Average.

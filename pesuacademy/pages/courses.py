@@ -1,20 +1,23 @@
 import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models import Course
 from .. import constants
+from ..models import Course
+from ..util import build_params
 
 
 class _CoursesPageHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
         """Fetches the courses for a single given semester ID.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             semester_id (str): The ID of the semester to fetch courses for.
+
         Returns:
             List[Course]: A list of Course objects containing course information.
+
         Raises:
             httpx.HTTPStatusError: If the request to the courses page fails.
         """

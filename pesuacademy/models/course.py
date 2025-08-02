@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class Attendance(BaseModel):
     """Represents attendance information for a course.
+
     Attributes:
         attended (Optional[int]): Number of classes attended by the student.
         total (Optional[int]): Total number of classes for the course.
@@ -16,6 +17,7 @@ class Attendance(BaseModel):
 
 class Course(BaseModel):
     """Represents a course in the PESU Academy system.
+
     Attributes:
         code (str): Unique identifier for the course.
         title (str): Title of the course.

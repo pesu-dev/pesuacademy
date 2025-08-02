@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class Unit(BaseModel):
     """Represents a unit of a course in the PESU Academy system.
+
     Attributes:
         title (str): The title of the unit.
         unit_id (str): Unique identifier for the unit.
@@ -14,6 +15,7 @@ class Unit(BaseModel):
 
 class Topic(BaseModel):
     """Represents a topic within a unit in the PESU Academy system.
+
     Attributes:
         title (str): The title of the topic.
         topic_id (str): Unique identifier for the topic.
@@ -29,6 +31,7 @@ class Topic(BaseModel):
 
 class MaterialLink(BaseModel):
     """Represents a link to a material in the PESU Academy system.
+
     Attributes:
         title (str): The title of the material link.
         url (str): The URL of the material.

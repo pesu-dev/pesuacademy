@@ -1,19 +1,22 @@
 import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models import SeatingInformation
 from .. import constants
+from ..models import SeatingInformation
+from ..util import build_params
 
 
 class _SeatingInformationHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient) -> list[SeatingInformation]:
         """Fetches and parses the seating information page.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
+
         Returns:
             List[SeatingInformation]: A list of SeatingInformation objects containing the seating details.
+
         Raises:
             httpx.HTTPStatusError: If the request to the seating information page fails.
         """

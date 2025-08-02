@@ -3,8 +3,7 @@ from typing import Any
 
 
 def build_params(params_obj: Any, **kwargs: Any) -> dict[str, str]:
-    """
-    Builds and returns the common parameter dictionary for PESU Academy requests.
+    """Builds and returns the common parameter dictionary for PESU Academy requests.
 
     Args:
         params_obj: The dataclass object from constants.PageURLParams (e.g., PageURLParams.Results).

@@ -1,10 +1,11 @@
-import httpx
 import re
+
+import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models.materials import Topic, MaterialLink
 from .. import constants
+from ..models.materials import MaterialLink, Topic
+from ..util import build_params
 
 
 class _MaterialLinksHandler:
@@ -13,12 +14,15 @@ class _MaterialLinksHandler:
         session: httpx.AsyncClient, topic: Topic, material_type_id: str
     ) -> list[MaterialLink]:
         """Fetches the material links for a given topic and material type ID.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             topic (Topic): The Topic object containing course and topic IDs.
             material_type_id (str): The ID of the material type to fetch links for.
+
         Returns:
             List[MaterialLink]: A list of MaterialLink objects containing the scraped data.
+
         Raises:
             httpx.HTTPStatusError: If the request to the material links page fails.
         """

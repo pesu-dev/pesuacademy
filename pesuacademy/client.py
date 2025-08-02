@@ -1,28 +1,29 @@
-import httpx
-from bs4 import BeautifulSoup
 import asyncio
 
-from .pages import (
-    _SeatingInformationHandler,
-    _CoursesPageHandler,
-    _CourseDetailPageHandler,
-    _UnitPageHandler,
-    _MaterialLinksHandler,
-    _AttendancePageHandler,
-    _ProfilePageHandler,
-    _SemesterHandler,
-    _AnnouncementPageHandler,
-    _ResultsPageHandler,
-)
+import httpx
+from bs4 import BeautifulSoup
+
 from .models import (
-    SeatingInformation,
-    Course,
-    Profile,
     Announcement,
-    Unit,
-    Topic,
+    Course,
     MaterialLink,
+    Profile,
+    SeatingInformation,
     SemesterResult,
+    Topic,
+    Unit,
+)
+from .pages import (
+    _AnnouncementPageHandler,
+    _AttendancePageHandler,
+    _CourseDetailPageHandler,
+    _CoursesPageHandler,
+    _MaterialLinksHandler,
+    _ProfilePageHandler,
+    _ResultsPageHandler,
+    _SeatingInformationHandler,
+    _SemesterHandler,
+    _UnitPageHandler,
 )
 
 
@@ -38,11 +39,14 @@ class _PesuScraper:
 
     async def login(self, username: str, password: str):
         """Logs in to the PESU Academy portal and initializes the session.
+
         Args:
             username (str): The user's SRN, PRN, or other login identifier.
             password (str): The user's password.
+
         Raises:
             Exception: If the login fails or the credentials are invalid.
+
         Returns:
             None
         """

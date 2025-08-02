@@ -1,14 +1,14 @@
 from .announcement import Announcement
-from .course import Course, Attendance
+from .course import Attendance, Course
+from .materials import MaterialLink, Topic, Unit
 from .profile import (
-    Profile,
-    PersonalDetails,
+    AddressDetails,
     OtherInformation,
-    QualifyingExamination,
     ParentDetails,
     ParentInformation,
-    AddressDetails,
+    PersonalDetails,
+    Profile,
+    QualifyingExamination,
 )
-from .seating_information import SeatingInformation
-from .materials import Unit, Topic, MaterialLink
 from .results import Assessment, CourseResult, SemesterResult
+from .seating_information import SeatingInformation

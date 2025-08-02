@@ -10,6 +10,21 @@ jobs:
       matrix:
         python-version: [ "3.11", "3.12", "3.13" ]
 
+    env:
+      TEST_NAME: ${{ secrets.TEST_NAME }}
+      TEST_PRN: ${{ secrets.TEST_PRN }}
+      TEST_SRN: ${{ secrets.TEST_SRN }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      TEST_BRANCH: ${{ secrets.TEST_BRANCH }}
+      TEST_BRANCH_SHORT_CODE: ${{ secrets.TEST_BRANCH_SHORT_CODE }}
+      TEST_PROGRAM: ${{ secrets.TEST_PROGRAM }}
+      TEST_SEMESTER: ${{ secrets.TEST_SEMESTER }}
+      TEST_SECTION: ${{ secrets.TEST_SECTION }}
+      TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      TEST_PHONE: ${{ secrets.TEST_PHONE }}
+      TEST_CAMPUS: ${{ secrets.TEST_CAMPUS }}
+      TEST_CAMPUS_CODE: ${{ secrets.TEST_CAMPUS_CODE }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -18,16 +33,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libxml2-dev libxslt1-dev python3-dev
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pre-commit httpx python-dotenv
+          pip install pre-commit pytest pytest-cov httpx python-dotenv pytest-asyncio
 
       - name: Run pre-commit hooks
         run: pre-commit run --all-files

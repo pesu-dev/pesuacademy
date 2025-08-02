@@ -1,22 +1,26 @@
-import datetime
-import httpx
-import re
 import copy
+import datetime
+import re
+
+import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models.announcement import Announcement
 from .. import constants
+from ..models.announcement import Announcement
+from ..util import build_params
 
 
 class _AnnouncementPageHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient) -> list[Announcement]:
         """Fetches the main announcements page and scrapes all announcements.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
+
         Returns:
             List[Announcement]: A list of Announcement objects containing the scraped data.
+
         Raises:
             httpx.HTTPStatusError: If the request to the announcements page fails.
         """

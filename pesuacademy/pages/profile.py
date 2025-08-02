@@ -1,18 +1,19 @@
-import httpx
-from bs4 import BeautifulSoup, Tag
 import re
 
-from ..util import build_params
+import httpx
+from bs4 import BeautifulSoup, Tag
+
+from .. import constants
 from ..models.profile import (
-    Profile,
-    PersonalDetails,
+    AddressDetails,
     OtherInformation,
-    QualifyingExamination,
     ParentDetails,
     ParentInformation,
-    AddressDetails,
+    PersonalDetails,
+    Profile,
+    QualifyingExamination,
 )
-from .. import constants
+from ..util import build_params
 
 
 class _ProfilePageHandler:
@@ -23,9 +24,11 @@ class _ProfilePageHandler:
     @staticmethod
     def _find_value_for_label(container: Tag, text: str) -> str:
         """Finds a value associated with a label within a specific container.
+
         Args:
             container (Tag): The BeautifulSoup Tag object containing the profile information.
             text (str): The label text to search for.
+
         Returns:
             str: The value associated with the label, or "N/A" if not found.
         """
@@ -46,14 +49,16 @@ class _ProfilePageHandler:
     @staticmethod
     def _parse_profile_soup(soup: BeautifulSoup) -> Profile:
         """Parses the profile page HTML into a structured Profile object.
+
         Args:
             soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML of the profile page.
+
         Returns:
             Profile: A Profile object containing personal, parent, and address details.
+
         Raises:
             ValueError: If the profile page structure is not as expected.
         """
-
         # Personal Details
         personal_container = soup.find("div", class_="media-body")
         img_tag = soup.find("img", class_="media-object")
@@ -167,12 +172,16 @@ class _ProfilePageHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient) -> Profile:
         """Fetches and parses the user's profile page.
+
         Args:
             session (httpx.AsyncClient): An authenticated HTTP client session.
+
         Returns:
             Profile: A Profile object containing the user's profile information.
+
         Raises:
-            httpx.HTTPStatusError: If the request to fetch the profile page fails."""
+            httpx.HTTPStatusError: If the request to fetch the profile page fails.
+        """
         url = "/s/studentProfilePESUAdmin"
         params = build_params(
             constants.PageURLParams.Profile,

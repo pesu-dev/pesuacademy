@@ -1,21 +1,25 @@
-import httpx
 import re
+
+import httpx
 from bs4 import BeautifulSoup
 
-from ..util import build_params
-from ..models.materials import Topic
 from .. import constants
+from ..models.materials import Topic
+from ..util import build_params
 
 
 class _UnitPageHandler:
     @staticmethod
     async def _get_page(session: httpx.AsyncClient, unit_id: str) -> list[Topic]:
         """Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
+
         Args:
             session (httpx.AsyncClient): The HTTP client session to use for requests.
             unit_id (str): The ID of the unit to fetch topics for.
+
         Returns:
             List[Topic]: A list of Topic objects containing the scraped data.
+
         Raises:
             httpx.HTTPStatusError: If the request to the unit page fails.
         """

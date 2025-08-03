@@ -1,3 +1,5 @@
+"""This module handles the scraping of links for all materials from the PESU Academy website."""
+
 import re
 
 import httpx
@@ -10,9 +12,7 @@ from ..util import build_params
 
 class _MaterialLinksHandler:
     @staticmethod
-    async def _get_page(
-        session: httpx.AsyncClient, topic: Topic, material_type_id: str
-    ) -> list[MaterialLink]:
+    async def _get_page(session: httpx.AsyncClient, topic: Topic, material_type_id: str) -> list[MaterialLink]:
         """Fetches the material links for a given topic and material type ID.
 
         Args:

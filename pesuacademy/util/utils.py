@@ -1,8 +1,18 @@
+"""Utility functions for PESU Academy."""
+
 import datetime
-from typing import Any
+from typing import Protocol
 
 
-def build_params(params_obj: Any, **kwargs: Any) -> dict[str, str]:
+class PageURLParams(Protocol):
+    """A protocol for objects that have the required parameters."""
+
+    MENU_ID: str
+    CONTROLLER_MODE: str
+    ACTION_TYPE: str
+
+
+def build_params(params_obj: PageURLParams, **kwargs: str) -> dict[str, str]:
     """Builds and returns the common parameter dictionary for PESU Academy requests.
 
     Args:

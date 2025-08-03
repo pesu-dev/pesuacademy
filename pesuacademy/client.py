@@ -1,3 +1,5 @@
+"""PESU Academy Scraper Client."""
+
 import asyncio
 
 import httpx
@@ -28,16 +30,15 @@ from .pages import (
 
 
 class _PesuScraper:
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initializes the PESU Academy scraper with a base URL and an HTTP session."""
         self._base_url = "https://www.pesuacademy.com/Academy"
-        self._session = httpx.AsyncClient(
-            base_url=self._base_url, follow_redirects=True, timeout=30.0
-        )
+        self._session = httpx.AsyncClient(base_url=self._base_url, follow_redirects=True, timeout=30.0)
         self._csrf_token: str | None = None
         self._semester_ids: dict[int, str] = {}
         self.is_authenticated = False
 
-    async def login(self, username: str, password: str):
+    async def login(self, username: str, password: str) -> None:
         """Logs in to the PESU Academy portal and initializes the session.
 
         Args:
@@ -95,31 +96,22 @@ class _PesuScraper:
             if semester and semester in self._semester_ids
             else self._semester_ids
         )
-        tasks = [
-            _CoursesPageHandler._get_page(self._session, sem_id)
-            for sem_id in semesters_to_fetch.values()
-        ]
+        tasks = [_CoursesPageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
         results = await asyncio.gather(*tasks)
-        courses_data = dict(zip(semesters_to_fetch.keys(), results))
-        return courses_data
+        return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
         if not self.is_authenticated:
             raise Exception("Not authenticated.")
-        attendance_data = {}
         # Fetch attendance for a specific semester or all semesters if none specified
         semesters_to_fetch = (
             {semester: self._semester_ids[semester]}
             if semester and semester in self._semester_ids
             else self._semester_ids
         )
-        tasks = [
-            _AttendancePageHandler._get_page(self._session, sem_id)
-            for sem_id in semesters_to_fetch.values()
-        ]
+        tasks = [_AttendancePageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
         results = await asyncio.gather(*tasks)
-        attendance_data = dict(zip(semesters_to_fetch.keys(), results))
-        return attendance_data
+        return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_announcements(self) -> list[Announcement]:
         if not self.is_authenticated:
@@ -146,5 +138,5 @@ class _PesuScraper:
             raise Exception("Not authenticated.")
         return await _ResultsPageHandler._get_page(self._session, semester_id)
 
-    async def close(self):
+    async def close(self) -> None:
         await self._session.aclose()

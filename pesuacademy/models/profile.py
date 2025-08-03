@@ -1,3 +1,5 @@
+"""Model for student profile in the PESU Academy system."""
+
 from pydantic import BaseModel
 
 

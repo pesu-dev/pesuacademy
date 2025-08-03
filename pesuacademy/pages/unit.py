@@ -1,3 +1,5 @@
+"""This module contains the class, which is responsible for fetching and scraping the unit page."""
+
 import re
 
 import httpx

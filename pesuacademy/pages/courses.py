@@ -1,3 +1,5 @@
+"""This module handles the scraping of courses from the PESU Academy website."""
+
 import httpx
 from bs4 import BeautifulSoup
 

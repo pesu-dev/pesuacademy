@@ -1,3 +1,5 @@
+"""Model for seating information in the PESU Academy system."""
+
 from pydantic import BaseModel
 
 

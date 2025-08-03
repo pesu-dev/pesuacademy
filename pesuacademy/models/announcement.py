@@ -1,3 +1,5 @@
+"""Model for announcements in the PESU Academy system."""
+
 import datetime
 
 from pydantic import BaseModel

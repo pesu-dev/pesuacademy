@@ -1,3 +1,5 @@
+"""This module handles fetching and parsing semester information in the PESU Academy system."""
+
 import datetime
 import re
 
@@ -48,9 +50,7 @@ class _SemesterHandler:
                 clean_value = "".join(re.findall(r"\d+", raw_value))
 
                 if clean_value:  # Make sure we actually found a number
-                    semester_number = int(
-                        text_match.group(0)
-                    )  # Extract the semester number from the text
+                    semester_number = int(text_match.group(0))  # Extract the semester number from the text
                     # Store the clean numeric string (e.g., "2763") as the ID
                     semester_ids[semester_number] = clean_value
 

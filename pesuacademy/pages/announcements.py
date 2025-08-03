@@ -1,3 +1,5 @@
+"""This module handles the scraping of announcements from the PESU Academy website."""
+
 import copy
 import datetime
 import re
@@ -54,9 +56,7 @@ class _AnnouncementPageHandler:
 
                 # Content Links
                 links = []
-                link_tags = content_div.find_all(
-                    "a", href=re.compile(r"handleDownloadAnoncemntdoc")
-                )
+                link_tags = content_div.find_all("a", href=re.compile(r"handleDownloadAnoncemntdoc"))
                 for link_tag in link_tags:
                     href_attr = link_tag.get("href", "")
                     match = re.search(r"handleDownloadAnoncemntdoc\('(\d+)'\)", href_attr)
@@ -77,9 +77,7 @@ class _AnnouncementPageHandler:
                         link_div.decompose()
                 content = content_clone.text.strip()
 
-                announcements.append(
-                    Announcement(title=title, date=date, content=content, links=links or None)
-                )
+                announcements.append(Announcement(title=title, date=date, content=content, links=links or None))
 
             except (AttributeError, ValueError) as e:
                 # Skip any panels that have parsing errors

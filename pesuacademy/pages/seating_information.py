@@ -1,3 +1,5 @@
+"""This module handles fetching and parsing the seating information page in the PESU Academy system."""
+
 import httpx
 from bs4 import BeautifulSoup
 
@@ -27,9 +29,7 @@ class _SeatingInformationHandler:
         response = await session.get(url, params=params)
         response.raise_for_status()
 
-        if (
-            "No Test Seating Info is available" in response.text
-        ):  # Check if no seating info is available
+        if "No Test Seating Info is available" in response.text:  # Check if no seating info is available
             return []
 
         soup = BeautifulSoup(response.text, "lxml")

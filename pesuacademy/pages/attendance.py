@@ -1,3 +1,5 @@
+"""This module handles the scraping of attendance data from the PESU Academy website."""
+
 import httpx
 from bs4 import BeautifulSoup
 
@@ -51,9 +53,7 @@ class _AttendancePageHandler:
                 except ValueError:
                     pass  # Keep as None if "NA"
 
-                course_attendance = Attendance(
-                    attended=attended, total=total, percentage=percentage
-                )
+                course_attendance = Attendance(attended=attended, total=total, percentage=percentage)
                 course = Course(code=cols[0], title=cols[1], attendance=course_attendance)
                 attendance_data.append(course)
         return attendance_data

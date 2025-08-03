@@ -1,3 +1,5 @@
+"""This module handles the scraping of course details from the PESU Academy website."""
+
 import re
 
 import httpx

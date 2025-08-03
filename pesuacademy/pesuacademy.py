@@ -1,3 +1,5 @@
+"""PESU Academy API Client."""
+
 import os
 
 from dotenv import load_dotenv
@@ -25,8 +27,10 @@ class PESUAcademy:
     asynchronous methods to fetch academic data.
     """
 
-    def __init__(self, client: _PesuScraper):
-        """Initializes the PESUAcademy session. This method is not meant to be called directly.
+    def __init__(self, client: _PesuScraper) -> None:
+        """Initializes the PESUAcademy session.
+
+        This method is not meant to be called directly.
         Please use the `PESUAcademy.login()` class method to create an instance.
 
         Args:
@@ -139,6 +143,7 @@ class PESUAcademy:
 
     async def get_units_for_course(self, course_id: str) -> list[Unit]:
         """Given a course_id, fetches the list of units within it.
+
         The course_id can be obtained from the Course model returned by `get_courses()`.
 
         Args:
@@ -151,6 +156,7 @@ class PESUAcademy:
 
     async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
         """Given a unit_id, fetches the list of topics within it.
+
         The unit_id can be obtained from the Unit model.
 
         Args:
@@ -173,8 +179,9 @@ class PESUAcademy:
         """
         return await self._client.get_material_links(topic, material_type_id)
 
-    async def close(self):
-        """Closes the network session gracefully. This should always be called when
-        you are finished with the session to release resources.
+    async def close(self) -> None:
+        """Closes the network session gracefully.
+
+        This should always be called when you are finished with the session to release resources.
         """
         await self._client.close()

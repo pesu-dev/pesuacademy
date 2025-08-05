@@ -6,7 +6,7 @@ BASE_URL = "https://www.pesuacademy.com"
 
 
 @dataclass(frozen=True)
-class PageURLParams:
+class _PageURLParams:
     """Holds the static URL parameter values for various pages/actions within PESU Academy."""
 
     @dataclass(frozen=True)

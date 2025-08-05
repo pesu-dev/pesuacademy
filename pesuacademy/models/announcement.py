@@ -12,10 +12,10 @@ class Announcement(BaseModel):
         title (str): The title of the announcement.
         date (datetime.date): The date of the announcement.
         content (str): The content of the announcement.
-        links (Optional[List[str]]): Optional list of attachment links related to the announcement.
+        attachments (Optional[List[str]]): Optional list of attachment links related to the announcement.
     """
 
     title: str
     date: datetime.date
     content: str
-    links: list[str] | None = None
+    attachments: list[str] | None = None

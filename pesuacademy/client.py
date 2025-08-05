@@ -5,7 +5,7 @@ import asyncio
 import httpx
 from bs4 import BeautifulSoup
 
-from .models import (
+from pesuacademy.models import (
     Announcement,
     Course,
     MaterialLink,
@@ -15,7 +15,7 @@ from .models import (
     Topic,
     Unit,
 )
-from .pages import (
+from pesuacademy.pages import (
     _AnnouncementPageHandler,
     _AttendancePageHandler,
     _CourseDetailPageHandler,
@@ -78,18 +78,12 @@ class _PesuScraper:
         self._semester_ids = await _SemesterHandler._get_semester_ids(self._session)
 
     async def get_seating_info(self) -> list[SeatingInformation]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _SeatingInformationHandler._get_page(self._session)
 
     async def get_profile(self) -> Profile:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _ProfilePageHandler._get_page(self._session)
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         # Fetch courses for a specific semester or all semesters if none specified
         semesters_to_fetch = (
             {semester: self._semester_ids[semester]}
@@ -101,8 +95,6 @@ class _PesuScraper:
         return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         # Fetch attendance for a specific semester or all semesters if none specified
         semesters_to_fetch = (
             {semester: self._semester_ids[semester]}
@@ -114,28 +106,18 @@ class _PesuScraper:
         return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_announcements(self) -> list[Announcement]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _AnnouncementPageHandler._get_page(self._session)
 
     async def get_units_for_course(self, course_id: str) -> list[Unit]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _CourseDetailPageHandler._get_page(self._session, course_id)
 
     async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _UnitPageHandler._get_page(self._session, unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _MaterialLinksHandler._get_page(self._session, topic, material_type_id)
 
     async def get_results(self, semester_id: str) -> SemesterResult:
-        if not self.is_authenticated:
-            raise Exception("Not authenticated.")
         return await _ResultsPageHandler._get_page(self._session, semester_id)
 
     async def close(self) -> None:

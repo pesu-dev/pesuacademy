@@ -17,21 +17,31 @@ class Assessment(BaseModel):
     total: str | None = None
 
 
+class Credits(BaseModel):
+    """Represents credits information for a course in the PESU Academy system.
+
+    Attributes:
+        earned (str): Credits earned for the course.
+        total (str): Total credits available for the course.
+    """
+
+    earned: str
+    total: str
+
+
 class CourseResult(BaseModel):
     """Represents the result of a course in the PESU Academy system.
 
     Attributes:
         code (str): Unique identifier for the course.
         title (str): Title of the course.
-        credits_earned (str): Credits earned for the course.
-        credits_total (str): Total credits available for the course.
+        credits (Optional[Credits]): Credits information for the course, if available.
         assessments (List[Assessment]): List of assessments associated with the course.
     """
 
     code: str
     title: str
-    credits_earned: str
-    credits_total: str
+    credits: Credits | None = None
     assessments: list[Assessment]
 
 
@@ -41,12 +51,10 @@ class SemesterResult(BaseModel):
     Attributes:
         semester (str): Semester number.
         sgpa (str): Semester Grade Point Average.
-        credits_earned (str): Total credits earned in the semester.
-        credits_total (str): Total credits available in the semester.
+        credits (Optional[Credits]): Credits information for the semester, if available.
         courses (List[CourseResult]): List of course results for the semester.
     """
 
     sgpa: str
-    credits_earned: str
-    credits_total: str
+    credits: Credits | None = None
     courses: list[CourseResult]

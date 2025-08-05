@@ -4,7 +4,7 @@ import datetime
 from typing import Protocol
 
 
-class PageURLParams(Protocol):
+class _PageURLParams(Protocol):
     """A protocol for objects that have the required parameters."""
 
     MENU_ID: str
@@ -12,7 +12,7 @@ class PageURLParams(Protocol):
     ACTION_TYPE: str
 
 
-def build_params(params_obj: PageURLParams, **kwargs: str) -> dict[str, str]:
+def _build_params(params_obj: _PageURLParams, **kwargs: str) -> dict[str, str]:
     """Builds and returns the common parameter dictionary for PESU Academy requests.
 
     Args:

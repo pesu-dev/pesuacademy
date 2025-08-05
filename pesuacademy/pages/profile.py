@@ -5,8 +5,8 @@ import re
 import httpx
 from bs4 import BeautifulSoup, Tag
 
-from .. import constants
-from ..models.profile import (
+from pesuacademy import constants
+from pesuacademy.models import (
     AddressDetails,
     OtherInformation,
     ParentDetails,
@@ -15,7 +15,7 @@ from ..models.profile import (
     Profile,
     QualifyingExamination,
 )
-from ..util import build_params
+from pesuacademy.util import _build_params
 
 
 class _ProfilePageHandler:
@@ -158,8 +158,8 @@ class _ProfilePageHandler:
             httpx.HTTPStatusError: If the request to fetch the profile page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.Profile,
+        params = _build_params(
+            constants._PageURLParams.Profile,
         )
         response = await session.get(url, params=params)
         response.raise_for_status()

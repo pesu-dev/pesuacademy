@@ -26,7 +26,7 @@ class Course(BaseModel):
         type (Optional[str]): Type of the course (e.g., FC, CC).
         status (Optional[str]): Current status of the course (e.g., Enrolled).
         attendance (Optional[Attendance]): Attendance information for the course.
-        course_id (Optional[str]): Unique identifier for the course instance.
+        id (Optional[str]): Unique identifier for the course instance.
     """
 
     code: str
@@ -34,4 +34,4 @@ class Course(BaseModel):
     type: str | None = None
     status: str | None = None
     attendance: Attendance | None = None
-    course_id: str | None = None
+    id: str | None = None

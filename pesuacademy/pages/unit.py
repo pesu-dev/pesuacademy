@@ -5,9 +5,9 @@ import re
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models.materials import Topic
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import Topic
+from pesuacademy.util import _build_params
 
 
 class _UnitPageHandler:
@@ -26,7 +26,7 @@ class _UnitPageHandler:
             httpx.HTTPStatusError: If the request to the unit page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(constants.PageURLParams.UnitPage, unitid=unit_id)
+        params = _build_params(constants._PageURLParams.UnitDetail, coursecontentid=unit_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -63,7 +63,7 @@ class _UnitPageHandler:
             topics.append(
                 Topic(
                     title=title,
-                    topic_id=topic_id,
+                    id=topic_id,
                     course_id=course_id,
                     unit_id=scraped_unit_id,
                 )

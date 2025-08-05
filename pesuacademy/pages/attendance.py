@@ -3,9 +3,9 @@
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models import Attendance, Course
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import Attendance, Course
+from pesuacademy.util import _build_params
 
 
 class _AttendancePageHandler:
@@ -24,7 +24,7 @@ class _AttendancePageHandler:
             httpx.HTTPStatusError: If the request to the attendance page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(constants.PageURLParams.Attendance, batchClassId=semester_id)
+        params = _build_params(constants._PageURLParams.Attendance, batchClassId=semester_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 

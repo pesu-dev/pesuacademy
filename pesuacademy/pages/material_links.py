@@ -5,9 +5,9 @@ import re
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models.materials import MaterialLink, Topic
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import MaterialLink, Topic
+from pesuacademy.util import _build_params
 
 
 class _MaterialLinksHandler:
@@ -27,11 +27,11 @@ class _MaterialLinksHandler:
             httpx.HTTPStatusError: If the request to the material links page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(
-            constants.PageURLParams.MaterialLinks,
+        params = _build_params(
+            constants._PageURLParams.MaterialLinks,
             selectedData=topic.course_id,
             id=material_type_id,
-            unitid=topic.topic_id,
+            unitid=topic.id,
             url="studentProfilePESUAdmin",
         )
         response = await session.get(url, params=params)
@@ -66,7 +66,7 @@ class _MaterialLinksHandler:
                         partial_url = match.group(1).split("#")[0]  # Get URL part before the '#'
                         title = link_tag.text.strip()
                         # Construct the full download URL
-                        full_url = f"{constants.BASE_UR}{partial_url}"
+                        full_url = f"{constants.BASE_URL}{partial_url}"
                         links.append(MaterialLink(title=title, url=full_url, is_pdf=True))
 
         return links

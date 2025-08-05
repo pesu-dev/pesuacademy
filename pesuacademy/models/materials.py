@@ -12,7 +12,7 @@ class Unit(BaseModel):
     """
 
     title: str
-    unit_id: str
+    id: str
 
 
 class Topic(BaseModel):
@@ -26,7 +26,7 @@ class Topic(BaseModel):
     """
 
     title: str
-    topic_id: str
+    id: str
     course_id: str
     unit_id: str
 

@@ -5,9 +5,9 @@ import re
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models.materials import Unit
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import Unit
+from pesuacademy.util import _build_params
 
 
 class _CourseDetailPageHandler:
@@ -26,7 +26,7 @@ class _CourseDetailPageHandler:
             httpx.HTTPStatusError: If the request to the course page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(constants.PageURLParams.CourseDetail, id=course_id)
+        params = _build_params(constants._PageURLParams.CourseDetail, id=course_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -53,6 +53,6 @@ class _CourseDetailPageHandler:
             match = re.search(r"handleclassUnit\('(\d+)'\)", onclick_attr)
             if match:
                 unit_id = match.group(1)
-                units.append(Unit(title=title, unit_id=unit_id))
+                units.append(Unit(title=title, id=unit_id))
 
         return units

@@ -3,9 +3,9 @@
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models import Course
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import Course
+from pesuacademy.util import _build_params
 
 
 class _CoursesPageHandler:
@@ -24,7 +24,7 @@ class _CoursesPageHandler:
             httpx.HTTPStatusError: If the request to the courses page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(constants.PageURLParams.Courses, id=semester_id)
+        params = _build_params(constants._PageURLParams.Courses, id=semester_id)
 
         response = await session.get(url, params=params)
         response.raise_for_status()
@@ -56,7 +56,7 @@ class _CoursesPageHandler:
                         title=cols[1],
                         type=cols[2],
                         status=cols[3],
-                        course_id=course_id,
+                        id=course_id,
                     )
                 )
         return courses

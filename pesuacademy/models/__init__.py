@@ -12,7 +12,7 @@ from .profile import (
     Profile,
     QualifyingExamination,
 )
-from .results import Assessment, CourseResult, SemesterResult
+from .results import Assessment, CourseResult, Credits, SemesterResult
 from .seating_information import SeatingInformation
 
 __all__ = [
@@ -33,4 +33,5 @@ __all__ = [
     "QualifyingExamination",
     "Assessment",
     "CourseResult",
+    "Credits",
 ]

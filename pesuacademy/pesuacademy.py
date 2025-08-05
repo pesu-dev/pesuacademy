@@ -5,10 +5,10 @@ import os
 from dotenv import load_dotenv
 
 # Import the core engine
-from .client import _PesuScraper
+from pesuacademy.client import _PesuScraper
 
 # Import all Pydantic models to be used as return types for clarity
-from .models import (
+from pesuacademy.models import (
     Announcement,
     Course,
     MaterialLink,

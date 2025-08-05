@@ -3,9 +3,9 @@
 import httpx
 from bs4 import BeautifulSoup
 
-from .. import constants
-from ..models.results import Assessment, CourseResult, SemesterResult
-from ..util import build_params
+from pesuacademy import constants
+from pesuacademy.models import Assessment, CourseResult, Credits, SemesterResult
+from pesuacademy.util import _build_params
 
 
 class _ResultsPageHandler:
@@ -58,8 +58,7 @@ class _ResultsPageHandler:
         return CourseResult(
             code=code,
             title=title,
-            credits_earned=s_credits_earned,
-            credits_total=s_credits_total,
+            credits=Credits(earned=s_credits_earned, total=s_credits_total),
             assessments=assessments,
         )
 
@@ -106,7 +105,7 @@ class _ResultsPageHandler:
             httpx.HTTPStatusError: If the request to the results page fails.
         """
         url = "/s/studentProfilePESUAdmin"
-        params = build_params(constants.PageURLParams.Results, semid=semester_id)
+        params = _build_params(constants._PageURLParams.Results, semid=semester_id)
         response = await session.get(url, params=params)
         response.raise_for_status()
 
@@ -117,7 +116,6 @@ class _ResultsPageHandler:
 
         return SemesterResult(
             sgpa=sgpa,
-            credits_earned=credits_earned,
-            credits_total=credits_total,
+            credits=Credits(earned=credits_earned, total=credits_total),
             courses=course_results,
         )

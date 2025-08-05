@@ -6,7 +6,8 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [
-    { name = "Aditeya Baral", email = "aditeya.baral@gmail.com" }
+    { name = "Aditeya Baral", email = "aditeya.baral@gmail.com" },
+    { name = "Samarth Mohan", email = "samarth.lina@gmail.com" }
 ]
 dependencies = [
     "beautifulsoup4>=4.13.4",

@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 
 BASE_URL = "https://www.pesuacademy.com"
+PAGES_BASE_URL = "/s/studentProfilePESUAdmin"
+SEMESTER_BASE_URL = "/a/studentProfilePESU/getStudentSemestersPESU"
 
 
 @dataclass(frozen=True)

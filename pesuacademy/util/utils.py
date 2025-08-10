@@ -1,4 +1,4 @@
-"""Utility functions for PESU Academy."""
+"""Utility functions for PESU Academy package."""
 
 import datetime
 from typing import Protocol

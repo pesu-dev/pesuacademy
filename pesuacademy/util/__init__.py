@@ -1,4 +1,4 @@
-"""Utility functions for PESU Academy."""
+"""Utility functions for PESU Academy package."""
 
 from .utils import _build_params
 

@@ -1,4 +1,4 @@
-"""This module handles fetching and parsing the seating information page in the PESU Academy system."""
+"""This module handles fetching and parsing the seating information page from the PESU Academy website.."""
 
 import httpx
 from bs4 import BeautifulSoup
@@ -22,11 +22,10 @@ class _SeatingInformationHandler:
         Raises:
             httpx.HTTPStatusError: If the request to the seating information page fails.
         """
-        url = "/s/studentProfilePESUAdmin"
         params = _build_params(
             constants._PageURLParams.SeatingInformation,
         )
-        response = await session.get(url, params=params)
+        response = await session.get(constants.PAGES_BASE_URL, params=params)
         response.raise_for_status()
 
         if "No Test Seating Info is available" in response.text:  # Check if no seating info is available

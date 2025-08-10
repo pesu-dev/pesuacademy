@@ -25,9 +25,8 @@ class _CourseDetailPageHandler:
         Raises:
             httpx.HTTPStatusError: If the request to the course page fails.
         """
-        url = "/s/studentProfilePESUAdmin"
         params = _build_params(constants._PageURLParams.CourseDetail, id=course_id)
-        response = await session.get(url, params=params)
+        response = await session.get(constants.PAGES_BASE_URL, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")

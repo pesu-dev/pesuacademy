@@ -1,10 +1,12 @@
-"""This module handles fetching and parsing semester information in the PESU Academy system."""
+"""This module handles fetching and parsing semester information from the PESU Academy website.."""
 
 import datetime
 import re
 
 import httpx
 from bs4 import BeautifulSoup
+
+from pesuacademy import constants
 
 
 class _SemesterHandler:
@@ -22,10 +24,9 @@ class _SemesterHandler:
             httpx.HTTPStatusError: If the request to the semester endpoint fails.
             Exception: If the semester data cannot be fetched or parsed correctly.
         """
-        url = "/a/studentProfilePESU/getStudentSemestersPESU"
         params = {"_": str(int(datetime.datetime.now().timestamp() * 1000))}
 
-        response = await session.get(url, params=params)
+        response = await session.get(constants.SEMESTER_BASE_URL, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")
@@ -36,7 +37,6 @@ class _SemesterHandler:
 
         semester_ids = {}
 
-        # Too many fixes done, need to refactor this later
         for option in options:
             raw_value = option.get("value")  # Fetches a wierd formatted value (eg.'\"2763\"')
             text = option.text.strip()
@@ -45,7 +45,7 @@ class _SemesterHandler:
             text_match = re.search(r"\d+", text)
 
             if raw_value and text_match:
-                # Imp Fix: Clean the raw value to extract the numeric part
+                # Clean the raw value to extract the numeric part
                 # Finds each numeric part of the raw value (e.g. '2763') and joins it to form a clean numeric string
                 clean_value = "".join(re.findall(r"\d+", raw_value))
 

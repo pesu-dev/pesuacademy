@@ -1,4 +1,4 @@
-"""This module handles fetching and parsing the student Profile page in the PESU Academy system."""
+"""This module handles fetching and parsing the student Profile page from the PESU Academy website."""
 
 import re
 
@@ -157,11 +157,10 @@ class _ProfilePageHandler:
         Raises:
             httpx.HTTPStatusError: If the request to fetch the profile page fails.
         """
-        url = "/s/studentProfilePESUAdmin"
         params = _build_params(
             constants._PageURLParams.Profile,
         )
-        response = await session.get(url, params=params)
+        response = await session.get(constants.PAGES_BASE_URL, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")

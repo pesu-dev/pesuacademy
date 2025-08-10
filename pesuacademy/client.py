@@ -36,7 +36,6 @@ class _PesuScraper:
         self._session = httpx.AsyncClient(base_url=self._base_url, follow_redirects=True, timeout=30.0)
         self._csrf_token: str | None = None
         self._semester_ids: dict[int, str] = {}
-        self.is_authenticated = False
 
     async def login(self, username: str, password: str) -> None:
         """Logs in to the PESU Academy portal and initializes the session.
@@ -72,7 +71,6 @@ class _PesuScraper:
         soup = BeautifulSoup(response.text, "lxml")
         final_csrf = soup.find("meta", attrs={"name": "csrf-token"})["content"]
         self._csrf_token = final_csrf
-        self.is_authenticated = True
         # Always Fetch semester IDs after successful login
         # Improve this by making it a separate method later
         self._semester_ids = await _SemesterHandler._get_semester_ids(self._session)

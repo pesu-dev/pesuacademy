@@ -1,4 +1,4 @@
-"""This module initializes the models for the PESU Academy application."""
+"""This module initializes the models for the PESU Academy package."""
 
 from .announcement import Announcement
 from .course import Attendance, Course

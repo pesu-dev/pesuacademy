@@ -1,4 +1,4 @@
-"""This module initializes the page handlers for the PESU Academy application."""
+"""This module initializes the page handlers for the PESU Academy package."""
 
 from .announcements import _AnnouncementPageHandler
 from .attendance import _AttendancePageHandler

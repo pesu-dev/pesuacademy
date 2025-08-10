@@ -1,4 +1,4 @@
-"""This module contains the class, which is responsible for fetching and scraping the unit page."""
+"""This module handles fetching and parsing Unit information from the PESU Academy website.."""
 
 import re
 
@@ -25,9 +25,8 @@ class _UnitPageHandler:
         Raises:
             httpx.HTTPStatusError: If the request to the unit page fails.
         """
-        url = "/s/studentProfilePESUAdmin"
         params = _build_params(constants._PageURLParams.UnitDetail, coursecontentid=unit_id)
-        response = await session.get(url, params=params)
+        response = await session.get(constants.PAGES_BASE_URL, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")

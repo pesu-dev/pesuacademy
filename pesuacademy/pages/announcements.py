@@ -26,15 +26,13 @@ class _AnnouncementPageHandler:
         Raises:
             httpx.HTTPStatusError: If the request to the announcements page fails.
         """
-        url = "/s/studentProfilePESUAdmin"
         params = _build_params(constants._PageURLParams.Announcements, url="studentProfilePESUAdmin")
-        response = await session.get(url, params=params)
+        response = await session.get(constants.PAGES_BASE_URL, params=params)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, "lxml")
 
         announcements = []
-        base_url = "https://www.pesuacademy.com"
 
         # Find all announcement wrappers
         announcement_wrappers = soup.find_all("div", class_="elem-info-wrapper")
@@ -63,7 +61,8 @@ class _AnnouncementPageHandler:
                     if match:
                         doc_id = match.group(1)
                         # Construct the full download URL
-                        full_url = f"{base_url}/Academy/s/studentProfilePESUAdmin/downloadAnoncemntdoc/{doc_id}"
+                        partial_url = f"{constants.BASE_URL}/Academy/s/studentProfilePESUAdmin/downloadAnoncemntdoc/"
+                        full_url = f"{partial_url}{doc_id}"
                         attachments.append(full_url)
 
                 # Content without "Read more" attachments and download attachments
@@ -71,7 +70,6 @@ class _AnnouncementPageHandler:
                 content_clone = copy.copy(content_div)
                 if read_more := content_clone.find("a", class_="readmorelink"):
                     read_more.decompose()
-                # temp fix to remove download attachments which have
                 for link_div in content_clone.find_all("div"):
                     if link_div.find("a", href=re.compile(r"handleDownloadAnoncemntdoc")):
                         link_div.decompose()

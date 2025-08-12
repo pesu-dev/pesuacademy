@@ -39,9 +39,10 @@ pip install git+https://github.com/pesu-dev/pesuacademy.git
 from pesuacademy import PESUAcademy
 
 p = PESUAcademy("PRN_or_SRN", "password")
-profile = p.profile()
-courses = p.courses(semester=2)
-attendance = p.attendance()
+profile = p.get_profile()
+courses = p.get_courses(semester=2)
+attendance = p.get_attendance()
+p.close()
 ```
 
 The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/dev/pesuacademy.html)
@@ -76,14 +77,14 @@ To start contributing to the auth project, you'll need to set up a local develop
 
 1. **Create and activate a virtual environment:**
    ```bash
-   conda create -n pesu-auth python=3.11
-   conda activate pesu-auth
+   conda create -n pesuacademy python=3.11
+   conda activate pesuacademy
    ```
 
 2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
-   pip install pytest pytest-cov httpx python-dotenv pre-commit
+   pip install pytest pytest-cov python-dotenv pre-commit
    ```
 
 ### Set Up Environment Variables
@@ -96,15 +97,6 @@ To start contributing to the auth project, you'll need to set up a local develop
 2. **Configure your test credentials:**
    Open the `.env` file and replace all `<YOUR_..._HERE>` placeholders with your actual test user details. Each variable
    has been documented in the `.env.example` file for clarity.
-
-### Set Up Environment Variables
-
-1. Copy the example environment file to create your own:
-    ```bash
-    cp .env.example .env
-    ```
-
-2. Configure your test credentials: Open the .env file and replace all <YOUR_..._HERE> placeholders with your actual test user details. Each variable has been documented in the .env.example file for clarity.
 
 ### Pre-commit Hooks
 

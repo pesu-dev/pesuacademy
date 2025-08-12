@@ -38,7 +38,7 @@ pip install git+https://github.com/pesu-dev/pesuacademy.git
 ```python
 from pesuacademy import PESUAcademy
 
-p = PESUAcademy("PRN_or_SRN", "password")
+p = PESUAcademy.login(username="PRN_or_SRN", password="password")
 profile = p.get_profile()
 courses = p.get_courses(semester=2)
 attendance = p.get_attendance()

@@ -58,38 +58,53 @@ To start contributing to the auth project, you'll need to set up a local develop
 
 ### Setting Up Your Environment
 
-##### Option 1: Using `uv`
 
-1. Create a virtual environment:
-    ```bash
-    uv venv --python 3.11
-    ```
-2. Activate the virtual environment:
-    ```bash
-    source .venv/bin/activate
-    ```
-3. Install dependencies:
-    ```bash
-    uv sync --all-extras
-    ```
+#### Option 1: Using conda
 
-##### Option 2: Using `conda`
+1. **Create and activate a virtual environment:**
+   ```bash
+   uv venv --python 3.11
+   source .venv/bin/activate
+   ```
 
-1. Create a virtual environment:
-    ```bash
-    conda create -n pesu-auth python=3.11
-    ```
+2. **Install dependencies:**
+   ```bash
+   uv sync --all-extras
+   ```
 
-2. Activate the virtual environment:
-    ```bash
-    conda activate pesu-auth
-    ```
+#### Option 2: Using uv
 
-3. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    pip install pytest pytest-cov httpx python-dotenv pre-commit
-    ```
+1. **Create and activate a virtual environment:**
+   ```bash
+   conda create -n pesu-auth python=3.11
+   conda activate pesu-auth
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   pip install pytest pytest-cov httpx python-dotenv pre-commit
+   ```
+
+### Set Up Environment Variables
+
+1. **Copy the example environment file to create your own:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure your test credentials:**
+   Open the `.env` file and replace all `<YOUR_..._HERE>` placeholders with your actual test user details. Each variable
+   has been documented in the `.env.example` file for clarity.
+
+### Pre-commit Hooks
+
+We use pre-commit hooks to ensure code quality and consistency. These will automatically run checks before you commit
+your code. Install the pre-commit hooks by running:
+
+```bash
+pre-commit install
+```
 
 ### Set Up Environment Variables
 

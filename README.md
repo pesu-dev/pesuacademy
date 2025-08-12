@@ -10,17 +10,14 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/HackerSpace-PESU/pesuacademy-py)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/HackerSpace-PESU/pesuacademy-py/latest)
 
-![black.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/black.yml/badge.svg)
-![python-package-pip.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/python-package-pip.yml/badge.svg)
-![python-publish.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/python-publish.yml/badge.svg)
 ![build-docs.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/build-docs.yml/badge.svg)
 
-Python wrapper and APIs for the PESU Academy website.
+This library provides a fast and lightweight Python wrapper around the PESU Academy website, enabling easy programmatic access to announcements, courses, profiles, and more.
 
-The wrapper provides **read-only** access to all the pages and information accessible on the PESU Academy website.
-Without authentication, the wrapper will only be able to fetch details from the `Know Your Class and Section` page.
+With pesuacademy, you can: - Fetch course details and schedules - Access announcements and results - Easily integrate PESU Academy data into your Python applications
 
-> :warning: **Warning:** This is not an official API and is not endorsed by PES University. Use at your own risk.
+> [!WARNING]
+> **Warning:** This is not an official API and is not endorsed by PES University. Use at your own risk.
 
 ## Installation
 
@@ -33,9 +30,7 @@ pip install pesuacademy
 ### Installing from source
 
 ```bash
-git clone https://github.com/HackerSpace-PESU/pesuacademy-py
-cd pesuacademy-py
-python setup.py install
+pip install git+https://github.com/pesu-dev/pesuacademy.git
 ```
 
 ## Usage
@@ -44,8 +39,71 @@ python setup.py install
 from pesuacademy import PESUAcademy
 
 p = PESUAcademy("PRN_or_SRN", "password")
-# p = PESUAcademy() # Without authentication: can only fetch details from the `Know Your Class and Section` page
 profile = p.profile()
 courses = p.courses(semester=2)
 attendance = p.attendance()
+```
+
+The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/dev/pesuacademy.html)
+
+
+## 🛠️ Development Environment
+
+### Prerequisites
+
+- Python 3.11 or higher
+- Dependencies (automatically installed with uv): - beautifulsoup4 - httpx - pydantic - python-dotenv - selectolax
+
+To start contributing to the auth project, you'll need to set up a local development environment. We recommend using a virtual environment with either conda or uv to manage dependencies and prevent conflicts with your other projects.
+
+### Setting Up Your Environment
+
+##### Option 1: Using `uv`
+
+1. Create a virtual environment:
+    ```bash
+    uv venv --python 3.11
+    ```
+2. Activate the virtual environment:
+    ```bash
+    source .venv/bin/activate
+    ```
+3. Install dependencies:
+    ```bash
+    uv sync --all-extras
+    ```
+
+##### Option 2: Using `conda`
+
+1. Create a virtual environment:
+    ```bash
+    conda create -n pesu-auth python=3.11
+    ```
+
+2. Activate the virtual environment:
+    ```bash
+    conda activate pesu-auth
+    ```
+
+3. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    pip install pytest pytest-cov httpx python-dotenv pre-commit
+    ```
+
+### Set Up Environment Variables
+
+1. Copy the example environment file to create your own:
+    ```bash
+    cp .env.example .env
+    ```
+
+2. Configure your test credentials: Open the .env file and replace all <YOUR_..._HERE> placeholders with your actual test user details. Each variable has been documented in the .env.example file for clarity.
+
+### Pre-commit Hooks
+
+We use pre-commit hooks to ensure code quality and consistency. These will automatically run checks before you commit your code. Install the pre-commit hooks by running:
+
+```bash
+pre-commit install
 ```

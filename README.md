@@ -17,7 +17,7 @@ This library provides a fast and lightweight Python wrapper around the PESU Acad
 With pesuacademy, you can: - Fetch course details and schedules - Access announcements and results - Easily integrate PESU Academy data into your Python applications
 
 > [!WARNING]
-> **Warning:** This is not an official API and is not endorsed by PES University. Use at your own risk.
+> This is not an official API and is not endorsed by PES University. Use at your own risk.
 
 ## Installation
 

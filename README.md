@@ -47,7 +47,7 @@ attendance = p.attendance()
 The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/dev/pesuacademy.html)
 
 
-## 🛠️ Development Environment
+## Development Environment
 
 ### Prerequisites
 

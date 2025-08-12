@@ -97,15 +97,6 @@ To start contributing to the auth project, you'll need to set up a local develop
    Open the `.env` file and replace all `<YOUR_..._HERE>` placeholders with your actual test user details. Each variable
    has been documented in the `.env.example` file for clarity.
 
-### Pre-commit Hooks
-
-We use pre-commit hooks to ensure code quality and consistency. These will automatically run checks before you commit
-your code. Install the pre-commit hooks by running:
-
-```bash
-pre-commit install
-```
-
 ### Set Up Environment Variables
 
 1. Copy the example environment file to create your own:

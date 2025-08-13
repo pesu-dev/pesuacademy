@@ -1,6 +1,6 @@
-# 🤝 Contributing to auth
+# 🤝 Contributing to PESUAcademy
 
-Thank you for your interest in contributing to auth! This document provides guidelines and instructions for setting up
+Thank you for your interest in contributing to PESUAcademy! This document provides guidelines and instructions for setting up
 your development environment and contributing to the project.
 
 ---
@@ -8,13 +8,13 @@ your development environment and contributing to the project.
 <details>
 <summary>📚 Table of Contents</summary>
 
-- [🤝 Contributing to auth](#-contributing-to-auth)
+- [🤝 Contributing to PESUAcademy](#-contributing-to-PESUAcademy)
 - [🚧 Getting Started](#-getting-started)
 - [🛠️ Development Environment Setup](#️-development-environment-setup)
     - [Prerequisites](#prerequisites)
     - [Setting Up Your Environment](#setting-up-your-environment)
-        - [Option 1: Using conda](#option-1-using-conda)
-        - [Option 2: Using uv](#option-2-using-uv)
+        - [Option 2: Using uv](#option-1-using-uv)
+        - [Option 1: Using conda](#option-2-using-conda)
     - [Set Up Environment Variables](#set-up-environment-variables)
     - [Pre-commit Hooks](#pre-commit-hooks)
 - [🧰 Running the Application](#-running-the-application)
@@ -44,12 +44,6 @@ your development environment and contributing to the project.
 
 We encourage developers to work on their own forks of the repository. This allows you to work on features or fixes witout affecting the main codebase until your changes are ready to be merged.
 
-### 🌐 Deployment Environment
-
-We maintain two deployment environments:
-
-- **Staging**: https://pesu-auth-dev.onrender.com - [Status Page](https://6ns95sgb.status.cron-job.org/)
-- **Production**: https://pesu-auth.onrender.com - [Status Page](https://xzlk85cp.status.cron-job.org/)
 
 ### 🔄 Development Workflow
 
@@ -71,7 +65,7 @@ Please note that you will not be able to push directly to either the `dev` or `m
 
 ## 🛠️ Development Environment Setup
 
-This section provides instructions for setting up your development environment to work on the auth project. We recommend
+This section provides instructions for setting up your development environment to work on the PESUAcademy project. We recommend
 using a virtual environment to manage dependencies and avoid conflicts with other projects. You can use either `conda`
 or `uv` for this purpose.
 
@@ -83,23 +77,9 @@ or `uv` for this purpose.
 
 ### Setting Up Your Environment
 
-You can set up your development environment using either `conda` or `uv`.
+You can set up your development environment using either `uv` or `conda`.
 
-#### Option 1: Using conda
-
-1. **Create and activate a virtual environment:**
-   ```bash
-   conda create -n pesu-auth python=3.11
-   conda activate pesu-auth
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   pip install pytest pytest-cov httpx python-dotenv pre-commit
-   ```
-
-#### Option 2: Using uv
+#### Option 1: Using uv
 
 1. **Create and activate a virtual environment:**
    ```bash
@@ -110,6 +90,20 @@ You can set up your development environment using either `conda` or `uv`.
 2. **Install dependencies:**
    ```bash
    uv sync --all-extras
+   ```
+
+#### Option 2: Using conda
+
+1. **Create and activate a virtual environment:**
+   ```bash
+   conda create -n pesuacademy python=3.11
+   conda activate pesuacademy
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   pip install pytest pytest-cov python-dotenv pre-commit
    ```
 
 ### Set Up Environment Variables
@@ -261,10 +255,10 @@ into the `dev` branch and deployed to staging for testing. After successful vali
 If you get stuck or have questions:
 
 1. Check the [README.md](../README.md) for setup and usage info.
-2. Review [open issues](https://github.com/pesu-dev/auth/issues)
-   or [pull requests](https://github.com/pesu-dev/auth/pulls) to see if someone else encountered the same problem.
+2. Review [open issues](https://github.com/pesu-dev/pesuacademy/issues)
+   or [pull requests](https://github.com/pesu-dev/pesuacademy/pulls) to see if someone else encountered the same problem.
 3. Reach out to the maintainers on PESU Discord.
-    - Use the `#pesu-auth` channel for questions related to this repository.
+    - Use the `#pesuacademy-py` channel for questions related to this repository.
     - Search for existing discussions before posting.
 4. Open a new issue if you're facing something new or need clarification.
 
@@ -274,8 +268,9 @@ If you get stuck or have questions:
 
 If you discover a security vulnerability, **please do not open a public issue**.
 
-Instead, report it privately by contacting the maintainers. We take all security concerns seriously and will respond
-promptly.
+Instead, report it privately by contacting the maintainers. We take all security concerns seriously and will respond promptly.
+
+Read [SECURITY](SECURITY.md) for more information.
 
 ---
 
@@ -336,7 +331,7 @@ When creating or working on an issue/PR, feel free to suggest an appropriate lab
 
 If you want to propose a new feature:
 
-1. Check if it already exists in [issues](https://github.com/pesu-dev/auth/issues)
+1. Check if it already exists in [issues](https://github.com/pesu-dev/pesuacademy/issues)
 2. Open a new issue using the **"Feature Request"** template if available
 3. Clearly explain the use case, proposed solution, and any relevant context
 
@@ -345,4 +340,4 @@ If you want to propose a new feature:
 ## 📄 License
 
 By contributing to this repository, you agree that your contributions will be licensed under the **MIT License**.
-See [`LICENSE`](LICENSE) for full license text.
+See [LICENSE](../LICENSE.md) for full license text.

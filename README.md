@@ -86,7 +86,7 @@ The complete documentation is available here: [PESU Academy Docs](https://pesu-d
 - Python 3.11 or higher
 - Dependencies (automatically installed with uv): - beautifulsoup4 - httpx - pydantic - python-dotenv - selectolax
 
-To start contributing to the auth project, you'll need to set up a local development environment. We recommend using a virtual environment with either conda or uv to manage dependencies and prevent conflicts with your other projects.
+To start contributing to the PESUAcademy project, you'll need to set up a local development environment. We recommend using a virtual environment with either conda or uv to manage dependencies and prevent conflicts with your other projects.
 
 ### Setting Up Your Environment
 
@@ -146,7 +146,3 @@ pre-commit install
 Made with [contrib.rocks](https://contrib.rocks).
 
 If you'd like to contribute, please follow our [contribution guidelines](https://github.com/pesu-dev/pesuacademy/blob/dev/.github/CONTRIBUTING.md).
-
-## License
-
-This project is distributed under the `MIT License`. See the [LICENSE](https://github.com/pesu-dev/pesuacademy/blob/dev/LICENSE) file for more information.

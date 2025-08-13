@@ -19,7 +19,7 @@ We will acknowledge your report within 48 hours and keep you updated on the prog
 
 ## Important Disclaimer
 
-PESUAcademy Package acts solely as a package for authenticating PESU credentials via the PESU Academy service.
+PESUAcademy Package acts solely as a package for authenticating and retrieving PESU credentials via the PESU Academy service.
 
 - We **do not control or take responsibility** for any third-party applications or services that use this package.
 - Users and developers should exercise caution when using or integrating with applications built on top of this package.
@@ -39,4 +39,4 @@ PESUAcademy Package uses several open-source dependencies. We regularly monitor 
 
 While we strive to maintain high security standards, no software is entirely free from vulnerabilities. Use this software at your own risk.
 
-Thank you for helping us keep PESUAcademy Package secure!
+Thank you for helping us keep PESUAcademy secure!

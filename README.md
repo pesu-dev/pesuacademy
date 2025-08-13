@@ -19,6 +19,15 @@ With pesuacademy, you can: - Fetch course details and schedules - Access announc
 > [!WARNING]
 > This is not an official Package and is not endorsed by PES University. Use at your own risk.
 
+## Features
+- **Profile**: Fetch a user's personal details.
+- **Courses**: Get a list of the user's enrolled courses by semester.
+- **Attendance**: Retrieve detailed attendance records.
+- **Announcements**: Get the latest college announcements.
+- **Exam Seating Info**: Find the user's assigned seat for upcoming ISA/ESAs.
+- **Results**: Fetch the user's semester-wise results.
+- **Class Materials**: A powerful module to list and download all your class notes and presentations.
+
 ## Installation
 
 ### Installing from `pip`
@@ -36,16 +45,38 @@ pip install git+https://github.com/pesu-dev/pesuacademy.git
 ## Usage
 
 ```python
+import asyncio
 from pesuacademy import PESUAcademy
 
-p = PESUAcademy.login(username="PRN_or_SRN", password="password")
-profile = p.get_profile()
-courses = p.get_courses(semester=2)
-attendance = p.get_attendance()
-p.close()
+PRN = "YOUR_PRN"
+PASSWORD = "YOUR_PASSWORD"
+
+async def main():
+    session = None
+    try:
+
+        session = await PESUAcademy.login(PRN, PASSWORD)
+        print("Login Successful!")
+
+        profile = await session.get_profile()
+        print(f"Welcome, {profile.personal.name}!")
+
+        results = await session.get_results(semester=2)
+        if results:
+            print(f"Your SGPA for Semester 2 was: {results.sgpa}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if session:
+            await session.close()
+            print("Session closed.")
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/dev/pesuacademy.html)
+The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/)
 
 
 ## Development Environment
@@ -60,7 +91,7 @@ To start contributing to the auth project, you'll need to set up a local develop
 ### Setting Up Your Environment
 
 
-#### Option 1: Using conda
+#### Option 1: Using uv
 
 1. **Create and activate a virtual environment:**
    ```bash
@@ -73,7 +104,7 @@ To start contributing to the auth project, you'll need to set up a local develop
    uv sync --all-extras
    ```
 
-#### Option 2: Using uv
+#### Option 2: Using conda
 
 1. **Create and activate a virtual environment:**
    ```bash
@@ -105,3 +136,17 @@ We use pre-commit hooks to ensure code quality and consistency. These will autom
 ```bash
 pre-commit install
 ```
+
+## Contributing to PESUAcademy
+
+<a href="https://github.com/pesu-dev/pesuacademy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=pesu-dev/pesuacademy" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+If you'd like to contribute, please follow our [contribution guidelines](https://github.com/pesu-dev/pesuacademy/blob/dev/.github/CONTRIBUTING.md).
+
+## License
+
+This project is distributed under the `MIT License`. See the [LICENSE](https://github.com/pesu-dev/pesuacademy/blob/dev/LICENSE) file for more information.

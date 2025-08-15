@@ -126,13 +126,11 @@ To start contributing to the PESUAcademy project, you'll need to set up a local 
    ```
 2. **Configure Environment Variables**
 
-    Production Credentials:
+- Production Credentials:
+    Update PESU_USERNAME and PESU_PASSWORD with your actual PESU Academy login details for production use.
 
-        Update PESU_USERNAME and PESU_PASSWORD with your actual PESU Academy login details for production use.
-
-    Test Credentials (Optional):
-
-        To run tests or for development purposes, fill in all the TEST_... variables (e.g., TEST_EMAIL, TEST_PRN, TEST_PASSWORD) with valid details for a test account.
+- Test Credentials (Optional):
+    To run tests or for development purposes, fill in all the TEST_... variables (e.g., TEST_EMAIL, TEST_PRN, TEST_PASSWORD) with valid details for a test account.
 
 ### Pre-commit Hooks
 
@@ -152,3 +150,4 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 
 If you'd like to contribute, please follow our [contribution guidelines](https://github.com/pesu-dev/pesuacademy/blob/dev/.github/CONTRIBUTING.md).
+

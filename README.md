@@ -78,68 +78,6 @@ if __name__ == "__main__":
 
 The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/)
 
-
-## Development Environment
-
-### Prerequisites
-
-- Python 3.11 or higher
-- Dependencies (automatically installed with uv): - beautifulsoup4 - httpx - pydantic - python-dotenv - selectolax
-
-To start contributing to the PESUAcademy project, you'll need to set up a local development environment. We recommend using a virtual environment with either conda or uv to manage dependencies and prevent conflicts with your other projects.
-
-### Setting Up Your Environment
-
-
-#### Option 1: Using uv
-
-1. **Create and activate a virtual environment:**
-   ```bash
-   uv venv --python 3.11
-   source .venv/bin/activate
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   uv sync --all-extras
-   ```
-
-#### Option 2: Using conda
-
-1. **Create and activate a virtual environment:**
-   ```bash
-   conda create -n pesuacademy python=3.11
-   conda activate pesuacademy
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   pip install pytest pytest-cov python-dotenv pre-commit
-   ```
-
-### Set Up Environment Variables
-
-1. **Copy the example environment file to create your own:**
-   ```bash
-   cp .env.example .env
-   ```
-2. **Configure Environment Variables**
-
-- **Production Credentials**:
-    Update PESU_USERNAME and PESU_PASSWORD with your PESU Academy login details for production use.
-
-- **Test Credentials**:
-    To run tests or for development purposes, fill in all the TEST_... variables (e.g., TEST_EMAIL, TEST_PRN, TEST_PASSWORD) with valid details.
-
-### Pre-commit Hooks
-
-We use pre-commit hooks to ensure code quality and consistency. These will automatically run checks before you commit your code. Install the pre-commit hooks by running:
-
-```bash
-pre-commit install
-```
-
 ## Contributing to PESUAcademy
 
 <a href="https://github.com/pesu-dev/pesuacademy/graphs/contributors">
@@ -149,6 +87,6 @@ pre-commit install
 Made with [contrib.rocks](https://contrib.rocks).
 
 
-If you'd like to contribute, please follow our [contribution guidelines](https://github.com/pesu-dev/pesuacademy/blob/dev/.github/CONTRIBUTING.md).
+If you'd like to contribute, please follow our [contribution guidelines](.github/CONTRIBUTING.md).
 
 

@@ -65,9 +65,7 @@ Please note that you will not be able to push directly to either the `dev` or `m
 
 ## 🛠️ Development Environment Setup
 
-This section provides instructions for setting up your development environment to work on the PESUAcademy project. We recommend
-using a virtual environment to manage dependencies and avoid conflicts with other projects. You can use either `conda`
-or `uv` for this purpose.
+This section provides instructions for setting up your development environment to work on the PESUAcademy project. We recommend using a virtual environment to manage dependencies and avoid conflicts with other projects.
 
 ### Prerequisites
 
@@ -340,4 +338,4 @@ If you want to propose a new feature:
 ## 📄 License
 
 By contributing to this repository, you agree that your contributions will be licensed under the **MIT License**.
-See [LICENSE](../LICENSE.md) for full license text.
+See [LICENSE](../LICENSE) for full license text.

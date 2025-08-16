@@ -14,7 +14,7 @@ from pesuacademy.util import _build_params
 
 class _AnnouncementPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient) -> list[Announcement]:
+    async def _get(session: httpx.AsyncClient) -> list[Announcement]:
         """Fetches the main announcements page and scrapes all announcements.
 
         Args:

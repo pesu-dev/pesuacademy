@@ -12,7 +12,7 @@ from pesuacademy.util import _build_params
 
 class _UnitPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, unit_id: str) -> list[Topic]:
+    async def _get(session: httpx.AsyncClient, unit_id: str) -> list[Topic]:
         """Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
 
         Args:

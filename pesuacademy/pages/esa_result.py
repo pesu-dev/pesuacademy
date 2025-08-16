@@ -90,7 +90,7 @@ class _ResultsPageHandler:
         return sgpa_raw, credits_earned, credits_total
 
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> SemesterResult:
+    async def _get(session: httpx.AsyncClient, semester_id: str) -> SemesterResult:
         """Fetches the ESA results for a given semester ID.
 
         Args:

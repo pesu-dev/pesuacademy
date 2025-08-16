@@ -10,7 +10,7 @@ from pesuacademy.util import _build_params
 
 class _CoursesPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
+    async def _get(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
         """Fetches the courses for a single given semester ID.
 
         Args:

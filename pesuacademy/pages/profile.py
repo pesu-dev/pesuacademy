@@ -145,7 +145,7 @@ class _ProfilePageHandler:
         )
 
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient) -> Profile:
+    async def _get(session: httpx.AsyncClient) -> Profile:
         """Fetches and parses the user's profile page.
 
         Args:

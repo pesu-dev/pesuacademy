@@ -12,7 +12,7 @@ from pesuacademy.util import _build_params
 
 class _CourseDetailPageHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient, course_id: str) -> list[Unit]:
+    async def _get(session: httpx.AsyncClient, course_id: str) -> list[Unit]:
         """Fetches the main page for a course and scrapes the list of units.
 
         Args:

@@ -10,7 +10,7 @@ from pesuacademy.util import _build_params
 
 class _SeatingInformationHandler:
     @staticmethod
-    async def _get_page(session: httpx.AsyncClient) -> list[SeatingInformation]:
+    async def _get(session: httpx.AsyncClient) -> list[SeatingInformation]:
         """Fetches and parses the seating information page.
 
         Args:

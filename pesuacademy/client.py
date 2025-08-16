@@ -76,10 +76,10 @@ class _PesuScraper:
         self._semester_ids = await _SemesterHandler._get_semester_ids(self._session)
 
     async def get_seating_info(self) -> list[SeatingInformation]:
-        return await _SeatingInformationHandler._get_page(self._session)
+        return await _SeatingInformationHandler._get(self._session)
 
     async def get_profile(self) -> Profile:
-        return await _ProfilePageHandler._get_page(self._session)
+        return await _ProfilePageHandler._get(self._session)
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
         # Fetch courses for a specific semester or all semesters if none specified
@@ -88,7 +88,7 @@ class _PesuScraper:
             if semester and semester in self._semester_ids
             else self._semester_ids
         )
-        tasks = [_CoursesPageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
+        tasks = [_CoursesPageHandler._get(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
         results = await asyncio.gather(*tasks)
         return dict(zip(semesters_to_fetch.keys(), results))
 
@@ -99,24 +99,24 @@ class _PesuScraper:
             if semester and semester in self._semester_ids
             else self._semester_ids
         )
-        tasks = [_AttendancePageHandler._get_page(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
+        tasks = [_AttendancePageHandler._get(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
         results = await asyncio.gather(*tasks)
         return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_announcements(self) -> list[Announcement]:
-        return await _AnnouncementPageHandler._get_page(self._session)
+        return await _AnnouncementPageHandler._get(self._session)
 
     async def get_units_for_course(self, course_id: str) -> list[Unit]:
-        return await _CourseDetailPageHandler._get_page(self._session, course_id)
+        return await _CourseDetailPageHandler._get(self._session, course_id)
 
     async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
-        return await _UnitPageHandler._get_page(self._session, unit_id)
+        return await _UnitPageHandler._get(self._session, unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        return await _MaterialLinksHandler._get_page(self._session, topic, material_type_id)
+        return await _MaterialLinksHandler._get(self._session, topic, material_type_id)
 
     async def get_results(self, semester_id: str) -> SemesterResult:
-        return await _ResultsPageHandler._get_page(self._session, semester_id)
+        return await _ResultsPageHandler._get(self._session, semester_id)
 
     async def close(self) -> None:
         await self._session.aclose()

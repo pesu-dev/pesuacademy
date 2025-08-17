@@ -103,8 +103,8 @@ class PESUAcademy:
         semesters depending on the argument provided.
 
         Args Required:
-            semester (Optional[int]): Optional user input is semester number
-            to fetch course details from. If not provided, details of courses for
+            semester (Optional[int]): The semester number for which courses are to
+            be fetched. If not provided, details of courses for
             all available semesters are returned.
 
         Returns:
@@ -117,9 +117,8 @@ class PESUAcademy:
         """Fetches details of the user's attendance records from PESU Academy.
 
         Args Required:
-            semester (Optional[int]):  Optional user input is semester number
-            to fetch attendance details from. If not provided, attendance details
-            for all available semesters is returned.
+            semester (Optional[int]): The semester number for which attendance details are to
+            be fetched. If not provided, attendance details for all available semesters is returned.
 
         Returns:
             A dictionary with semester number/s as key/s and lists of course objects

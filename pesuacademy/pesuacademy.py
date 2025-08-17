@@ -265,7 +265,7 @@ class PESUAcademy:
             >>> # 4. Get material links
             >>> material_links = await session.get_material_links(my_topic, "2")
             >>> for link in material_links:
-            ...     print(f"Material Notes: {link.material_title} at {link.material_url}")
+            ...     print(f"{'[PDF] ' if link.is_pdf else ''}{link.title}: {link.url}")
         """
         return await self._client.get_material_links(topic, material_type_id)
 

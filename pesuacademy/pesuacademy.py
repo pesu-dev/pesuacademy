@@ -23,15 +23,18 @@ from pesuacademy.models import (
 class PESUAcademy:
     """The main, user-facing class to interact with PESU Academy.
 
-    An instance of this class represents a single authenticated session and provides
-    asynchronous methods to fetch academic data.
+    This class provides a high-level asynchronous interface for fetching academic
+    data. An instance of this class represents a single, authenticated user
+    session.
     """
 
     def __init__(self, client: _PesuScraper) -> None:
         """Initializes the PESUAcademy session.
 
-        This method is not meant to be called directly.
-        Please use the `PESUAcademy.login()` class method to create an instance.
+        Note:
+            This constructor is not meant to be called directly by the user.
+            Please use the `PESUAcademy.login()` class method as a factory
+            to create a properly authenticated instance.
 
         Args:
             client (_PesuScraper): An authenticated instance of the core client.
@@ -46,8 +49,8 @@ class PESUAcademy:
         (PESU_USERNAME, PESU_PASSWORD) in a `.env` file.
 
         Args:
-            username (Optional[str]): The user's login identifier. Defaults to
-                the `PESU_USERNAME` environment variable.
+            username (Optional[str]): The user's login identifier as used in  https://www.pesuacademy.com/Academy/.
+        Defaults to the `PESU_USERNAME` environment variable.
             password (Optional[str]): The user's password. Defaults to the
                 `PESU_PASSWORD` environment variable.
 
@@ -57,6 +60,16 @@ class PESUAcademy:
         Raises:
             ValueError: If credentials are not provided either as arguments
                 or as environment variables.
+
+        Example:
+            >>> async def main():
+            ...     pesu_session = await PESUAcademy.login("YOUR_PRN", "YOUR_PASSWORD")
+            ...     profile = await pesu_session.get_profile()
+            ...     print(f"Hello, {profile.personal.name}")
+            ...     await pesu_session.close()
+            >>>
+            >>> if __name__ == "__main__":
+            ...     asyncio.run(main())
         """
         load_dotenv()  # Load environment variables from .env file
         uname = username or os.environ.get("PESU_USERNAME")
@@ -73,26 +86,37 @@ class PESUAcademy:
         return cls(client)
 
     async def get_profile(self) -> Profile:
-        """Fetches and displays all details of the user's profile under PESU Academy in an organized manner.
+        """Fetches all details of the user's profile under PESU Academy in an organized manner.
 
-        Args Required:
+        Args:
             None
 
         Returns:
-            A Profile object containing user's personal details
+            Profile: A Profile object containing user's personal details
             as well as parent details, qualifying examination, address and other information.
+
+        Example:
+            >>> profile = await session.get_profile()
+            >>> print(f"Name: {profile.personal.name}")
+            >>> print(f"Qualifying examination: {profile.qualifying_exam.exam} : {profile.qualifying_exam.score}")
         """
         return await self._client.get_profile()
 
     async def get_seating_info(self) -> list[SeatingInformation]:
-        """Fetches seating arrangement details of the user's upcoming examinations.
+        """Fetches seating arrangement details of the user's examinations.
 
-        Args Required:
+        Args:
             None
 
         Returns:
-            User's examination seating details i.e course name, course code,
-            examination date, time, location and block in the format of a list.
+            list[SeatingInformation]: A list containing user's examination seating details i.e course name, course code,
+            examination date, time, location and block.
+
+        Example:
+            >>> seating_info = await session.get_seating_info()
+            >>> print(
+            ...     f"{seating_info.name} on {seating_info.date} at {seating_info.time} in {seating_info.terminal}
+            ...- {seating_info.block}")
         """
         return await self._client.get_seating_info()
 
@@ -102,27 +126,41 @@ class PESUAcademy:
         Can view details of courses for a specific semester or all available
         semesters depending on the argument provided.
 
-        Args Required:
+        Args:
             semester (Optional[int]): The semester number for which courses are to
             be fetched. If not provided, details of courses for
             all available semesters are returned.
 
         Returns:
-            A dictionary with semester number/s as key/s and lists with course details i.e.
-            code, title, type, status, attendance and id as its values.
+            dict[int, list[Course]]: A dictionary with semester number/s as key/s and lists with course details i.e.
+            code, title, type, status, attendance and id as its value/s.
+
+        Example:
+            >>> sem_4_courses = await session.get_courses(semester=4)
+            >>> for course in sem_4_courses.get(4, []):
+            ...     print(f"Course: {course.title} ({course.code})")
         """
         return await self._client.get_courses(semester)
 
     async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
         """Fetches details of the user's attendance records from PESU Academy.
 
-        Args Required:
+        Args:
             semester (Optional[int]): The semester number for which attendance details are to
             be fetched. If not provided, attendance details for all available semesters is returned.
 
         Returns:
-            A dictionary with semester number/s as key/s and lists of course objects
+            dict[int, list[Course]]: A dictionary with semester number/s as key/s and lists of course objects
             that contain user's attendance records in those courses respectively.
+
+        Example:
+            >>> attendance_data = await session.get_attendance(semester=4)
+            >>> courses_for_sem_4 = attendance_data.get(4, [])
+            >>> for courses in courses_for_sem_4:
+            ...     if courses.attendance:
+            ...         print(f"{course.title}: {course.attendance.percentage}%")
+            ...     else:
+            ...         print(f"{course.title}: Attendance data not avaialable")
         """
         return await self._client.get_attendance(semester)
 
@@ -130,15 +168,21 @@ class PESUAcademy:
         """Fetches the final result as well as details of result for the semester entered by the user.
 
         Args:
-            semester (int): The semester number for which final results
-            are to be fetched.
+            semester (int): The semester number for which final results are to be fetched.
 
         Returns:
-            A SemesterResult object containing semester number, user's SGPA,
+            SemesterResult: An object containing semester number, user's SGPA,
             credit details (if any), and course result details.
 
         Raises:
             ValueError: If the requested semester is invalid or has no results.
+
+        Example:
+            >>> try:
+            ...     sem_3_result = await session.get_results(semester=3)
+            ...     print(f"Semester 3 SGPA: {sem_3_result.sgpa}")
+            ... except ValueError as e:
+            ...     print(e)
         """
         semester_id_str = self._client._semester_ids.get(semester)
         if not semester_id_str:
@@ -148,14 +192,19 @@ class PESUAcademy:
         return await self._client.get_results(semester_id_str)
 
     async def get_announcements(self) -> list[Announcement]:
-        """Fetches the details of all recent announcements from the PESU Academy dashboard.
+        """Fetches the details of all recent announcements from the PESU Academy.
 
         Args:
             None
 
         Returns:
-            A list of Announcement objects containing details of the latest announcements
+            list[Announcement]: Announcement objects containing details of the latest announcements
             i.e. its title, date of announcement, content and attachments provided (if any).
+
+        Example:
+            >>> announcements = await session.get_announcements()
+            >>> for announcement in announcements:
+            ...     print(f"[{announcement.date}] {announcement.title}")
         """
         return await self._client.get_announcements()
 
@@ -166,11 +215,11 @@ class PESUAcademy:
 
         The course_id can be obtained from the Course model returned by `get_courses()`.
 
-        Args Required:
+        Args:
             course_id (str): The unique internal ID for the course.
 
         Returns:
-            A list of Unit objects containing title of the unit and unit_id.
+            list[Unit]: A list of `Unit` objects containing title of the unit and unit_id.
         """
         return await self._client.get_units_for_course(course_id)
 
@@ -179,31 +228,63 @@ class PESUAcademy:
 
         The unit_id can be obtained from the Unit model.
 
-        Args Required:
+        Args:
             unit_id (str): The unique internal ID for the required unit.
 
         Returns:
-            A list of Topic objects containing IDs i.e. title, topic_id,
+            list[Topic]: A list of `Topic` objects containing IDs i.e. title, topic_id,
             course_id, unit_id needed for the final step (retrieving material links).
         """
         return await self._client.get_topics_for_unit(unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        """Given a Topic object and a material type ID through user input, fetches the final required download links.
+        """Given a `Topic` object and a material type ID through user input, fetches the final required download links.
 
-        Args Required:
-            topic (Topic): The Topic object obtained from `get_topics_for_unit()`.
-            material_type_id (str): A string representing the material type (e.g., "2" for Slides, "3" for Notes).
+        Args:
+            topic (Topic): The `Topic` object obtained from `get_topics_for_unit()`.
+            material_type_id (str): A string representing the material type (e.g., "2"
+                for Slides, "3" for Notes).
 
         Returns:
-            A list of MaterialLink objects containing material title, URL, and a bool string
+            list[MaterialLink]: A list of `MaterialLink` objects containing material title, URL, and a bool string
             indicating whether the URL provided is that of a PDF file.
+
+        Example:
+            >>> # 1. Get courses to find a specific course_id
+            >>> courses_data = await session.get_courses(semester=4)
+            >>> my_course = courses_data.get(4, [])[0]
+            >>>
+            >>> # 2. Get units for that course
+            >>> units = await session.get_units_for_course(my_course.course_id)
+            >>> my_unit = units[0]
+            >>>
+            >>> # 3. Get topics for that unit
+            >>> topics = await session.get_topics_for_unit(my_unit.unit_id)
+            >>> my_topic = topics[0]
+            >>>
+            >>> # 4. Get material links
+            >>> material_links = await session.get_material_links(my_topic, "2")
+            >>> for link in material_links:
+            ...     print(f"Material Notes: {link.material_title} at {link.material_url}")
         """
         return await self._client.get_material_links(topic, material_type_id)
 
     async def close(self) -> None:
-        """Closes the network session gracefully.
+        """Closes the underlying network session gracefully. This method is crucial for proper resource management.
 
-        This should always be called when you are finished with the session to release resources.
+        To guarantee that the session is always closed, even if errors occur
+        during its use, it is highly recommended to call this method within a
+        `try...finally` block.
+
+        Example:
+        >>> session = None
+        >>> try:
+        ...     session = await PESUAcademy.login("YOUR_PRN", "YOUR_PASSWORD")
+        ...     profile = await session.get_profile()
+        ...     print(f"Hello, {profile.personal.name}")
+        ... finally:
+        ...     if session:
+        ...         await session.close()
+        ...         print("Session closed successfully.")
         """
         await self._client.close()

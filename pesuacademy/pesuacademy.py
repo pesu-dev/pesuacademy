@@ -50,7 +50,7 @@ class PESUAcademy:
 
         Args:
             username (Optional[str]): The user's login identifier as used in  https://www.pesuacademy.com/Academy/.
-        Defaults to the `PESU_USERNAME` environment variable.
+            Defaults to the `PESU_USERNAME` environment variable.
             password (Optional[str]): The user's password. Defaults to the
                 `PESU_PASSWORD` environment variable.
 
@@ -277,14 +277,14 @@ class PESUAcademy:
         `try...finally` block.
 
         Example:
-        >>> session = None
-        >>> try:
-        ...     session = await PESUAcademy.login("YOUR_PRN", "YOUR_PASSWORD")
-        ...     profile = await session.get_profile()
-        ...     print(f"Hello, {profile.personal.name}")
-        ... finally:
-        ...     if session:
-        ...         await session.close()
-        ...         print("Session closed successfully.")
+            >>> session = None
+            >>> try:
+            ...     session = await PESUAcademy.login("YOUR_PRN", "YOUR_PASSWORD")
+            ...     profile = await session.get_profile()
+            ...     print(f"Hello, {profile.personal.name}")
+            ... finally:
+            ...     if session:
+            ...         await session.close()
+            ...         print("Session closed successfully.")
         """
         await self._client.close()

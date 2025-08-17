@@ -1,6 +1,6 @@
 # 🤝 Contributing to PESUAcademy
 
-Thank you for your interest in contributing to PESUAcademy! This document provides guidelines and instructions for setting up your development environment and contributing to the project.
+Thank you for your interest in contributing to PESUAcademy! This document will guide you through the process of setting up your environment and making your first contribution.
 
 ---
 
@@ -8,17 +8,14 @@ Thank you for your interest in contributing to PESUAcademy! This document provid
 <summary>📚 Table of Contents</summary>
 
 - [🤝 Contributing to PESUAcademy](#-contributing-to-PESUAcademy)
+- [📜 Code of Conduct](#-code-of-conduct)
 - [🚧 Getting Started](#-getting-started)
-- [🛠️ Development Environment Setup](#️-development-environment-setup)
+- [🛠️ Development Environment Setup](#-development-environment-setup)
   - [Prerequisites](#prerequisites)
-  - [Setting Up Your Environment](#setting-up-your-environment)
-    - [Option 1: Using uv](#option-1-using-uv)
-    - [Option 2: Using conda](#option-2-using-conda)
+  - [Installation Steps](#installation-steps)
   - [Set Up Environment Variables](#set-up-environment-variables)
-  - [Pre-commit Hooks](#pre-commit-hooks)
-- [🧰 Running the Application](#-running-the-application)
 - [🧪 Testing and Code Quality](#-testing-and-code-quality)
-  - [Pre-commit Hooks](#pre-commit-hooks-1)
+  - [Pre-commit Hooks](#pre-commit-hooks)
   - [Linting & Formatting](#linting--formatting)
 - [🧪 Running Tests](#-running-tests)
   - [Writing Tests](#writing-tests)
@@ -39,46 +36,53 @@ Thank you for your interest in contributing to PESUAcademy! This document provid
 
 ---
 
+## 📜 Code Of Conduct
+
+All contributors are expected to read and adhere to our [Code of Conduct](../CODE_OF_CONDUCT.md). Please be respectful and professional in all interactions.
+
+---
+
 ## 🚧 Getting Started
 
-We encourage developers to work on their own forks of the repository. This allows you to work on features or fixes witout affecting the main codebase until your changes are ready to be merged.
+We encourage developers to work on their own forks of the repository. This allows you to work on features or fixes witout affecting the main codebase until your changes are ready to be merged. We use a standard **fork-and-pull** workflow with a `dev` branch for staging changes.
 
 ### 🔄 Development Workflow
 
 The standard workflow for contributing is as follows:
 
-1. Fork the repository on GitHub and clone it to your local machine.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with clear, descriptive messages.
-4. Push your branch to your fork on GitHub.
-5. Create a Pull Request (PR) against the repository's `dev` branch (not `main`).
-6. Wait for review and feedback from the maintainers, address any comments or suggestions.
-7. Once approved, your changes will be merged into the `dev` branch and deployed to staging for testing.
-8. After successful testing in staging, changes are promoted from `dev` to `main` for production deployment.
+1. **Fork and Clone**: Fork the repository on GitHub and clone it to your local machine.
+2. **Create a Branch**: Create a new branch from `dev` for your changes.
+   - `git checkout dev`
+   - `git pull origin dev`
+   - `git checkout -b your-feature-name`
+3. **Make Changes**: Write your code and add tests.
+4. **Commit changes**: Commit your changes using the [Conventional Commits](https://www.conventionalcommits.org/) format.
+5. **Push:** Push your branch to your forked repository.
+6. **Create a Pull Request (PR)**: Open a PR from your branch to the `pesu-dev/pesuacademy:dev` branch (not `main`).
+7. **Review**: Wait for feedback from maintainers. Address any requested changes.
+8. **Merge**: Once approved, your changes will be merged into the `dev` branch and deployed to staging for testing.
+9. After successful testing in staging, changes are promoted from `dev` to `main` for production deployment.
 
-Please note that you will not be able to push directly to either the `dev` or `main` branches of the repository. All PRs must be raised from a feature branch of your forked repository and target the `dev` branch. Direct PRs to `main` will be closed.
+> [!NOTE]
+> Please note that you will not be able to push directly to either the `dev` or `main` branches of the repository. All PRs must be raised from a feature branch of your forked repository and target the `dev` branch. **Direct PRs to `main` branch will be closed.**
 
 ---
 
 ## 🛠️ Development Environment Setup
 
-This section provides instructions for setting up your development environment to work on the PESUAcademy project. We recommend using a virtual environment to manage dependencies and avoid conflicts with other projects.
+A virtual environment is highly recommended to manage project dependencies.
 
 ### Prerequisites
 
-- Python 3.11 or higher
+- Python 3.11+
 - Git
 
-### Setting Up Your Environment
+### Installation Steps
 
-You can set up your development environment using either `uv` or `conda`.
-
-#### Option 1: Using `uv`
-
-1. **Create and activate a virtual environment:**
+1. **Create and activate a virtual environment: (using `uv`)**
 
    ```bash
-   uv venv --python 3.11
+   uv venv
    source .venv/bin/activate
    ```
 
@@ -87,22 +91,10 @@ You can set up your development environment using either `uv` or `conda`.
    uv sync --all-extras
    ```
 
-#### Option 2: Using `conda`
-
-1. **Create and activate a virtual environment:**
-
-   ```bash
-   conda create -n pesuacademy python=3.11
-   conda activate pesuacademy
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   pip install pytest pytest-cov python-dotenv pre-commit
-   ```
-
 ### Set Up Environment Variables
+
+> [!WARNING]
+> Never commit your `.env` file to Git. It should only exist on your local machine. This project uses a `.env` file to manage credentials for both testing and general use. The `.gitignore` file is already configured to ignore `.env`, ensuring you never accidentally commit your secrets.
 
 1. **Copy the example environment file to create your own:**
 
@@ -110,26 +102,15 @@ You can set up your development environment using either `uv` or `conda`.
    cp .env.example .env
    ```
 
-2. **Configure your test credentials:**
-   Open the `.env` file and replace all `<YOUR_..._HERE>` placeholders with your actual test user details. Each variable
-   has been documented in the `.env.example` file for clarity.
+2. **Configure your credentials:**
+   Open the `.env` file you just created. You will see two sections of variables.
 
-### Pre-commit Hooks
-
-We use pre-commit hooks to ensure code quality and consistency. These will automatically run checks before you commit your code. Install the pre-commit hooks by running:
-
-```bash
-pre-commit install
-```
-
----
-
-## 🧰 Running the Application
-
-You can run the application using the same instructions as in the [README.md](../README.md) file. To ensure parity with production, we recommend testing the app both locally and inside Docker. See the [README.md](../README.md) for Docker
-instructions.
-
----
+   1. **Production Credentials (Production):**
+      - These are the standard `PESU_USERNAME` and `PESU_PASSWORD` variables.
+      - They are used when you run example scripts or use the library as an end-user would.
+   2. **Test User Credentials (Development/Contributions) :**
+      - These variables (all prefixed with `TEST_`) are **essential** for running the automated test suite (`pytest`).
+      - Fill in all `TEST_...` variables with the details of a valid account.
 
 ## 🧪 Testing and Code Quality
 
@@ -147,7 +128,14 @@ The following checks are enforced:
 - ✅ `debug-statements` to prevent committed `print()` or `pdb`
 - ✅ A local `pytest` hook that runs the full test suite
 
-> ⚠️ You will not be able to commit code that fails these checks.
+Install the pre-commit hooks by running:
+
+```bash
+pre-commit install
+```
+
+> [!WARNING]
+> You will not be able to commit code that fails these checks.
 
 ### Linting & Formatting
 
@@ -175,7 +163,8 @@ To check coverage:
 pytest --cov
 ```
 
-> The pre-commit hook runs `python scripts/run_tests.py`, which uses the same underlying `pytest` runner.
+> [!NOTE]
+> The pre-commit hook runs `python scripts/run_tests.py`, which uses the same `pytest` runner.
 
 ### Writing Tests
 
@@ -245,8 +234,7 @@ The maintainers will review your PR, provide feedback, and may request changes. 
 If you get stuck or have questions:
 
 1. Check the [README.md](../README.md) for setup and usage info.
-2. Review [open issues](https://github.com/pesu-dev/pesuacademy/issues)
-   or [pull requests](https://github.com/pesu-dev/pesuacademy/pulls) to see if someone else encountered the same problem.
+2. Review [open issues](https://github.com/pesu-dev/pesuacademy/issues) or [pull requests](https://github.com/pesu-dev/pesuacademy/pulls) to see if someone else encountered the same problem.
 3. Reach out to the maintainers on [PESU Discord](https://discord.gg/eZ3uFs2).
    - Use the `#pesuacademy-py` channel for questions related to this repository.
    - Search for existing discussions before posting.
@@ -279,23 +267,26 @@ To keep the codebase clean and maintainable, please follow these conventions:
 ### 📝 Docstrings & Comments
 
 - Add docstrings to all public functions, classes, and modules
-- Use [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings) (or
-  consistent alternatives)
+- Use [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
 - Write comments when logic is non-obvious and avoid restating the code
+
+> [!IMPORTANT]
+> Our official documentation on the website is automatically generated directly from these docstrings using Sphinx. Please write clear, complete, and user-friendly explanations, as they will be read by the library's users.
 
 Example:
 
 ```python
-def send_otp(email: str) -> bool:
-    """
-    Sends a one-time password to the given email.
+async def get_profile(self) -> Profile:
+   """Fetches the student's detailed profile information.
 
-    Args:
-        email (str): User's email address
+   Returns:
+       Profile: A Pydantic model containing personal, parent, and address details.
 
-    Returns:
-        bool: True if the OTP was sent successfully, False otherwise
-    """
+   Example:
+       >>> profile = await session.get_profile()
+       >>> print(f"Name: {profile.student_details.name}")
+   """
+   ...
 ```
 
 ---

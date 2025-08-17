@@ -19,7 +19,8 @@ With pesuacademy, you can: - Fetch course details and schedules - Access announc
 > [!WARNING]
 > This is not an official Package and is not endorsed by PES University. Use at your own risk.
 
-## Features
+## 💡 Features
+
 - **Profile**: Fetch a user's personal details.
 - **Courses**: Get a list of the user's enrolled courses by semester.
 - **Attendance**: Retrieve detailed attendance records.
@@ -28,7 +29,7 @@ With pesuacademy, you can: - Fetch course details and schedules - Access announc
 - **Results**: Fetch the user's semester-wise results.
 - **Class Materials**: A powerful module to list and download all your class notes and presentations.
 
-## Installation
+## 🔨 Installation
 
 ### Installing from `pip`
 
@@ -42,7 +43,7 @@ pip install pesuacademy
 pip install git+https://github.com/pesu-dev/pesuacademy.git
 ```
 
-## Usage
+## 📐 Usage
 
 ```python
 import asyncio
@@ -78,13 +79,12 @@ if __name__ == "__main__":
 
 The complete documentation is available here: [PESU Academy Docs](https://pesu-dev.github.io/pesuacademy/)
 
-## Contributing to PESUAcademy
+## 🤝 Contributing to PESUAcademy
 
 <a href="https://github.com/pesu-dev/pesuacademy/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=pesu-dev/pesuacademy" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
-
 
 If you'd like to contribute, please follow our [contribution guidelines](.github/CONTRIBUTING.md).

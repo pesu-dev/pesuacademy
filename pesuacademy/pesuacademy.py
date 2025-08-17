@@ -73,14 +73,13 @@ class PESUAcademy:
         return cls(client)
 
     async def get_profile(self) -> Profile:
-        """Fetches and displays all details of the user's profile
-          under PESU Academy in an organized manner.
-        
+        """Fetches and displays all details of the user's profile under PESU Academy in an organized manner.
+
         Args Required:
             None
-        
+
         Returns:
-            A Profile object containing user's personal details 
+            A Profile object containing user's personal details
             as well as parent details, qualifying examination, address and other information.
         """
         return await self._client.get_profile()
@@ -98,17 +97,18 @@ class PESUAcademy:
         return await self._client.get_seating_info()
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
-        """Fetches details of the courses that the user has registered for. 
-        Can view details of courses for a specific semester or all available 
+        """Fetches details of the courses that the user has registered for.
+
+        Can view details of courses for a specific semester or all available
         semesters depending on the argument provided.
 
         Args Required:
-            semester (Optional[int]): Optional user input is semester number 
-            to fetch course details from. If not provided, details of courses for 
+            semester (Optional[int]): Optional user input is semester number
+            to fetch course details from. If not provided, details of courses for
             all available semesters are returned.
 
         Returns:
-            A dictionary with semester number/s as key/s and lists with course details i.e. 
+            A dictionary with semester number/s as key/s and lists with course details i.e.
             code, title, type, status, attendance and id as its values.
         """
         return await self._client.get_courses(semester)
@@ -117,7 +117,7 @@ class PESUAcademy:
         """Fetches details of the user's attendance records from PESU Academy.
 
         Args Required:
-            semester (Optional[int]):  Optional user input is semester number 
+            semester (Optional[int]):  Optional user input is semester number
             to fetch attendance details from. If not provided, attendance details
             for all available semesters is returned.
 
@@ -128,15 +128,14 @@ class PESUAcademy:
         return await self._client.get_attendance(semester)
 
     async def get_results(self, semester: int) -> SemesterResult:
-        """Fetches the final result as well as details of result for the semester 
-           entered by the user.
+        """Fetches the final result as well as details of result for the semester entered by the user.
 
         Args:
             semester (int): The semester number for which final results
             are to be fetched.
 
         Returns:
-            A SemesterResult object containing semester number, user's SGPA, 
+            A SemesterResult object containing semester number, user's SGPA,
             credit details (if any), and course result details.
 
         Raises:
@@ -150,8 +149,7 @@ class PESUAcademy:
         return await self._client.get_results(semester_id_str)
 
     async def get_announcements(self) -> list[Announcement]:
-        """Fetches the details of all recent announcements from 
-           the PESU Academy dashboard.
+        """Fetches the details of all recent announcements from the PESU Academy dashboard.
 
         Args:
             None
@@ -192,8 +190,7 @@ class PESUAcademy:
         return await self._client.get_topics_for_unit(unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        """Given a Topic object and a material type ID through user input, 
-        fetches the final required download links from PESU Academy.
+        """Given a Topic object and a material type ID through user input, fetches the final required download links.
 
         Args Required:
             topic (Topic): The Topic object obtained from `get_topics_for_unit()`.

@@ -36,12 +36,6 @@ Thank you for your interest in contributing to PESUAcademy! This document will g
 
 ---
 
-## 📜 Code Of Conduct
-
-All contributors are expected to read and adhere to our [Code of Conduct](../CODE_OF_CONDUCT.md). Please be respectful and professional in all interactions.
-
----
-
 ## 🚧 Getting Started
 
 We encourage developers to work on their own forks of the repository. This allows you to work on features or fixes witout affecting the main codebase until your changes are ready to be merged. We use a standard **fork-and-pull** workflow with a `dev` branch for staging changes.
@@ -55,7 +49,7 @@ The standard workflow for contributing is as follows:
    - `git checkout dev`
    - `git pull origin dev`
    - `git checkout -b your-feature-name`
-3. **Make Changes**: Write your code and add tests.
+3. **Make Changes**: Implement your feature.
 4. **Commit changes**: Commit your changes using the [Conventional Commits](https://www.conventionalcommits.org/) format.
 5. **Push:** Push your branch to your forked repository.
 6. **Create a Pull Request (PR)**: Open a PR from your branch to the `pesu-dev/pesuacademy:dev` branch (not `main`).
@@ -315,6 +309,12 @@ If you want to propose a new feature:
 1. Check if it already exists in [issues](https://github.com/pesu-dev/pesuacademy/issues)
 2. Open a new issue using the **"Feature Request"** template if available
 3. Clearly explain the use case, proposed solution, and any relevant context
+
+---
+
+## 📜 Code Of Conduct
+
+All contributors are expected to read and adhere to our [Code of Conduct](../CODE_OF_CONDUCT.md). Please be respectful and professional in all interactions.
 
 ---
 

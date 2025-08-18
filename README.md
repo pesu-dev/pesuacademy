@@ -11,6 +11,7 @@
 
 Super-fast, lightweight, asynchronous Python wrapper for the PESU Academy portal. Fetch profile, courses, attendance, announcements, results, seating information, and class materials with clean Pydantic models.
 
+> [!WARNING]
 > This is an unofficial package and is not endorsed by PES University. Use at your own risk.
 
 ### Highlights
@@ -23,7 +24,7 @@ Super-fast, lightweight, asynchronous Python wrapper for the PESU Academy portal
 ---
 
 <details>
-<summary>:books: Table of Contents</summary>
+<summary>📚 Table of Contents</summary>
 
 - [:rocket: Installation](#installation)
 - [:zap: Quickstart](#quickstart)
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Full docs: [https://pesu-dev.github.io/pesuacademy/](https://pesu-dev.github.io/pesuacademy/)
+Full documentation is available here: [PESUAcademy Docs](https://pesu-dev.github.io/pesuacademy/)
 
 ## Credentials and environment
 
@@ -231,10 +232,12 @@ Contributions are welcome! Please:
 - Add or update tests where reasonable, and run `pytest`.
 - For docs, build locally or let CI validate.
 
-Contributors: [https://github.com/pesu-dev/pesuacademy/graphs/contributors](https://github.com/pesu-dev/pesuacademy/graphs/contributors)
+<a href="https://github.com/pesu-dev/pesuacademy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=pesu-dev/pesuacademy" />
+</a>
 
 Made with [contrib.rocks](https://contrib.rocks).
 
 ## License
 
-MIT License. See `LICENSE` for details.
+MIT License. See [LICENSE](../LICENSE) for full license text.

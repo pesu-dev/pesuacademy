@@ -26,26 +26,26 @@ Super-fast, lightweight, asynchronous Python wrapper for the PESU Academy portal
 <details>
 <summary>📚 Table of Contents</summary>
 
-- [:rocket: Installation](#installation)
-- [:zap: Quickstart](#quickstart)
-- [:key: Credentials and Environment](#credentials-and-environment)
-- [:gear: API Overview](#api-overview)
-- [:computer: Usage Examples](#usage-examples)
-  - [:bust_in_silhouette: Profile](#profile)
-  - [:mortar_board: Courses and Attendance](#courses-and-attendance)
-  - [:chart_with_upwards_trend: Results](#results)
-  - [:loudspeaker: Announcements](#announcements)
-  - [:seat: Seating Information](#seating-information)
-  - [:books: Materials Workflow](#materials-workflow-units--topics--links)
-- [:warning: Error Handling and Troubleshooting](#error-handling-and-troubleshooting)
-- [:handshake: Contributing](#contributing)
-- [:page_facing_up: License](#license)
+- [🚀 Installation](#installation)
+- [⚡ Quickstart](#quickstart)
+- [🔑 Credentials and Environment](#credentials-and-environment)
+- [⚙️ API Overview](#api-overview)
+- [💻 Usage Examples](#usage-examples)
+  - [Profile](#profile)
+  - [Courses and Attendance](#courses-and-attendance)
+  - [Results](#results)
+  - [Announcements](#announcements)
+  - [Seating Information](#seating-information)
+  - [Materials Workflow](#materials-workflow-units--topics--links)
+- [⚠️ Error Handling and Troubleshooting](#error-handling-and-troubleshooting)
+- [🤝 Contributing](#contributing)
+- [📄 License](#license)
 
 </details>
 
 ---
 
-## Installation
+## 🚀 Installation
 
 Install from PyPI:
 
@@ -66,7 +66,7 @@ Optional extras:
 
 Requirements: Python >= 3.11
 
-## Quickstart
+## ⚡ Quickstart
 
 ```python
 import asyncio
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
 Full documentation is available here: [PESUAcademy Docs](https://pesu-dev.github.io/pesuacademy/)
 
-## Credentials and environment
+## 🔑 Credentials and environment
 
 `PESUAcademy.login()` will read credentials from environment variables if not provided as arguments. You can use a local `.env` file.
 
@@ -109,7 +109,7 @@ Then:
 session = await PESUAcademy.login()  # reads from PESU_USERNAME / PESU_PASSWORD
 ```
 
-## API overview
+## ⚙️ API overview
 
 All methods are asynchronous and should be awaited.
 
@@ -127,7 +127,7 @@ All methods are asynchronous and should be awaited.
 
 Always call `await session.close()` to release network resources.
 
-## Usage examples
+## 💻 Usage examples
 
 ### Profile
 
@@ -231,6 +231,10 @@ Contributions are welcome! Please:
 - Write clear, well-typed, and well-formatted code.
 - Add or update tests where reasonable, and run `pytest`.
 - For docs, build locally or let CI validate.
+
+Read [CONTRIBUTING](.github/CONTRIBUTING.md) for more information.
+
+### Contributors
 
 <a href="https://github.com/pesu-dev/pesuacademy/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=pesu-dev/pesuacademy" />

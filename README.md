@@ -22,22 +22,25 @@ Super-fast, lightweight, asynchronous Python wrapper for the PESU Academy portal
 
 ---
 
-### Table of contents
+<details>
+<summary>:books: Table of Contents</summary>
 
-- Installation
-- Quickstart
-- Credentials and environment
-- API overview
-- Usage examples
-  - Profile
-  - Courses and Attendance
-  - Results
-  - Announcements
-  - Seating information
-  - Materials workflow (Units → Topics → Links)
-- Error handling and troubleshooting
-- Contributing
-- License
+- [:rocket: Installation](#installation)
+- [:zap: Quickstart](#quickstart)
+- [:key: Credentials and Environment](#credentials-and-environment)
+- [:gear: API Overview](#api-overview)
+- [:computer: Usage Examples](#usage-examples)
+  - [:bust_in_silhouette: Profile](#profile)
+  - [:mortar_board: Courses and Attendance](#courses-and-attendance)
+  - [:chart_with_upwards_trend: Results](#results)
+  - [:loudspeaker: Announcements](#announcements)
+  - [:seat: Seating Information](#seating-information)
+  - [:books: Materials Workflow](#materials-workflow-units--topics--links)
+- [:warning: Error Handling and Troubleshooting](#error-handling-and-troubleshooting)
+- [:handshake: Contributing](#contributing)
+- [:page_facing_up: License](#license)
+
+</details>
 
 ---
 
@@ -87,7 +90,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Full docs: `https://pesu-dev.github.io/pesuacademy/`
+Full docs: [https://pesu-dev.github.io/pesuacademy/](https://pesu-dev.github.io/pesuacademy/)
 
 ## Credentials and environment
 
@@ -228,9 +231,9 @@ Contributions are welcome! Please:
 - Add or update tests where reasonable, and run `pytest`.
 - For docs, build locally or let CI validate.
 
-Contributors: https://github.com/pesu-dev/pesuacademy/graphs/contributors
+Contributors: [https://github.com/pesu-dev/pesuacademy/graphs/contributors](https://github.com/pesu-dev/pesuacademy/graphs/contributors)
 
-Made with `https://contrib.rocks`.
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## License
 

@@ -123,7 +123,7 @@ class PESUAcademy:
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
         """Fetches details of the courses that the user has registered for.
 
-        Can view details of courses for a specific semester or all available
+        Can fetch details of courses for a specific semester or all available
         semesters depending on the argument provided.
 
         Args:

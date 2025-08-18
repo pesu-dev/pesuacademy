@@ -15,15 +15,21 @@ class _UnitPageHandler:
     async def _get(session: httpx.AsyncClient, unit_id: str) -> list[Topic]:
         """Fetches the page for a specific unit and scrapes the list of topics and their required IDs.
 
+        This method is tightly coupled to the HTML structure of `Unit Detail` page in PESUAcademy.
+        The identifiers (topic_id, course_id, unit_id) are extracted from the JS `handleclasscoursecontentunit`
+        function call within each row's `onclick` attribute.
+        The topic title is scraped from the `title` attribute.
+
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
-            unit_id (str): The ID of the unit to fetch topics for.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `Unit Detail` page.
+            unit_id (str): The identifier of the unit to fetch topics for.
 
         Returns:
-            List[Topic]: A list of Topic objects containing the scraped data.
+            List[Topic]: A list of `Topic` objects parsed from the page.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the unit page fails.
+            httpx.HTTPStatusError: If the request to the unit page fails. [ Non-2xx status code ]
         """
         params = _build_params(constants._PageURLParams.UnitDetail, coursecontentid=unit_id)
         response = await session.get(constants.PAGES_BASE_URL, params=params)

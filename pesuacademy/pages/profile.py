@@ -30,7 +30,7 @@ class _ProfilePageHandler:
 
         Args:
             container (Tag): The BeautifulSoup Tag object containing the profile information.
-            text (str): The label text to search for.
+            text (str): The label text to search for (e.g., "SRN").
 
         Returns:
             str: The value associated with the label, or "N/A" if not found.
@@ -53,11 +53,14 @@ class _ProfilePageHandler:
     def _parse_profile_soup(soup: BeautifulSoup) -> Profile:
         """Parses the profile page HTML into a structured Profile object.
 
+        This method finds distinct sections of the profile (e.g., "Personal Details", "Parent Details")
+        and calls `_find_value_for_label` to extract individual fields.
+
         Args:
             soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML of the profile page.
 
         Returns:
-            Profile: A Profile object containing personal, parent, and address details.
+            Profile: A Profile object containing the user's profile information.
 
         Raises:
             ValueError: If the profile page structure is not as expected.
@@ -148,14 +151,16 @@ class _ProfilePageHandler:
     async def _get(session: httpx.AsyncClient) -> Profile:
         """Fetches and parses the user's profile page.
 
+        This method is tightly coupled to the HTML structure of `Profile` page in PESUAcademy.
+
         Args:
-            session (httpx.AsyncClient): An authenticated HTTP client session.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request to the `Profile` page.
 
         Returns:
             Profile: A Profile object containing the user's profile information.
 
         Raises:
-            httpx.HTTPStatusError: If the request to fetch the profile page fails.
+            httpx.HTTPStatusError: If the request to fetch the profile page fails. [ Non-2xx status code ]
         """
         params = _build_params(
             constants._PageURLParams.Profile,

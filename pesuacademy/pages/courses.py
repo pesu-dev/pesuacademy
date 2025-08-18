@@ -11,17 +11,23 @@ from pesuacademy.util import _build_params
 class _CoursesPageHandler:
     @staticmethod
     async def _get(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
-        """Fetches the courses for a single given semester ID.
+        """Fetches the courses for a single given semester identifier.
+
+        This method is tightly coupled to the HTML structure of `Courses` page in PESUAcademy.
+        The course identifier is extracted from the `id` attribute of the table row `<tr>` tag
+        (e.g., `'rowWiseCourseContent_...'`).
 
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
-            semester_id (str): The ID of the semester to fetch courses for.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `Courses` page.
+            semester_id (str): The identifier of the semester to fetch courses for.
 
         Returns:
-            List[Course]: A list of Course objects containing course information.
+            List[Course]: A list of `Course` objects parsed from the page. Returns
+                        an empty list if no courses are found.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the courses page fails.
+            httpx.HTTPStatusError: If the request to the courses page fails. [ Non-2xx status code ]
         """
         params = _build_params(constants._PageURLParams.Courses, id=semester_id)
 

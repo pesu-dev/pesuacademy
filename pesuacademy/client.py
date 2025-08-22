@@ -76,13 +76,33 @@ class _PesuScraper:
         self._semester_ids = await _SemesterHandler._get_semester_ids(self._session)
 
     async def get_seating_info(self) -> list[SeatingInformation]:
+        """Fetch Seating information from PESU Academy.
+
+        Returns:
+            List[SeatingInformation]: A List of `SeatingInformation` objects
+                                    containing the scraped data
+        """
         return await _SeatingInformationHandler._get(self._session)
 
     async def get_profile(self) -> Profile:
+        """Fetch user profile from PESU Academy.
+
+        Returns:
+            Profile (obj): A `Profile` object containing the scraped data.
+        """
         return await _ProfilePageHandler._get(self._session)
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
-        # Fetch courses for a specific semester or all semesters if none specified
+        """Fetch courses for a specific semester or all semesters if none specified.
+
+        Args:
+            semester (int): The semester to fetch courses for.
+
+        Returns:
+            Dict[int, list[Course]]: A dictionary mapping semester number to
+                                    their corresponding courses.
+
+        """
         semesters_to_fetch = (
             {semester: self._semester_ids[semester]}
             if semester and semester in self._semester_ids
@@ -93,7 +113,15 @@ class _PesuScraper:
         return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_attendance(self, semester: int | None = None) -> dict[int, list[Course]]:
-        # Fetch attendance for a specific semester or all semesters if none specified
+        """Fetch attendance for a specific semester or all semesters if none specified.
+
+        Args:
+            semester (int): The semester to fetch attendance for.
+
+        Returns:
+            Dict[int, list[Course]]: A dictionary mapping semester number to their
+                                    corresponding courses with Attendance objects.
+        """
         semesters_to_fetch = (
             {semester: self._semester_ids[semester]}
             if semester and semester in self._semester_ids
@@ -104,19 +132,66 @@ class _PesuScraper:
         return dict(zip(semesters_to_fetch.keys(), results))
 
     async def get_announcements(self) -> list[Announcement]:
+        """Fetch Announcements from PESU Academy.
+
+        Returns:
+            List[Announcement]: A List of `Announcement` objects containing
+                            the scraped data.
+        """
         return await _AnnouncementPageHandler._get(self._session)
 
     async def get_units_for_course(self, course_id: str) -> list[Unit]:
+        """Fetch Units for Courses from PESU Academy.
+
+        Args:
+            course_id (str): The course identifier for which units
+                            are to be fetched
+        Returns:
+            List[Unit]: A List of `Unit` objects containing
+                            the scraped data.
+        """
         return await _CourseDetailPageHandler._get(self._session, course_id)
 
     async def get_topics_for_unit(self, unit_id: str) -> list[Topic]:
+        """Fetch Topics for Units from PESU Academy.
+
+        Args:
+            unit_id (str): The unit identifier for whic units
+                            are to be fetched
+        Returns:
+            List[Topic]: A List of `Topic` objects containing
+                            the scraped data.
+        """
         return await _UnitPageHandler._get(self._session, unit_id)
 
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
+        """Fetch Material Links for Topics from PESU Academy.
+
+        Args:
+            topic (Topic): The topic object for which material links are
+                            to be fetched.
+            material_type_id (str): The identifier of the material type
+                                    to fetch links for.
+
+        Returns:
+            List[MaterialLink]: A List of `MaterialLink` objects containing
+                            the scraped data.
+        """
         return await _MaterialLinksHandler._get(self._session, topic, material_type_id)
 
     async def get_results(self, semester_id: str) -> SemesterResult:
+        """Fetch Results for semsters from PESU Academy.
+
+        Args:
+            semester_id (str): The semester identifier for which results
+                                are to be fetched.
+
+        Returns:
+            SemesterResult (obj): A `SemesterResult` object containing the
+                                scraped data.
+        """
         return await _ResultsPageHandler._get(self._session, semester_id)
 
     async def close(self) -> None:
+        """Gracefully close the network session."""
         await self._session.aclose()

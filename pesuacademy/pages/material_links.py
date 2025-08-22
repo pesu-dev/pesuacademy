@@ -27,7 +27,7 @@ class _MaterialLinksHandler:
 
         Returns:
             List[MaterialLink]: A list of `MaterialLink` objects parsed from the page. Returns
-                                an empty list if no matrial links are found.
+                                an empty list if no material links are found.
 
         Raises:
             httpx.HTTPStatusError: If the request to the material links page fails. [ Non-2xx status code ]

@@ -21,7 +21,7 @@ class _ResultsPageHandler:
                                     container where assessments are present.
 
         Returns:
-            List[Assesment]: A list of `Assesment` objects parsed from the page.
+            List[Assesment]: A list of `Assessment` objects parsed from the page.
         """
         assessments = []
         assessment_bar = container.find("div", class_="dashboard-info-bar")

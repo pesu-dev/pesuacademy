@@ -160,7 +160,7 @@ class PESUAcademy:
             ...     if courses.attendance:
             ...         print(f"{course.title}: {course.attendance.percentage}%")
             ...     else:
-            ...         print(f"{course.title}: Attendance data not avaialable")
+            ...         print(f"{course.title}: Attendance data not available")
         """
         return await self._client.get_attendance(semester)
 

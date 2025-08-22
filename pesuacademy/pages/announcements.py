@@ -17,7 +17,7 @@ class _AnnouncementPageHandler:
     async def _get(session: httpx.AsyncClient) -> list[Announcement]:
         """Fetches the main announcements page and scrapes all announcements.
 
-        This method is tightly coupled to the HTML strucutre of the`Announcements` page in PESUAcademy.
+        This method is tightly coupled to the HTML structure of the `Announcements` page in PESUAcademy.
         If any announcement panel cannot be parsed, it will be skipped, logged and proceed to the next one.
 
         Args:

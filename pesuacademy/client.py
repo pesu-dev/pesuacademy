@@ -156,7 +156,7 @@ class _PesuScraper:
         """Fetch Topics for Units from PESU Academy.
 
         Args:
-            unit_id (str): The unit identifier for whic units
+            unit_id (str): The unit identifier for which units
                             are to be fetched
         Returns:
             List[Topic]: A List of `Topic` objects containing
@@ -180,7 +180,7 @@ class _PesuScraper:
         return await _MaterialLinksHandler._get(self._session, topic, material_type_id)
 
     async def get_results(self, semester_id: str) -> SemesterResult:
-        """Fetch Results for semsters from PESU Academy.
+        """Fetch Results for semesters from PESU Academy.
 
         Args:
             semester_id (str): The semester identifier for which results

@@ -54,7 +54,7 @@ class _CoursesPageHandler:
 
             cols = [c.text.strip() for c in row.find_all("td")]
 
-            if len(cols) >= 4:
+            if len(cols) >= constants.COURSES_EXPECTED_COLUMNS:
                 courses.append(
                     Course(
                         code=cols[0],

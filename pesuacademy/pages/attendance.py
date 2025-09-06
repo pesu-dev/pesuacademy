@@ -43,7 +43,7 @@ class _AttendancePageHandler:
         attendance_data = []
         for row in table.find("tbody").find_all("tr"):
             cols = [c.text.strip() for c in row.find_all("td")]
-            if len(cols) >= 4:
+            if len(cols) >= constants.ATTENDANCE_EXPECTED_COLUMNS:
                 attended, total = None, None
                 if "/" in cols[2]:
                     try:

@@ -9,6 +9,7 @@ from .material_links import _MaterialLinksHandler
 from .profile import _ProfilePageHandler
 from .seating_information import _SeatingInformationHandler
 from .semester import _SemesterHandler
+from .timetable import _TimetablePageHandler
 from .unit import _UnitPageHandler
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "_SeatingInformationHandler",
     "_SemesterHandler",
     "_UnitPageHandler",
+    "_TimetablePageHandler",
 ]

@@ -9,7 +9,7 @@ __pycache__/
 .uv/
 .ruff_cache/
 .DS_store
-test.*
+test*.*
 docs/modules.rst
 docs/pesuacademy*.rst
 docs/_build/

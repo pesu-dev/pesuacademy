@@ -45,7 +45,7 @@ class _SeatingInformationHandler:
         seating_info = []
         for row in info_table.find("tbody").find_all("tr"):
             cols = [c.text.strip() for c in row.find_all("td")]
-            if len(cols) >= 6:
+            if len(cols) >= constants.SEATING_INFO_EXPECTED_COLUMNS:
                 seating_info.append(
                     SeatingInformation(
                         name=cols[0],

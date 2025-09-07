@@ -2,6 +2,7 @@
 
 from .announcements import _AnnouncementPageHandler
 from .attendance import _AttendancePageHandler
+from .cgpa import _CGPAHandler
 from .course_detail import _CourseDetailPageHandler
 from .courses import _CoursesPageHandler
 from .esa_result import _ResultsPageHandler
@@ -24,4 +25,5 @@ __all__ = [
     "_SemesterHandler",
     "_UnitPageHandler",
     "_TimetablePageHandler",
+    "_CGPAHandler",
 ]

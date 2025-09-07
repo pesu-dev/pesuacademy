@@ -19,6 +19,7 @@ from pesuacademy.models import (
 from pesuacademy.pages import (
     _AnnouncementPageHandler,
     _AttendancePageHandler,
+    _CGPAHandler,
     _CourseDetailPageHandler,
     _CoursesPageHandler,
     _MaterialLinksHandler,
@@ -81,7 +82,13 @@ class _PesuScraper:
         return await _SeatingInformationHandler._get(self._session)
 
     async def get_profile(self) -> Profile:
-        return await _ProfilePageHandler._get(self._session)
+        # Fetch profile and current CGPA
+        profile_task = _ProfilePageHandler._get(self._session)
+        cgpa_task = _CGPAHandler.get_current_cgpa(self._session)
+
+        profile, cgpa = await asyncio.gather(profile_task, cgpa_task)
+        profile.personal.cgpa = cgpa
+        return profile
 
     async def get_courses(self, semester: int | None = None) -> dict[int, list[Course]]:
         # Fetch courses for a specific semester or all semesters if none specified
@@ -104,6 +111,11 @@ class _PesuScraper:
         tasks = [_AttendancePageHandler._get(self._session, sem_id) for sem_id in semesters_to_fetch.values()]
         results = await asyncio.gather(*tasks)
         return dict(zip(semesters_to_fetch.keys(), results))
+
+    # async def get_current_cgpa(self) -> float:
+    #     profile = await _ProfilePageHandler._get(self._session)
+    #     profile.personal.cgpa = await _CGPAHandler.get_current_cgpa(self._session)
+    #     return profile.personal.cgpa
 
     async def get_announcements(self) -> list[Announcement]:
         return await _AnnouncementPageHandler._get(self._session)

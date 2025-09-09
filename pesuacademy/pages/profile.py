@@ -89,12 +89,15 @@ class _ProfilePageHandler:
             "div", class_="info-contents"
         )
 
+        raw_blood_group = _ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group")
+
         other_info = OtherInformation(
             sslc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
             puc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
             date_of_birth=_ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
-            blood_group=_ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
+            blood_group=raw_blood_group,  # now guaranteed to be a valid Literal
         )
+
         qualifying_exam = QualifyingExamination(
             exam=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
             rank=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Rank"),
@@ -102,7 +105,7 @@ class _ProfilePageHandler:
         )
 
         # Parent Details
-        # Correctly handles the parent details section by just spltting the containers
+        # Correctly handles the parent details section by just splitting the containers
         # Assumes Father is always first and Mother is always second (just in this context, lol)
         parent_containers = soup.find("h4", string="Parent Details").find_next("div").find_all("div", class_="col-md-6")
         father_container = parent_containers[0]

@@ -50,11 +50,12 @@ class _ProfilePageHandler:
         return "N/A"
 
     @staticmethod
-    def _parse_profile_soup(soup: BeautifulSoup) -> Profile:
+    def _parse_profile_soup(soup: BeautifulSoup, high_privacy: bool = False) -> Profile:
         """Parses the profile page HTML into a structured Profile object.
 
         Args:
             soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML of the profile page.
+            high_privacy (bool): If True, sensitive information will be masked or omitted.
 
         Returns:
             Profile: A Profile object containing personal, parent, and address details.
@@ -62,11 +63,31 @@ class _ProfilePageHandler:
         Raises:
             ValueError: If the profile page structure is not as expected.
         """
+
+        # Define a helper function to handle privacy-sensitive values
+        # This function returns None for sensitive information if high privacy mode is enabled
+        def privacy_value(label: str, container: Tag, high_privacy: bool) -> str | None:
+            """Returns the value for a label, or None if high privacy mode is enabled.
+
+            Args:
+                label (str): The label to search for.
+                container (Tag): The BeautifulSoup Tag object containing the profile information.
+                high_privacy (bool): If True, sensitive information will be masked or omitted.
+
+            Returns:
+                str | None: The value associated with the label, or None if high privacy mode is enabled.
+            """
+            return None if high_privacy else _ProfilePageHandler._find_value_for_label(container, label)
+
         # Personal Details
         personal_container = soup.find("div", class_="media-body")
-        img_tag = soup.find("img", class_="media-object")
-        profile_image_base64 = img_tag["src"] if img_tag else None
-        profile_image_base64 = profile_image_base64.split("data:image/jpeg;base64,")[1]
+
+        if high_privacy:
+            img_tag = soup.find("img", class_="media-object")
+            profile_image_base64 = img_tag["src"] if img_tag else None
+            profile_image_base64 = profile_image_base64.split("data:image/jpeg;base64,")[1]
+        else:
+            profile_image_base64 = None
 
         personal = PersonalDetails(
             name=_ProfilePageHandler._find_value_for_label(personal_container, "Name"),
@@ -76,10 +97,10 @@ class _ProfilePageHandler:
             branch=_ProfilePageHandler._find_value_for_label(personal_container, "Branch"),
             semester=_ProfilePageHandler._find_value_for_label(personal_container, "Semester"),
             section=_ProfilePageHandler._find_value_for_label(personal_container, "Section"),
-            email_id=_ProfilePageHandler._find_value_for_label(personal_container, "Email ID"),
-            contact_no=_ProfilePageHandler._find_value_for_label(personal_container, "Contact No"),
-            aadhar_no=_ProfilePageHandler._find_value_for_label(personal_container, "Aadhar No"),
-            name_as_in_aadhar=_ProfilePageHandler._find_value_for_label(personal_container, "Name as in aadhar"),
+            email_id=privacy_value("Email ID", personal_container, high_privacy),
+            contact_no=privacy_value("Contact No", personal_container, high_privacy),
+            aadhar_no=privacy_value("Aadhar No", personal_container, high_privacy),
+            name_as_in_aadhar=privacy_value("Name as in aadhar", personal_container, high_privacy),
             image=profile_image_base64,
         )
 
@@ -90,10 +111,10 @@ class _ProfilePageHandler:
         )
 
         other_info = OtherInformation(
-            sslc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "SSLC Marks"),
-            puc_marks=_ProfilePageHandler._find_value_for_label(other_info_container, "PUC Marks"),
-            date_of_birth=_ProfilePageHandler._find_value_for_label(other_info_container, "Date of birth"),
-            blood_group=_ProfilePageHandler._find_value_for_label(other_info_container, "Blood Group"),
+            sslc_marks=privacy_value("SSLC Marks", other_info_container, high_privacy),
+            puc_marks=privacy_value("PUC Marks", other_info_container, high_privacy),
+            date_of_birth=privacy_value("Date of birth", other_info_container, high_privacy),
+            blood_group=privacy_value("Blood Group", other_info_container, high_privacy),
         )
         qualifying_exam = QualifyingExamination(
             exam=_ProfilePageHandler._find_value_for_label(qualifying_exam_container, "Exam"),
@@ -110,30 +131,30 @@ class _ProfilePageHandler:
 
         parents = ParentInformation(
             father=ParentDetails(
-                name=_ProfilePageHandler._find_value_for_label(father_container, "Father Name"),
-                mobile=_ProfilePageHandler._find_value_for_label(father_container, "Mobile"),
-                email=_ProfilePageHandler._find_value_for_label(father_container, "Email"),
-                occupation=_ProfilePageHandler._find_value_for_label(father_container, "Occupation"),
-                qualification=_ProfilePageHandler._find_value_for_label(father_container, "Qualification"),
-                designation=_ProfilePageHandler._find_value_for_label(father_container, "Designation"),
-                employer=_ProfilePageHandler._find_value_for_label(father_container, "Employer"),
+                name=privacy_value("Father Name", father_container, high_privacy),
+                mobile=privacy_value("Mobile", father_container, high_privacy),
+                email=privacy_value("Email", father_container, high_privacy),
+                occupation=privacy_value("Occupation", father_container, high_privacy),
+                qualification=privacy_value("Qualification", father_container, high_privacy),
+                designation=privacy_value("Designation", father_container, high_privacy),
+                employer=privacy_value("Employer", father_container, high_privacy),
             ),
             mother=ParentDetails(
-                name=_ProfilePageHandler._find_value_for_label(mother_container, "Mother Name"),
-                mobile=_ProfilePageHandler._find_value_for_label(mother_container, "Mobile"),
-                email=_ProfilePageHandler._find_value_for_label(mother_container, "Email"),
-                occupation=_ProfilePageHandler._find_value_for_label(mother_container, "Occupation"),
-                qualification=_ProfilePageHandler._find_value_for_label(mother_container, "Qualification"),
-                designation=_ProfilePageHandler._find_value_for_label(mother_container, "Designation"),
-                employer=_ProfilePageHandler._find_value_for_label(mother_container, "Employer"),
+                name=privacy_value("Mother Name", mother_container, high_privacy),
+                mobile=privacy_value("Mobile", mother_container, high_privacy),
+                email=privacy_value("Email", mother_container, high_privacy),
+                occupation=privacy_value("Occupation", mother_container, high_privacy),
+                qualification=privacy_value("Qualification", mother_container, high_privacy),
+                designation=privacy_value("Designation", mother_container, high_privacy),
+                employer=privacy_value("Employer", mother_container, high_privacy),
             ),
         )
 
         # Address Details
         address_container = soup.find("h4", string="Address").find_next("div")
         address = AddressDetails(
-            present=_ProfilePageHandler._find_value_for_label(address_container, "Present Address"),
-            permanent=_ProfilePageHandler._find_value_for_label(address_container, "Permanent Address"),
+            present=privacy_value("Present Address", address_container, high_privacy),
+            permanent=privacy_value("Permanent Address", address_container, high_privacy),
         )
 
         return Profile(

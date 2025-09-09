@@ -28,7 +28,7 @@ class PESUAcademy:
     asynchronous methods to fetch academic data.
     """
 
-    def __init__(self, client: _PesuScraper) -> None:
+    def __init__(self, client: _PesuScraper, high_privacy: bool = False) -> None:
         """Initializes the PESUAcademy session.
 
         This method is not meant to be called directly.
@@ -36,23 +36,42 @@ class PESUAcademy:
 
         Args:
             client (_PesuScraper): An authenticated instance of the core client.
+            high_privacy (bool): If True, sensitive information will be masked or omitted.
+
+        Returns:
+            None
         """
         self._client = client
+        self.high_privacy = high_privacy
 
     @classmethod
-    async def login(cls, username: str | None = None, password: str | None = None) -> "PESUAcademy":
+    async def login(
+        cls, username: str | None = None, password: str | None = None, high_privacy: bool = False
+    ) -> "PESUAcademy":
         """Creates and returns an authenticated PESUAcademy session.
 
         Credentials can be passed as arguments or loaded from environment variables
         (PESU_USERNAME, PESU_PASSWORD).
 
+        High privacy mode can be enabled for additional security measures.
+
         Args:
             username (Optional[str]): The user's login identifier.
             password (Optional[str]): The user's password.
+            high_privacy (bool): If True, sensitive information will be masked or omitted.
+
+        Returns:
+            PESUAcademy: An authenticated instance of the PESUAcademy client.
+
+        Raises:
+            ValueError: If credentials are not provided and environment variables are not set.
         """
         load_dotenv()  # Load environment variables from .env file
         uname = username or os.environ.get("PESU_USERNAME")
         pword = password or os.environ.get("PESU_PASSWORD")
+
+        # Load high privacy mode setting
+        hpriv = high_privacy or os.environ.get("HIGH_PRIVACY_MODE", "false").lower() == "true"
 
         if not uname or not pword:
             raise ValueError(
@@ -61,8 +80,8 @@ class PESUAcademy:
             )
 
         client = _PesuScraper()
-        await client.login(uname, pword)
-        return cls(client)
+        await client.login(uname, pword, hpriv)
+        return cls(client, hpriv)
 
     async def get_profile(self) -> Profile:
         """Fetches the student's detailed profile information.

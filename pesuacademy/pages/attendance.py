@@ -11,17 +11,23 @@ from pesuacademy.util import _build_params
 class _AttendancePageHandler:
     @staticmethod
     async def _get(session: httpx.AsyncClient, semester_id: str) -> list[Course]:
-        """Fetches the attendance for a single given semester ID.
+        """Fetches the attendance for a single given semester identifier.
+
+        This method is tightly coupled to the HTML structure of `Attendance` page in PESUAcademy.
+        If the conversion of attended classes/total classes/attendance percentage from string to integer/float fails,
+        they're returned as `None`.
 
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
-            semester_id (str): The ID of the semester to fetch attendance for.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `Attendance` page.
+            semester_id (str): The identifier of the semester to fetch attendance for.
 
         Returns:
-            List[Course]: A list of Course objects containing attendance information.
+            List[Course]: A list of `Course` objects containing `Attendance` objects and other information.
+                        Returns an empty list if no courses are found.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the attendance page fails.
+            httpx.HTTPStatusError: If the request to the attendance page fails. [ Non-2xx status code ]
         """
         params = _build_params(constants._PageURLParams.Attendance, batchClassId=semester_id)
         response = await session.get(constants.PAGES_BASE_URL, params=params)

@@ -13,14 +13,18 @@ class _SeatingInformationHandler:
     async def _get(session: httpx.AsyncClient) -> list[SeatingInformation]:
         """Fetches and parses the seating information page.
 
+        This method is tightly coupled to the HTML structure of `Seating Information` page in PESUAcademy.
+        If no test seating information is found, an empty list is returned.
+
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `Seating Information` page.
 
         Returns:
-            List[SeatingInformation]: A list of SeatingInformation objects containing the seating details.
+            List[SeatingInformation]: A list of `SeatingInformation` objects parsed from the page.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the seating information page fails.
+            httpx.HTTPStatusError: If the request to the seating information page fails. [ Non-2xx status code ]
         """
         params = _build_params(
             constants._PageURLParams.SeatingInformation,

@@ -11,7 +11,18 @@ from pesuacademy.util import _build_params
 class _ResultsPageHandler:
     @staticmethod
     def _parse_assessments(container: BeautifulSoup) -> list[Assessment]:
-        """Parses the assessments for a single course."""
+        """This method parses the assessments for a single course.
+
+        It handles two distinct HTML patterns: one for numeric marks (e.g., "25 / 30") and
+        another for letter grades.
+
+        Args:
+            container (BeautifulSoup): The BeautifulSoup object containing the parsed HTML
+                                    container where assessments are present.
+
+        Returns:
+            List[Assesment]: A list of `Assessment` objects parsed from the page.
+        """
         assessments = []
         assessment_bar = container.find("div", class_="dashboard-info-bar")
         if not assessment_bar:
@@ -40,7 +51,18 @@ class _ResultsPageHandler:
 
     @staticmethod
     def _parse_single_course(container: BeautifulSoup) -> CourseResult | None:
-        """Parses a single course container from the results page."""
+        """This method parses a single course container from the results page.
+
+        It extracts the course code and title by splitting the header text.
+        It parses the 'earned/total' credits string and forwards assessment parsing to `_parse_assessments`.
+
+        Args:
+            container (BeautifulSoup): The BeautifulSoup object containing the parsed HTML page.
+
+        Returns:
+            CourseResult | None: An object containing the parsed details or `None` if the header could not
+                                be parsed.
+        """
         header = container.find("div", class_="header-info")
         if not header:
             return None
@@ -64,7 +86,14 @@ class _ResultsPageHandler:
 
     @staticmethod
     def _parse_course_results(soup: BeautifulSoup) -> list[CourseResult]:
-        """Parses all course results from the page."""
+        """Parses all course results from the page.
+
+        Args:
+            soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML page.
+
+        Returns:
+            List[CourseResult]: A list of `CourseResult` objects parsed from the page.
+        """
         wrapper = soup.find("div", class_="multiple-info-wrapper")
         if not wrapper:
             return []
@@ -78,7 +107,16 @@ class _ResultsPageHandler:
 
     @staticmethod
     def _parse_summary(soup: BeautifulSoup) -> tuple[str, str, str]:
-        """Parses the summary section (SGPA, credits) of the results page."""
+        """This method parses the summary section (SGPA, credits) of the results page.
+
+        The first div is assumed to contain credits, and the second is assumed to contain the SGPA.
+
+        Args:
+            soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML page.
+
+        Returns:
+            Tuple[str, str, str]: A tuple of (SGPA, credits_earned, credits_total).
+        """
         summary_divs = soup.select("div.dashboard-info-bar > div")
         summary_credits_raw = summary_divs[0].contents[-1].strip()
 
@@ -91,18 +129,22 @@ class _ResultsPageHandler:
 
     @staticmethod
     async def _get(session: httpx.AsyncClient, semester_id: str) -> SemesterResult:
-        """Fetches the ESA results for a given semester ID.
+        """Fetches the ESA results for a given semester identifier.
+
+        This method is tightly coupled to the HTML structure of `ESA / ISA results` page in PESUAcademy.
+        It scrapes semester results for a given semester identifier by forwarding to `_parse_summary` and
+        `_parse_course_results`.
 
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
-            semester_id (str): The ID of the semester to fetch results for.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `ESA / ISA results` page.
+            semester_id (str): The identifier of the semester to fetch results for.
 
         Returns:
-            SemesterResult: An object containing
-            the semester results including SGPA, credits earned, and course results.
+            SemesterResult: An object containing the results for the semester.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the results page fails.
+            httpx.HTTPStatusError: If the request to the results page fails. [ Non-2xx status code ]
         """
         params = _build_params(constants._PageURLParams.Results, semid=semester_id)
         response = await session.get(constants.PAGES_BASE_URL, params=params)

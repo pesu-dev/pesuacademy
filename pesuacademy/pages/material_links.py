@@ -13,18 +13,24 @@ from pesuacademy.util import _build_params
 class _MaterialLinksHandler:
     @staticmethod
     async def _get(session: httpx.AsyncClient, topic: Topic, material_type_id: str) -> list[MaterialLink]:
-        """Fetches the material links for a given topic and material type ID.
+        """Fetches the material links for a given topic and material identifier.
+
+        This method is tightly coupled to the HTML structure of `Materials` page in PESUAcademy.
+        It has two parsing paths based on the content of the `onclick` attribute:
+            - **Non-PDFs** are identified by a JS `downloadcoursedoc()` function call.
+            - **PDFs** are identified by a JS `loadIframe()` function call.
 
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
-            topic (Topic): The Topic object containing course and topic IDs.
-            material_type_id (str): The ID of the material type to fetch links for.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request to the `Materials` page.
+            topic (Topic): The Topic object containing course and topic identifiers.
+            material_type_id (str): The identifier of the material type to fetch links for.
 
         Returns:
-            List[MaterialLink]: A list of MaterialLink objects containing the scraped data.
+            List[MaterialLink]: A list of `MaterialLink` objects parsed from the page. Returns
+                                an empty list if no material links are found.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the material links page fails.
+            httpx.HTTPStatusError: If the request to the material links page fails. [ Non-2xx status code ]
         """
         params = _build_params(
             constants._PageURLParams.MaterialLinks,

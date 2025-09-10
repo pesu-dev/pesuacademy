@@ -17,14 +17,18 @@ class _AnnouncementPageHandler:
     async def _get(session: httpx.AsyncClient) -> list[Announcement]:
         """Fetches the main announcements page and scrapes all announcements.
 
+        This method is tightly coupled to the HTML structure of the `Announcements` page in PESUAcademy.
+        If any announcement panel cannot be parsed, it will be skipped, logged and proceed to the next one.
+
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request
+                                        to the `Announcements` page.
 
         Returns:
-            List[Announcement]: A list of Announcement objects containing the scraped data.
+            List[Announcement]: A list of `Announcement` objects containing all the parsed data.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the announcements page fails.
+            httpx.HTTPStatusError: If the request to the announcements page fails. [ Non-2xx status code ]
         """
         params = _build_params(constants._PageURLParams.Announcements, url="studentProfilePESUAdmin")
         response = await session.get(constants.PAGES_BASE_URL, params=params)

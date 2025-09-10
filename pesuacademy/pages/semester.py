@@ -12,16 +12,23 @@ from pesuacademy import constants
 class _SemesterHandler:
     @staticmethod
     async def _get_semester_ids(session: httpx.AsyncClient) -> dict[int, str]:
-        """Fetches semester IDs by calling the dynamic endpoint and cleaning the extracted values.
+        r"""Fetches semester identifiers by calling the dynamic endpoint and cleaning the extracted values.
+
+        This method is tightly coupled to the HTML structure of the dynamic semester-loading
+        endpoint in PESU Academy.
+        This method cleans the raw semester identifier (e.g., `'\"2763\"'`) provided by the endpoint into
+        a usable numeric string (e.g., `'2763'`).
+        It maps this clean identifier to the semester number extracted from the option's text (e.g.,`2` in 'Sem-2').
 
         Args:
-            session (httpx.AsyncClient): The HTTP client session to use for requests.
+            session (httpx.AsyncClient): An active HTTP Client session used to make the request to the
+                                        `Student Semesters` page.
 
         Returns:
-            dict[int, str]: A dictionary mapping semester numbers to their corresponding IDs.
+            Dict[int, str]: A dictionary mapping semester number to their corresponding identifiers.
 
         Raises:
-            httpx.HTTPStatusError: If the request to the semester endpoint fails.
+            httpx.HTTPStatusError: If the request to the semester endpoint fails. [ Non-2xx status code ]
             Exception: If the semester data cannot be fetched or parsed correctly.
         """
         params = {"_": str(int(datetime.datetime.now().timestamp() * 1000))}

@@ -11,46 +11,47 @@ import datetime
 # -- Path setup --------------------------------------------------------------
 
 # Add the root of the project so autodoc can find your package
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = 'pesuacademy'
-author = 'Aditeya Baral and Samarth Mohan'
-copyright = f'{datetime.datetime.now().year}, {author}'
+project = "pesuacademy"
+author = "Aditeya Baral and Samarth Mohan"
+copyright = f"{datetime.datetime.now().year}, {author}"
 
 try:
     import pesuacademy
+
     release = pesuacademy.__version__
 except ImportError:
-    release = '0.0.1'
+    release = "0.0.1"
 
 # -- General configuration ---------------------------------------------------
 
 # Sphinx extensions for enhanced documentation
 extensions = [
-    'sphinx.ext.autodoc',        # Automatically document code from docstrings
-    'sphinx.ext.napoleon',       # Support Google style and NumPy style docstrings
-    'sphinx.ext.viewcode',       # Add links to source code
-    'sphinx.ext.intersphinx',    # Link to external docs (Python stdlib, requests, etc)
-    'sphinx.ext.todo',           # Support for todo directives
-    'sphinx.ext.coverage',       # Coverage report of documentation
-    'sphinx.ext.githubpages',    # Add .nojekyll for GitHub Pages
-    'sphinx_autodoc_typehints',  # Better display of Python type hints
+    "sphinx.ext.autodoc",  # Automatically document code from docstrings
+    "sphinx.ext.napoleon",  # Support Google style and NumPy style docstrings
+    "sphinx.ext.viewcode",  # Add links to source code
+    "sphinx.ext.intersphinx",  # Link to external docs (Python stdlib, requests, etc)
+    "sphinx.ext.todo",  # Support for todo directives
+    "sphinx.ext.coverage",  # Coverage report of documentation
+    "sphinx.ext.githubpages",  # Add .nojekyll for GitHub Pages
+    "sphinx_autodoc_typehints",  # Better display of Python type hints
 ]
 
 # Templates path
 # templates_path = ['_templates']
 
 # Files and directories to exclude
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # Show todos in the generated docs (turn off in production if desired)
 todo_include_todos = False
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'  # ReadTheDocs theme, clean and widely used
+html_theme = "sphinx_rtd_theme"  # ReadTheDocs theme, clean and widely used
 
 # html_static_path = ['_static']   # For custom CSS/JS if needed
 
@@ -60,7 +61,7 @@ html_theme = 'sphinx_rtd_theme'  # ReadTheDocs theme, clean and widely used
 # ]
 
 # Show last updated timestamp on each page
-html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = "%b %d, %Y"
 
 html_theme_options = {
     "navigation_depth": 4,
@@ -72,25 +73,25 @@ html_theme_options = {
 
 # Link to other project docs for cross-references
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'requests': ('https://requests.readthedocs.io/en/latest/', None),
-    'pydantic': ('https://pydantic-docs.helpmanual.io/', None),
-    'httpx': ('https://www.python-httpx.org/en/stable/', None),
-    'beautifulsoup4': ('https://beautiful-soup-4.readthedocs.io/en/latest/', None),
-    'selectolax': ('https://selectolax.readthedocs.io/en/latest/', None),
+    "python": ("https://docs.python.org/3", None),
+    "requests": ("https://requests.readthedocs.io/en/latest/", None),
+    "pydantic": ("https://pydantic-docs.helpmanual.io/", None),
+    "httpx": ("https://www.python-httpx.org/en/stable/", None),
+    "beautifulsoup4": ("https://beautiful-soup-4.readthedocs.io/en/latest/", None),
+    "selectolax": ("https://selectolax.readthedocs.io/en/latest/", None),
 }
 
 # -- Autodoc options ---------------------------------------------------------
 
-autodoc_member_order = 'bysource'  # Document members in the order they appear in source
+autodoc_member_order = "bysource"  # Document members in the order they appear in source
 
-autodoc_typehints = 'description'  # Show type hints in descriptions, cleaner output
+autodoc_typehints = "description"  # Show type hints in descriptions, cleaner output
 
 autodoc_default_options = {
-    'members': True,
-    'undoc-members': True,
-    'show-inheritance': True,
-    'inherited-members': True,
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
+    "inherited-members": True,
 }
 
 autodoc_typehints_format = "fully-qualified"

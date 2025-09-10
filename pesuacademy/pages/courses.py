@@ -15,7 +15,7 @@ class _CoursesPageHandler:
 
         This method is tightly coupled to the HTML structure of `Courses` page in PESUAcademy.
         The course identifier is extracted from the `id` attribute of the table row `<tr>` tag
-        (e.g., `'rowWiseCourseContent_...'`).
+        (`'rowWiseCourseContent_...'`).
 
         Args:
             session (httpx.AsyncClient): An active HTTP Client session used to make the request

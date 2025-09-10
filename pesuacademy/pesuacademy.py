@@ -116,8 +116,8 @@ class PESUAcademy:
         Example:
             >>> seating_info = await session.get_seating_info()
             >>> print(
-            ...     f"{seating_info.name} on {seating_info.date} at {seating_info.time} in {seating_info.terminal}
-            ...- {seating_info.block}")
+            ...     f"{seating_info.name} on {seating_info.date} at {seating_info.time} in {seating_info.terminal}",
+            ...     f"- {seating_info.block}")"
         """
         return await self._client.get_seating_info()
 
@@ -271,13 +271,43 @@ class PESUAcademy:
         return await self._client.get_material_links(topic, material_type_id)
 
     async def get_timetable(self) -> Timetable:
-        """Fetches the student's timetable.
-
-        Args:
-            None
+        """Fetches the student's timetable and formats them into their respective days and slots.
 
         Returns:
             Timetable: A Timetable object containing the student's timetable details.
+
+        Raises:
+            ValueError: If the JSON data cannot be found or parsed.
+
+        Example:
+            >>> # 1. Accessing a dictionary
+            >>> try:
+            ...     timetable = await pesu_session.get_timetable()
+            ...     if not timetable:
+            ...         print("No timetable found.")
+            ...     print(
+            ...         f"First class in Day 1 at {timetable.monday[0].time.start} - "
+            ...         f"{timetable.monday[0].time.end}: {timetable.monday[0].session.name} - "
+            ...         f"{timetable.monday[0].session.code} by {timetable.monday[0].session.faculty}"
+            ...     )
+            ... except ValueError as e:
+            ...     print(e)
+            >>>
+            >>> # 2. Accessing directly
+            >>> try:
+            ...     timetable = await pesu_session.get_timetable()
+            ...     if not timetable:
+            ...         print("No timetable found.")
+            ...     for day, schedule in timetable.days.items():
+            ...         print(f"Day {day._value_}:")
+            ...         for slot in schedule:
+            ...             if slot.session:
+            ...                 print(
+            ...                     f"- {slot.time.start} - {slot.time.end}: {slot.session.name} - "
+            ...                     f" {slot.session.code} by {slot.session.faculty}"
+            ...                 )
+            ... except ValueError as e:
+            ...     print(e)
         """
         return await self._client.get_timetable()
 

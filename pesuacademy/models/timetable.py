@@ -1,7 +1,7 @@
 """Model for TimeTable in the PESU Academy system."""
 
 from datetime import time
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel
 
@@ -48,7 +48,7 @@ class Slot(BaseModel):
     session: ClassSession | None = ClassSession(code="N/A", name="N/A", faculty="N/A")
 
 
-class Weekday(str, Enum):
+class Weekday(StrEnum):
     """Enumeration for the days of the week."""
 
     monday = "monday"

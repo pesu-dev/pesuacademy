@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from pesuacademy.models import (
     Announcement,
     Course,
+    Credits,
     MaterialLink,
     Profile,
     SeatingInformation,
@@ -117,8 +118,11 @@ class _PesuScraper:
     async def get_material_links(self, topic: Topic, material_type_id: str) -> list[MaterialLink]:
         return await _MaterialLinksHandler._get(self._session, topic, material_type_id)
 
-    async def get_results(self, semester_id: str) -> SemesterResult:
-        return await _ResultsPageHandler._get(self._session, semester_id)
+    async def get_results(self, semester_id: str, semester: int) -> SemesterResult:
+        return await _ResultsPageHandler._get(self._session, semester_id, semester)
+
+    async def get_sgpa(self, semester_id: str, semester: int) -> tuple[str, Credits]:
+        return await _ResultsPageHandler._get_sgpa_and_credits(self._session, semester_id, semester)
 
     async def get_timetable(self) -> Timetable:
         return await _TimetablePageHandler._get(self._session)

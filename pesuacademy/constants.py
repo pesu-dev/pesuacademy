@@ -84,6 +84,14 @@ class _PageURLParams:
         ACTION_TYPE: str = "9"
 
     @dataclass(frozen=True)
+    class ProvisionalResults:
+        """Static parameters for the Provisional Results page (has SGPA)."""
+
+        MENU_ID: str = "652"
+        CONTROLLER_MODE: str = "6402"
+        ACTION_TYPE: str = "53"
+
+    @dataclass(frozen=True)
     class SeatingInformation:
         """Static parameters for the Seating Information page."""
 

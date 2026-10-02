@@ -58,3 +58,31 @@ class SemesterResult(BaseModel):
     sgpa: str
     credits: Credits | None = None
     courses: list[CourseResult]
+
+
+class SemesterSGPA(BaseModel):
+    """Represents the SGPA and credits for a specific semester.
+
+    Attributes:
+        semester (int): Semester number.
+        sgpa (str): Semester Grade Point Average.
+        credits (Credits): Credits information for the semester.
+    """
+
+    semester: int
+    sgpa: str
+    credits: Credits
+
+
+class CGPAResult(BaseModel):
+    """Represents the calculated CGPA and aggregated credits across all semesters.
+
+    Attributes:
+        cgpa (str): Cumulative Grade Point Average.
+        credits (Credits): Total credits earned across all semesters.
+        semesters (list[SemesterSGPA]): List of SGPA data for each semester.
+    """
+
+    cgpa: str
+    credits: Credits
+    semesters: list[SemesterSGPA]

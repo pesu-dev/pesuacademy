@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pesuacademy.pesuacademy &mdash; pesuacademy 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pesuacademy.pesuacademy</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;PESU Academy API Client.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""PESU Academy API Client."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
@@ -106,11 +106,14 @@
 <span class="c1"># Import all Pydantic models to be used as return types for clarity</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pesuacademy.models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Announcement</span><span class="p">,</span>
+    <span class="n">CGPAResult</span><span class="p">,</span>
     <span class="n">Course</span><span class="p">,</span>
+    <span class="n">Credits</span><span class="p">,</span>
     <span class="n">MaterialLink</span><span class="p">,</span>
     <span class="n">Profile</span><span class="p">,</span>
     <span class="n">SeatingInformation</span><span class="p">,</span>
     <span class="n">SemesterResult</span><span class="p">,</span>
+    <span class="n">SemesterSGPA</span><span class="p">,</span>
     <span class="n">Timetable</span><span class="p">,</span>
     <span class="n">Topic</span><span class="p">,</span>
     <span class="n">Unit</span><span class="p">,</span>
@@ -120,47 +123,47 @@
 <div class="viewcode-block" id="PESUAcademy">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PESUAcademy</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main, user-facing class to interact with PESU Academy.</span>
+<span class="w">    </span><span class="sd">"""The main, user-facing class to interact with PESU Academy.</span>
 
 <span class="sd">    An instance of this class represents a single authenticated session and provides</span>
 <span class="sd">    asynchronous methods to fetch academic data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="PESUAcademy.__init__">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">_PesuScraper</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the PESUAcademy session.</span>
+<span class="w">        </span><span class="sd">"""Initializes the PESUAcademy session.</span>
 
 <span class="sd">        This method is not meant to be called directly.</span>
 <span class="sd">        Please use the `PESUAcademy.login()` class method to create an instance.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            client (_PesuScraper): An authenticated instance of the core client.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.login">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.login">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PESUAcademy&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates and returns an authenticated PESUAcademy session.</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"PESUAcademy"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Creates and returns an authenticated PESUAcademy session.</span>
 
 <span class="sd">        Credentials can be passed as arguments or loaded from environment variables</span>
 <span class="sd">        (PESU_USERNAME, PESU_PASSWORD).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            username (Optional[str]): The user&#39;s login identifier.</span>
-<span class="sd">            password (Optional[str]): The user&#39;s password.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            username (Optional[str]): The user's login identifier.</span>
+<span class="sd">            password (Optional[str]): The user's password.</span>
+<span class="sd">        """</span>
         <span class="n">load_dotenv</span><span class="p">()</span>  <span class="c1"># Load environment variables from .env file</span>
-        <span class="n">uname</span> <span class="o">=</span> <span class="n">username</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PESU_USERNAME&quot;</span><span class="p">)</span>
-        <span class="n">pword</span> <span class="o">=</span> <span class="n">password</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PESU_PASSWORD&quot;</span><span class="p">)</span>
+        <span class="n">uname</span> <span class="o">=</span> <span class="n">username</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PESU_USERNAME"</span><span class="p">)</span>
+        <span class="n">pword</span> <span class="o">=</span> <span class="n">password</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PESU_PASSWORD"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">uname</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pword</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Credentials not provided. &quot;</span>
-                <span class="s2">&quot;Pass them as arguments or set PESU_USERNAME and PESU_PASSWORD environment variables.&quot;</span>
+                <span class="s2">"Credentials not provided. "</span>
+                <span class="s2">"Pass them as arguments or set PESU_USERNAME and PESU_PASSWORD environment variables."</span>
             <span class="p">)</span>
 
         <span class="n">client</span> <span class="o">=</span> <span class="n">_PesuScraper</span><span class="p">()</span>
@@ -171,35 +174,35 @@
 <div class="viewcode-block" id="PESUAcademy.get_profile">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_profile">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Profile</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches the student&#39;s detailed profile information.</span>
+<span class="w">        </span><span class="sd">"""Fetches the student's detailed profile information.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            None</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Profile: A Profile object containing personal, parent, and address details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_profile</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_seating_info">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_seating_info">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_seating_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SeatingInformation</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches upcoming exam seating arrangements.</span>
+<span class="w">        </span><span class="sd">"""Fetches upcoming exam seating arrangements.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            None</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of SeatingInformation objects containing seating details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_seating_info</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_courses">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_courses">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_courses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Course</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches registered courses.</span>
+<span class="w">        </span><span class="sd">"""Fetches registered courses.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            semester (Optional[int]): The semester number to fetch. If not provided,</span>
@@ -207,14 +210,14 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A dictionary mapping semester numbers to lists of Course objects.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_courses</span><span class="p">(</span><span class="n">semester</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_attendance">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_attendance">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_attendance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Course</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches attendance records.</span>
+<span class="w">        </span><span class="sd">"""Fetches attendance records.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            semester (Optional[int]): The semester number to fetch. If not provided,</span>
@@ -222,14 +225,14 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A dictionary mapping semester numbers to lists of Course objects with attendance data.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_attendance</span><span class="p">(</span><span class="n">semester</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_results">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_results">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SemesterResult</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches the final results for a specific semester.</span>
+<span class="w">        </span><span class="sd">"""Fetches the final results for a specific semester.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            semester (int): The semester number for which to fetch results.</span>
@@ -239,26 +242,86 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If the requested semester is invalid or has no results.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">semester_id_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">semester</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">semester_id_str</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid or unavailable semester: </span><span class="si">{</span><span class="n">semester</span><span class="si">}</span><span class="s2">. Available: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid or unavailable semester: </span><span class="si">{</span><span class="n">semester</span><span class="si">}</span><span class="s2">. Available: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">semester_id_str</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">semester_id_str</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PESUAcademy.get_sgpa">
+<a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_sgpa">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sgpa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Credits</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Fetches only the SGPA and credits for a specific semester.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            semester (int): The semester number.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[str, Credits]: A tuple containing the SGPA string and a Credits object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the requested semester is invalid or has no results.</span>
+<span class="sd">        """</span>
+        <span class="n">semester_id_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">semester</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">semester_id_str</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Invalid or unavailable semester: </span><span class="si">{</span><span class="n">semester</span><span class="si">}</span><span class="s2">. Available: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_sgpa</span><span class="p">(</span><span class="n">semester_id_str</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PESUAcademy.get_cgpa">
+<a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_cgpa">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_cgpa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CGPAResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Calculates the cumulative CGPA by fetching all SGPAs for the student.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            CGPAResult: An object containing the overall CGPA, total credits, and a breakdown of all semesters.</span>
+<span class="sd">        """</span>
+        <span class="n">semester_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">total_earned_credits</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">total_grade_points</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">sem</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_semester_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">sgpa_str</span><span class="p">,</span> <span class="n">credits</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sgpa</span><span class="p">(</span><span class="n">semester</span><span class="o">=</span><span class="n">sem</span><span class="p">)</span>
+            <span class="n">semester_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SemesterSGPA</span><span class="p">(</span><span class="n">semester</span><span class="o">=</span><span class="n">sem</span><span class="p">,</span> <span class="n">sgpa</span><span class="o">=</span><span class="n">sgpa_str</span><span class="p">,</span> <span class="n">credits</span><span class="o">=</span><span class="n">credits</span><span class="p">))</span>
+
+            <span class="c1"># Add to CGPA calculation if SGPA is a valid number</span>
+            <span class="k">if</span> <span class="n">sgpa_str</span> <span class="o">!=</span> <span class="s2">"N/A"</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sem_sgpa</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sgpa_str</span><span class="p">)</span>
+                    <span class="n">sem_credits_earned</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">credits</span><span class="o">.</span><span class="n">earned</span><span class="p">)</span>
+                    <span class="n">total_grade_points</span> <span class="o">+=</span> <span class="n">sem_sgpa</span> <span class="o">*</span> <span class="n">sem_credits_earned</span>
+                    <span class="n">total_earned_credits</span> <span class="o">+=</span> <span class="n">sem_credits_earned</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">total_earned_credits</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cgpa_val</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">total_grade_points</span> <span class="o">/</span> <span class="n">total_earned_credits</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">cgpa_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cgpa_val</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cgpa_str</span> <span class="o">=</span> <span class="s2">"N/A"</span>
+
+        <span class="n">earned_credits_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">total_earned_credits</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"0"</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
+        <span class="n">total_credits</span> <span class="o">=</span> <span class="n">Credits</span><span class="p">(</span><span class="n">earned</span><span class="o">=</span><span class="n">earned_credits_str</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">earned_credits_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">CGPAResult</span><span class="p">(</span><span class="n">cgpa</span><span class="o">=</span><span class="n">cgpa_str</span><span class="p">,</span> <span class="n">credits</span><span class="o">=</span><span class="n">total_credits</span><span class="p">,</span> <span class="n">semesters</span><span class="o">=</span><span class="n">semester_list</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_announcements">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_announcements">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_announcements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Announcement</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches all recent announcements from the dashboard.</span>
+<span class="w">        </span><span class="sd">"""Fetches all recent announcements from the dashboard.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            None</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of Announcement objects containing the latest announcements.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_announcements</span><span class="p">()</span></div>
 
 
@@ -267,7 +330,7 @@
 <div class="viewcode-block" id="PESUAcademy.get_units_for_course">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_units_for_course">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_units_for_course</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">course_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a course_id, fetches the list of units within it.</span>
+<span class="w">        </span><span class="sd">"""Given a course_id, fetches the list of units within it.</span>
 
 <span class="sd">        The course_id can be obtained from the Course model returned by `get_courses()`.</span>
 
@@ -276,14 +339,14 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of Unit objects.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_units_for_course</span><span class="p">(</span><span class="n">course_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_topics_for_unit">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_topics_for_unit">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_topics_for_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Topic</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a unit_id, fetches the list of topics within it.</span>
+<span class="w">        </span><span class="sd">"""Given a unit_id, fetches the list of topics within it.</span>
 
 <span class="sd">        The unit_id can be obtained from the Unit model.</span>
 
@@ -292,46 +355,46 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of Topic objects, containing IDs needed for the final step.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_topics_for_unit</span><span class="p">(</span><span class="n">unit_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_material_links">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_material_links">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_material_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="n">Topic</span><span class="p">,</span> <span class="n">material_type_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MaterialLink</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a Topic object and a material type ID, fetches the final download links.</span>
+<span class="w">        </span><span class="sd">"""Given a Topic object and a material type ID, fetches the final download links.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            topic (Topic): The Topic object obtained from `get_topics_for_unit()`.</span>
-<span class="sd">            material_type_id (str): A string representing the material type (e.g., &quot;2&quot; for Slides, &quot;3&quot; for Notes).</span>
+<span class="sd">            material_type_id (str): A string representing the material type (e.g., "2" for Slides, "3" for Notes).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of MaterialLink objects.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_material_links</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">material_type_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.get_timetable">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.get_timetable">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_timetable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Timetable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches the student&#39;s timetable.</span>
+<span class="w">        </span><span class="sd">"""Fetches the student's timetable.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            None</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Timetable: A Timetable object containing the student&#39;s timetable details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            Timetable: A Timetable object containing the student's timetable details.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get_timetable</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PESUAcademy.close">
 <a class="viewcode-back" href="../../pesuacademy.html#pesuacademy.pesuacademy.PESUAcademy.close">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes the network session gracefully.</span>
+<span class="w">        </span><span class="sd">"""Closes the network session gracefully.</span>
 
 <span class="sd">        This should always be called when you are finished with the session to release resources.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </div>
 
@@ -344,8 +407,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Aditeya Baral and Samarth Mohan.
-      <span class="lastupdated">Last updated on Sep 04, 2025.
+    <p>&#169; Copyright 2026, Aditeya Baral and Samarth Mohan.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 

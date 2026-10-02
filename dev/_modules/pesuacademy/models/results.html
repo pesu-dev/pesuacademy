@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pesuacademy.models.results &mdash; pesuacademy 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pesuacademy.models.results</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Model for results in the PESU Academy system.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Model for results in the PESU Academy system."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
@@ -102,13 +102,13 @@
 <div class="viewcode-block" id="Assessment">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.Assessment">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Assessment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents an assessment(e.g., ISA1, MATLAB) in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents an assessment(e.g., ISA1, MATLAB) in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name (str): Name of the assessment.</span>
 <span class="sd">        marks (Optional[str]): Marks obtained in the assessment, if applicable. (e.g., 72)</span>
 <span class="sd">        total (Optional[str]): Total marks for the assessment, if applicable. (e.g., 100)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">marks</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -119,12 +119,12 @@
 <div class="viewcode-block" id="Credits">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.Credits">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Credits</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents credits information for a course in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents credits information for a course in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        earned (str): Credits earned for the course.</span>
 <span class="sd">        total (str): Total credits available for the course.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">earned</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">total</span><span class="p">:</span> <span class="nb">str</span></div>
@@ -134,14 +134,14 @@
 <div class="viewcode-block" id="CourseResult">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.CourseResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CourseResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents the result of a course in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents the result of a course in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        code (str): Unique identifier for the course.</span>
 <span class="sd">        title (str): Title of the course.</span>
 <span class="sd">        credits (Optional[Credits]): Credits information for the course, if available.</span>
 <span class="sd">        assessments (List[Assessment]): List of assessments associated with the course.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
@@ -153,18 +153,52 @@
 <div class="viewcode-block" id="SemesterResult">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.SemesterResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SemesterResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents the result of a semester in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents the result of a semester in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        semester (str): Semester number.</span>
 <span class="sd">        sgpa (str): Semester Grade Point Average.</span>
 <span class="sd">        credits (Optional[Credits]): Credits information for the semester, if available.</span>
 <span class="sd">        courses (List[CourseResult]): List of course results for the semester.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">sgpa</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">courses</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">CourseResult</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="SemesterSGPA">
+<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.SemesterSGPA">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SemesterSGPA</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Represents the SGPA and credits for a specific semester.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        semester (int): Semester number.</span>
+<span class="sd">        sgpa (str): Semester Grade Point Average.</span>
+<span class="sd">        credits (Credits): Credits information for the semester.</span>
+<span class="sd">    """</span>
+
+    <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sgpa</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span></div>
+
+
+
+<div class="viewcode-block" id="CGPAResult">
+<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.CGPAResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CGPAResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Represents the calculated CGPA and aggregated credits across all semesters.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cgpa (str): Cumulative Grade Point Average.</span>
+<span class="sd">        credits (Credits): Total credits earned across all semesters.</span>
+<span class="sd">        semesters (list[SemesterSGPA]): List of SGPA data for each semester.</span>
+<span class="sd">    """</span>
+
+    <span class="n">cgpa</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span>
+    <span class="n">semesters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SemesterSGPA</span><span class="p">]</span></div>
 
 </pre></div>
 
@@ -175,8 +209,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Aditeya Baral and Samarth Mohan.
-      <span class="lastupdated">Last updated on Sep 04, 2025.
+    <p>&#169; Copyright 2026, Aditeya Baral and Samarth Mohan.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 

@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pesuacademy.exceptions.csrf &mdash; pesuacademy 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -94,18 +94,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pesuacademy.exceptions.csrf</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;This module defines a custom exception for CSRF token errors in the PESU Academy application.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""This module defines a custom exception for CSRF token errors in the PESU Academy application."""</span>
 
 
 <div class="viewcode-block" id="CSRFTokenError">
 <a class="viewcode-back" href="../../../pesuacademy.exceptions.html#pesuacademy.exceptions.csrf.CSRFTokenError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CSRFTokenError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom exception for CSRF token errors in the PESU Academy application.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Custom exception for CSRF token errors in the PESU Academy application."""</span>
 
 <div class="viewcode-block" id="CSRFTokenError.__init__">
 <a class="viewcode-back" href="../../../pesuacademy.exceptions.html#pesuacademy.exceptions.csrf.CSRFTokenError.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Custom exception for CSRF token errors.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Custom exception for CSRF token errors."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -113,8 +113,8 @@
 <div class="viewcode-block" id="CSRFTokenError.__str__">
 <a class="viewcode-back" href="../../../pesuacademy.exceptions.html#pesuacademy.exceptions.csrf.CSRFTokenError.__str__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the error.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span></div>
+<span class="w">        </span><span class="sd">"""Return a string representation of the error."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span></div>
 </div>
 
 </pre></div>
@@ -126,8 +126,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Aditeya Baral and Samarth Mohan.
-      <span class="lastupdated">Last updated on Sep 04, 2025.
+    <p>&#169; Copyright 2026, Aditeya Baral and Samarth Mohan.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 

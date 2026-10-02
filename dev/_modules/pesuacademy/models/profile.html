@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pesuacademy.models.profile &mdash; pesuacademy 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pesuacademy.models.profile</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Model for student profile in the PESU Academy system.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Model for student profile in the PESU Academy system."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
@@ -102,7 +102,7 @@
 <div class="viewcode-block" id="PersonalDetails">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.PersonalDetails">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PersonalDetails</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents personal details of a user in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents personal details of a user in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name (str): Full name of the user.</span>
@@ -116,7 +116,7 @@
 <span class="sd">        contact_no (str): Contact number of the user.</span>
 <span class="sd">        name_as_in_aadhar (str): Name as per Aadhar card.</span>
 <span class="sd">        image (Optional[str]): Base64 encoded profile image, if available.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">pesu_id</span><span class="p">:</span> <span class="nb">str</span>
@@ -136,14 +136,14 @@
 <div class="viewcode-block" id="OtherInformation">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.OtherInformation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OtherInformation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents other personal information of a user in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents other personal information of a user in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        sslc_marks (str): Marks obtained in SSLC.</span>
 <span class="sd">        puc_marks (str): Marks obtained in PUC.</span>
 <span class="sd">        date_of_birth (str): Date of birth of the user.</span>
 <span class="sd">        blood_group (str): Blood group of the user.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">sslc_marks</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">puc_marks</span><span class="p">:</span> <span class="nb">str</span>
@@ -155,13 +155,13 @@
 <div class="viewcode-block" id="QualifyingExamination">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.QualifyingExamination">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">QualifyingExamination</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents details of a qualifying examination in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents details of a qualifying examination in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        exam (str): The qualifying examination.</span>
 <span class="sd">        rank (str): Rank obtained in the examination.</span>
 <span class="sd">        score (str): Score obtained in the examination.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">exam</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">rank</span><span class="p">:</span> <span class="nb">str</span>
@@ -172,7 +172,7 @@
 <div class="viewcode-block" id="ParentDetails">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.ParentDetails">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParentDetails</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents details of a parent in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents details of a parent in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name (str): Full name of the parent.</span>
@@ -182,7 +182,7 @@
 <span class="sd">        qualification (str): Qualification of the parent.</span>
 <span class="sd">        designation (str): Designation of the parent.</span>
 <span class="sd">        employer (str): Employer of the parent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">mobile</span><span class="p">:</span> <span class="nb">str</span>
@@ -197,12 +197,12 @@
 <div class="viewcode-block" id="ParentInformation">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.ParentInformation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParentInformation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents information about parents in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents information about parents in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        father (ParentDetails): Details of the father.</span>
 <span class="sd">        mother (ParentDetails): Details of the mother.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">father</span><span class="p">:</span> <span class="n">ParentDetails</span>
     <span class="n">mother</span><span class="p">:</span> <span class="n">ParentDetails</span></div>
@@ -212,12 +212,12 @@
 <div class="viewcode-block" id="AddressDetails">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.AddressDetails">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AddressDetails</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents address details in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents address details in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        present (str): Present address of the user.</span>
 <span class="sd">        permanent (str): Permanent address of the user.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">present</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">permanent</span><span class="p">:</span> <span class="nb">str</span></div>
@@ -227,15 +227,15 @@
 <div class="viewcode-block" id="Profile">
 <a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.profile.Profile">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Profile</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a user&#39;s profile in the PESU Academy system.</span>
+<span class="w">    </span><span class="sd">"""Represents a user's profile in the PESU Academy system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        personal (PersonalDetails): Personal details of the user.</span>
 <span class="sd">        other_info (OtherInformation): Other personal information of the user.</span>
 <span class="sd">        qualifying_exam (QualifyingExamination): Details of the qualifying examination.</span>
-<span class="sd">        parents (ParentInformation): Information about the user&#39;s parents.</span>
+<span class="sd">        parents (ParentInformation): Information about the user's parents.</span>
 <span class="sd">        address (AddressDetails): Address details of the user.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">personal</span><span class="p">:</span> <span class="n">PersonalDetails</span>
     <span class="n">other_info</span><span class="p">:</span> <span class="n">OtherInformation</span>
@@ -252,8 +252,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Aditeya Baral and Samarth Mohan.
-      <span class="lastupdated">Last updated on Sep 04, 2025.
+    <p>&#169; Copyright 2026, Aditeya Baral and Samarth Mohan.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 

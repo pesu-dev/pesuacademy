@@ -1,51 +1,47 @@
-# pesuacademy-py
+# pesuacademy
 
 ![PyPI](https://img.shields.io/pypi/v/pesuacademy?label=pypi%20package)
-![GitHub Release](https://img.shields.io/github/v/release/HackerSpace-PESU/pesuacademy-py)
-![GitHub Tag](https://img.shields.io/github/v/tag/HackerSpace-PESU/pesuacademy-py)
 ![PyPI - Status](https://img.shields.io/pypi/status/pesuacademy)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pesuacademy)
+![Status: Deprecated](https://img.shields.io/badge/status-deprecated-red)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HackerSpace-PESU/pesuacademy-py)
-![GitHub last commit](https://img.shields.io/github/last-commit/HackerSpace-PESU/pesuacademy-py)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/HackerSpace-PESU/pesuacademy-py/latest)
+> [!CAUTION]
+> **This project is deprecated and archived. It no longer works and will not receive updates, fixes, or support.**
+>
+> All programmatic access to PESU Academy now goes through **[PESU OAuth2](https://github.com/pesu-dev/oauth2)**.
+> Please migrate any code that depends on this package.
 
-![black.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/black.yml/badge.svg)
-![python-package-pip.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/python-package-pip.yml/badge.svg)
-![python-publish.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/python-publish.yml/badge.svg)
-![build-docs.yml](https://github.com/HackerSpace-PESU/pesuacademy-py/actions/workflows/build-docs.yml/badge.svg)
+## Why?
 
-Python wrapper and APIs for the PESU Academy website.
+`pesuacademy` scraped the PESU Academy website directly using your PESU password. That approach was fragile (it broke
+whenever the site's markup changed) and required every application to handle raw student credentials.
 
-The wrapper provides **read-only** access to all the pages and information accessible on the PESU Academy website.
-Without authentication, the wrapper will only be able to fetch details from the `Know Your Class and Section` page.
+[PESU OAuth2](https://github.com/pesu-dev/oauth2) replaces it with a standard OAuth2 / OpenID Connect authorization
+server ("Sign in with PESU"), so applications can access PESU Academy data on a student's behalf without ever seeing
+their password.
 
-> :warning: **Warning:** This is not an official API and is not endorsed by PES University. Use at your own risk.
+## Migrating
 
-## Installation
+1. Remove `pesuacademy` from your dependencies:
 
-### Installing from `pip`
+   ```bash
+   pip uninstall pesuacademy
+   ```
 
-```bash
-pip install pesuacademy
-```
+2. Register your application and integrate with PESU OAuth2. See the
+   [PESU OAuth2 repository](https://github.com/pesu-dev/oauth2) and its hosted documentation at
+   <https://pesu-oauth2.onrender.com> for details.
 
-### Installing from source
+3. For questions, reach out on the `#pesu-dev` channel of the [PESU Discord](https://discord.gg/eZ3uFs2).
 
-```bash
-git clone https://github.com/HackerSpace-PESU/pesuacademy-py
-cd pesuacademy-py
-python setup.py install
-```
+## Final release
 
-## Usage
+The last published version on PyPI is `1.0.1`. It is identical to `1.0.0` except that importing it emits a deprecation
+warning. Existing installations are not removed, but they are not expected to work against PESU Academy.
 
-```python
-from pesuacademy import PESUAcademy
+## History
 
-p = PESUAcademy("PRN_or_SRN", "password")
-# p = PESUAcademy() # Without authentication: can only fetch details from the `Know Your Class and Section` page
-profile = p.profile()
-courses = p.courses(semester=2)
-attendance = p.attendance()
-```
+This repository is kept read-only for reference. Its issues and pull requests have been closed, and the source code
+remains available under the [MIT License](LICENSE).
+
+> [!WARNING]
+> This was never an official API and was not endorsed by PES University.

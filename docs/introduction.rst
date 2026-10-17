@@ -1,6 +1,11 @@
 Introduction
 ============
 
+.. warning::
+
+   **pesuacademy is deprecated and archived. It no longer works.**
+   All access to PESU Academy now goes through `PESU OAuth2 <https://github.com/pesu-dev/oauth2>`_.
+
 Welcome to the **pesuacademy** Python package!
 
 This library provides a fast and lightweight Python wrapper around the PESU Academy website, enabling easy programmatic access to announcements, courses, profiles, and more.

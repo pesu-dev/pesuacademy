@@ -1,13 +1,9 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: 🗂️ Project Board
-    url: https://github.com/orgs/pesu-dev/projects/4
-    about: View the project board for ongoing work and updates.
-
-  - name: 🗨️ GitHub Discussions
-    url: https://github.com/orgs/pesu-dev/discussions
-    about: Use GitHub Discussions for general Q&A and brainstorming.
+  - name: 🔐 PESU OAuth2
+    url: https://github.com/pesu-dev/oauth2
+    about: This project is deprecated. All access to PESU Academy now goes through PESU OAuth2.
 
   - name: 💬 Join the PESU Developer Group Discord Server
     url: https://discord.gg/eZ3uFs2
-    about: Join our Discord for help with PESUAuth integration, support, or bot development.
+    about: Ask questions in the #pesu-dev channel.

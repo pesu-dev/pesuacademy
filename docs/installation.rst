@@ -1,6 +1,11 @@
 Installation
 ============
 
+.. warning::
+
+   **pesuacademy is deprecated and archived. It no longer works.**
+   All access to PESU Academy now goes through `PESU OAuth2 <https://github.com/pesu-dev/oauth2>`_.
+
 You can install **pesuacademy** easily using `pip`:
 
 .. code-block:: bash

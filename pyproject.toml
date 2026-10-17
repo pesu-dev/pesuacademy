@@ -1,7 +1,7 @@
 [project]
 name = "pesuacademy"
-version = "1.0.0"
-description = "Super-fast and lightweight Python wrapper for PESU Academy."
+version = "1.0.1"
+description = "[DEPRECATED] Python wrapper for PESU Academy. No longer works; use PESU OAuth2 (https://github.com/pesu-dev/oauth2) instead."
 readme = "README.md"
 readme-content-type = "text/markdown"
 requires-python = ">=3.11"
@@ -10,7 +10,7 @@ authors = [
     { name = "Aditeya Baral", email = "aditeya.baral@gmail.com" },
     { name = "Samarth Mohan", email = "samarth.lina@gmail.com" }
 ]
-urls = { Homepage = "https://github.com/pesu-dev/pesuacademy", Repository = "https://github.com/pesu-dev/pesuacademy", Documentation = "https://github.com/pesu-dev/pesuacademy#readme", BugTracker = "https://github.com/pesu-dev/pesuacademy/issues" }
+urls = { Homepage = "https://github.com/pesu-dev/pesuacademy", Repository = "https://github.com/pesu-dev/pesuacademy", Documentation = "https://github.com/pesu-dev/pesuacademy#readme", Replacement = "https://github.com/pesu-dev/oauth2" }
 keywords = ["pesu", "pesu academy", "python client", "wrapper"]
 
 dependencies = [
@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",

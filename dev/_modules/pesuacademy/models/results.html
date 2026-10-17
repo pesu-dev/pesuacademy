@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pesuacademy.models.results &mdash; pesuacademy 1.0.0 documentation</title>
+  <title>pesuacademy.models.results &mdash; pesuacademy 1.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/documentation_options.js?v=292eb321"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -166,40 +166,6 @@
     <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">courses</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">CourseResult</span><span class="p">]</span></div>
 
-
-
-<div class="viewcode-block" id="SemesterSGPA">
-<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.SemesterSGPA">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SemesterSGPA</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Represents the SGPA and credits for a specific semester.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        semester (int): Semester number.</span>
-<span class="sd">        sgpa (str): Semester Grade Point Average.</span>
-<span class="sd">        credits (Credits): Credits information for the semester.</span>
-<span class="sd">    """</span>
-
-    <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">sgpa</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span></div>
-
-
-
-<div class="viewcode-block" id="CGPAResult">
-<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.CGPAResult">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">CGPAResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Represents the calculated CGPA and aggregated credits across all semesters.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        cgpa (str): Cumulative Grade Point Average.</span>
-<span class="sd">        credits (Credits): Total credits earned across all semesters.</span>
-<span class="sd">        semesters (list[SemesterSGPA]): List of SGPA data for each semester.</span>
-<span class="sd">    """</span>
-
-    <span class="n">cgpa</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span>
-    <span class="n">semesters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SemesterSGPA</span><span class="p">]</span></div>
-
 </pre></div>
 
            </div>
@@ -210,7 +176,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Aditeya Baral and Samarth Mohan.
-      <span class="lastupdated">Last updated on Oct 02, 2026.
+      <span class="lastupdated">Last updated on Oct 17, 2026.
       </span></p>
   </div>
 

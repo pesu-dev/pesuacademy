@@ -76,14 +76,6 @@ pesuacademy.pages.semester module
    :show-inheritance:
    :undoc-members:
 
-pesuacademy.pages.timetable module
-----------------------------------
-
-.. automodule:: pesuacademy.pages.timetable
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 pesuacademy.pages.unit module
 -----------------------------
 

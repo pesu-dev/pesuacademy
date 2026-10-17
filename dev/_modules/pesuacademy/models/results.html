@@ -166,6 +166,40 @@
     <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">courses</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">CourseResult</span><span class="p">]</span></div>
 
+
+
+<div class="viewcode-block" id="SemesterSGPA">
+<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.SemesterSGPA">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SemesterSGPA</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Represents the SGPA and credits for a specific semester.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        semester (int): Semester number.</span>
+<span class="sd">        sgpa (str): Semester Grade Point Average.</span>
+<span class="sd">        credits (Credits): Credits information for the semester.</span>
+<span class="sd">    """</span>
+
+    <span class="n">semester</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sgpa</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span></div>
+
+
+
+<div class="viewcode-block" id="CGPAResult">
+<a class="viewcode-back" href="../../../pesuacademy.models.html#pesuacademy.models.results.CGPAResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CGPAResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Represents the calculated CGPA and aggregated credits across all semesters.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cgpa (str): Cumulative Grade Point Average.</span>
+<span class="sd">        credits (Credits): Total credits earned across all semesters.</span>
+<span class="sd">        semesters (list[SemesterSGPA]): List of SGPA data for each semester.</span>
+<span class="sd">    """</span>
+
+    <span class="n">cgpa</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">credits</span><span class="p">:</span> <span class="n">Credits</span>
+    <span class="n">semesters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SemesterSGPA</span><span class="p">]</span></div>
+
 </pre></div>
 
            </div>

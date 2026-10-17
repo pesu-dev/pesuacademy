@@ -52,6 +52,14 @@ pesuacademy.models.seating\_information module
    :show-inheritance:
    :undoc-members:
 
+pesuacademy.models.timetable module
+-----------------------------------
+
+.. automodule:: pesuacademy.models.timetable
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 
